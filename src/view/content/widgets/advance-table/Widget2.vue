@@ -4,10 +4,10 @@
     <div class="card-header border-0 py-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark">
-          Agents Stats
+          Customer Stats
         </span>
         <span class="text-muted mt-3 font-weight-bold font-size-sm">
-          More than 400+ new members
+          Management Panel
         </span>
       </h3>
       <div class="card-toolbar">
@@ -40,10 +40,10 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="width: 50px">authors</th>
+              <th class="pr-0" style="width: 50px">公司</th>
               <th style="min-width: 200px"></th>
-              <th style="min-width: 150px">company</th>
-              <th style="min-width: 150px">progress</th>
+              <th style="min-width: 150px">联系人</th>
+              <th style="min-width: 150px">进度</th>
               <th class="pr-0 text-right" style="min-width: 150px">action</th>
             </tr>
           </thead>
@@ -60,7 +60,7 @@
                   <div class="symbol symbol-50 symbol-light mt-1">
                     <span class="symbol-label">
                       <img
-                        :src="item.text0"
+                        :src="item.head"
                         class="h-75 align-self-end"
                         alt=""
                       />
@@ -71,20 +71,20 @@
                   <a
                     href="#"
                     class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >{{ item.text1 }}</a
+                    >{{ item.company }}</a
                   >
                   <span
                     class="text-muted font-weight-bold text-muted d-block"
-                    >{{ item.text2 }}</span
+                    >{{ item.email }}</span
                   >
                 </td>
                 <td>
                   <span
                     class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                    >{{ item.text3 }}</span
+                    >{{ item.name }}</span
                   >
                   <span class="text-muted font-weight-bold">{{
-                    item.text4
+                    item.phone
                   }}</span>
                 </td>
                 <td>
@@ -94,7 +94,7 @@
                     >
                       <span
                         class="text-muted mr-2 font-size-sm font-weight-bold"
-                        >{{ item.text5 }}</span
+                        >{{ item.progress }}</span
                       >
                       <span class="text-muted font-size-sm font-weight-bold"
                         >Progress</span
@@ -104,8 +104,8 @@
                       <div
                         class="progress-bar"
                         role="progressbar"
-                        :style="{ width: item.text5 }"
-                        v-bind:class="`bg-${item.text6}`"
+                        :style="{ width: item.progress }"
+                        v-bind:class="`bg-${item.state}`"
                         aria-valuenow="50"
                         aria-valuemin="0"
                         aria-valuemax="100"
@@ -162,46 +162,54 @@
 </template>
 
 <script>
+import { em_customers } from '@/core/services/firebaseInit';
+// import { Timestamp } from 'firebase/firestore';
+
 export default {
   name: "widget-2",
   data() {
+    em_customers.doc(`abcd@abcd.com`).set({
+        head: "media/svg/avatars/001-boy.svg",
+        company: "Company Name",
+        email: "Customer Email",
+        name: "Customer Name",
+        phone: "Customer Phone",
+        progress: "100%",
+        state: "success",
+        //time: Timestamp.now(),
+        inviter_uid: "abcd"
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
     return {
       list: [
         {
-          text0: "media/svg/avatars/001-boy.svg",
-          text1: "Brad Simmons",
-          text2: "HTML, JS, ReactJS",
-          text3: "Intertico",
-          text4: "Web, UI/UX Design",
-          text5: "65%",
-          text6: "danger"
+          head: "media/svg/avatars/001-boy.svg",
+          company: "Company Name",
+          email: "Customer Email",
+          name: "Customer Name",
+          phone: "Customer Phone",
+          progress: "90%",
+          state: "danger"
         },
         {
-          text0: "media/svg/avatars/018-girl-9.svg",
-          text1: "Jessie Clarcson",
-          text2: "C#, ASP.NET, MS SQL",
-          text3: "Agoda",
-          text4: "Houses & Hotels",
-          text5: "83%",
-          text6: "success"
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "success"
         },
         {
-          text0: "media/svg/avatars/047-girl-25.svg",
-          text1: "Lebron Wayde",
-          text2: "PHP, Laravel, VueJS",
-          text3: "RoadGee",
-          text4: "Transportation",
-          text5: "47%",
-          text6: "primary"
-        },
-        {
-          text0: "media/svg/avatars/014-girl-7.svg",
-          text1: "Natali Trump",
-          text2: "Python, PostgreSQL, ReactJS",
-          text3: "The Hill",
-          text4: "Insurance",
-          text5: "71%",
-          text6: "danger"
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "primary"
         }
       ],
       checked: false

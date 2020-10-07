@@ -26,7 +26,7 @@
             class="font-weight-bolder text-center font-size-h4 font-size-h1-lg"
             style="color: #986923;"
           >
-            Discover Amazing Metronic <br />with great build tools
+            Discover Amazing Future <br />with Finestuido
           </h3>
         </div>
         <div
@@ -52,7 +52,7 @@
                 <h3
                   class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg"
                 >
-                  Welcome to Metronic
+                  Admin panel
                 </h3>
                 <span class="text-muted font-weight-bold font-size-h4"
                   >New Here?
