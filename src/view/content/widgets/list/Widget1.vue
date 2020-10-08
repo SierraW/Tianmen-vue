@@ -73,12 +73,16 @@ export default {
       chartOptions: {},
       series: [
         {
-          name: "Net Profit",
-          data: [35, 65, 75, 55, 45, 60, 55]
+          name: "Message sent",
+          data: [200, 120, 100, 114, 91, 60]
         },
         {
-          name: "Revenue",
-          data: [40, 70, 80, 60, 50, 65, 60]
+          name: "Customers",
+          data: [40, 30, 20, 25, 20, 12]
+        },
+        {
+          name: "Projects",
+          data: [3, 5, 5, 6, 7, 6]
         }
       ]
     };
@@ -184,11 +188,11 @@ export default {
         },
         y: {
           formatter: function(val) {
-            return "$" + val + " thousands";
+            return val + " item(s)";
           }
         }
       },
-      colors: ["#fc8692", "#ffffff"],
+      colors: ["#fc8692", "#fdb8bf", "#ffeaec"],
       grid: {
         borderColor: this.layoutConfig("colors.gray.gray-200"),
         strokeDashArray: 4,

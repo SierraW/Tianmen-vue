@@ -210,6 +210,42 @@ export default {
           phone: "123-123-1234",
           progress: "90%",
           state: "primary"
+        },
+        {
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "success"
+        },
+        {
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "primary"
+        },
+        {
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "primary"
+        },
+        {
+          head: "media/svg/avatars/018-girl-9.svg",
+          company: "Rain Wu",
+          email: "info@finestudio.ca",
+          name: "ARAIN Company",
+          phone: "123-123-1234",
+          progress: "90%",
+          state: "primary"
         }
       ],
       checked: false
