@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import { em_customers } from '@/core/services/firebaseInit';
 
@@ -122,6 +123,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.currentUser)
     if (this.form.name == '') {
       alert("Customer data not found! Redirecting you to privous page...");
       this.$router.back();
@@ -144,6 +146,11 @@ export default {
         vm.form.state = doc.data().state
       })
     });
+  },
+  computed: {
+    ...mapGetters([
+      "currentUser"
+    ]),
   },
   methods: {
     countDownChangedFailed(dismissCountDown) {

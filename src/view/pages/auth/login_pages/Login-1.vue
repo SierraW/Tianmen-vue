@@ -116,16 +116,6 @@
                 >
                   Sign In
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg"
-                >
-                  <span class="svg-icon svg-icon-md">
-                    <inline-svg
-                      src="media/svg/social-icons/google.svg"
-                    /> </span
-                  >Sign in with Google
-                </button>
               </div>
             </form>
           </div>
