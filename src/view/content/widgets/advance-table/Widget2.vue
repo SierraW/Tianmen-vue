@@ -114,20 +114,9 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <a
-                    href="#"
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm"
-                  >
-                    <span class="svg-icon svg-icon-md svg-icon-primary">
-                      <!--begin::Svg Icon | path:assets/media/svg/icons/General/Settings-1.svg-->
-                      <inline-svg
-                        src="media/svg/icons/General/Settings-1.svg"
-                      />
-                      <!--end::Svg Icon-->
-                    </span>
-                  </a>
-                  <a
-                    href="#"
+                  <router-link v-bind:to="{name:'cus_data', params:{
+                    customer_id: item.id
+                  }}"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
@@ -137,7 +126,7 @@
                       />
                       <!--end::Svg Icon-->
                     </span>
-                  </a>
+                  </router-link>
                   <a
                     href="#"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
@@ -163,93 +152,35 @@
 
 <script>
 import { em_customers } from '@/core/services/firebaseInit';
-// import { Timestamp } from 'firebase/firestore';
 
 export default {
   name: "widget-2",
   data() {
-    em_customers.doc(`abcd@abcd.com`).set({
-        head: "media/svg/avatars/001-boy.svg",
-        company: "Company Name",
-        email: "Customer Email",
-        name: "Customer Name",
-        phone: "Customer Phone",
-        progress: "100%",
-        state: "success",
-        //time: Timestamp.now(),
-        inviter_uid: "abcd"
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
     return {
-      list: [
-        {
-          head: "media/svg/avatars/001-boy.svg",
-          company: "Company Name",
-          email: "Customer Email",
-          name: "Customer Name",
-          phone: "Customer Phone",
-          progress: "90%",
-          state: "danger"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "success"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "primary"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "success"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "primary"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "primary"
-        },
-        {
-          head: "media/svg/avatars/018-girl-9.svg",
-          company: "Rain Wu",
-          email: "info@finestudio.ca",
-          name: "ARAIN Company",
-          phone: "123-123-1234",
-          progress: "90%",
-          state: "primary"
-        }
-      ],
+      list: [],
       checked: false
     };
+  },
+  created () {
+    em_customers.where("inviter_uid", "==", "0").onSnapshot( querySnapshot => {
+        var emCusRecords = [];
+        querySnapshot.forEach(function(doc) {
+          const cusRecord = {
+            id: doc.id,
+            head: "media/svg/avatars/001-boy.svg",
+            company: doc.data().company,
+            email: doc.data().email,
+            name: doc.data().name,
+            phone: doc.data().phone,
+            progress: doc.data().progress,
+            state: doc.data().state,
+            time: doc.data().time,
+            inviter_uid: "abcd"
+          };
+          emCusRecords.push(cusRecord);
+        });
+        this.list = emCusRecords;
+    });
   },
   components: {},
   methods: {

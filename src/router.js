@@ -16,6 +16,16 @@ export default new Router({
           component: () => import("@/view/pages/Dashboard.vue")
         },
         {
+          path: "/ocean",
+          name: "cus_ocean",
+          component: () => import("@/view/pages/customers_data/CustomersOcean.vue")
+        },
+        {
+          path: "/customer/:customer_id",
+          name: "cus_data",
+          component: () => import("@/view/pages/customers_data/CustomersData.vue")
+        },
+        {
           path: "/builder",
           name: "builder",
           component: () => import("@/view/pages/Builder.vue")

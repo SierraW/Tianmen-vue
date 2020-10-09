@@ -12,6 +12,7 @@ const em_chat = db.collection("em_chat");
 const em_customers = db.collection("em_customers");
 
 export {
+	firebase,
 	db,
 	auth,
 	em_chat,

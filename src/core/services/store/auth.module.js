@@ -35,6 +35,8 @@ const actions = {
       ApiService.post("login", credentials)
         .then(({ data }) => {
           console.log("Here what post returns", data);
+          console.log("Here what context is", context);
+          console.log("Here what credentials is", credentials);
           context.commit(SET_AUTH, data);
           resolve(data);
         })

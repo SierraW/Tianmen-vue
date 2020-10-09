@@ -67,12 +67,12 @@
           <!--begin::Navigation-->
           <div class="navi navi-hover min-w-md-250px">
             <b-dropdown-text tag="div" class="navi-item">
-              <a href="#" class="navi-link">
+              <router-link to="/ocean" class="navi-link">
                 <span class="navi-icon">
                   <i class="flaticon2-drop"></i>
                 </span>
-                <span class="navi-text">New Group</span>
-              </a>
+                <span class="navi-text">公海</span>
+              </router-link>
             </b-dropdown-text>
             <b-dropdown-text tag="div" class="navi-item">
               <a href="#" class="navi-link">
