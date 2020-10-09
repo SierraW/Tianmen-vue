@@ -10,15 +10,6 @@
           Management Panel
         </span>
       </h3>
-      <div class="card-toolbar">
-        <a href="#" class="btn btn-success font-weight-bolder font-size-sm">
-          <span class="svg-icon svg-icon-md svg-icon-white">
-            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
-            <inline-svg src="media/svg/icons/Communication/Add-user.svg" />
-            <!--end::Svg Icon--> </span
-          >Add New Member</a
-        >
-      </div>
     </div>
     <!--end::Header-->
     <!--begin::Body-->
@@ -114,10 +105,9 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <router-link v-bind:to="{name:'cus_data', params:{
-                    customer_id: item.id
-                  }}"
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+                  <a
+                    href="#"
+                    class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
                       <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->
@@ -126,9 +116,22 @@
                       />
                       <!--end::Svg Icon-->
                     </span>
+                  </a>
+                  <router-link v-bind:to="{name:'cus_data', params:{
+                    customer_id: item.id
+                  }}"
+                    class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+                  >
+                    <span class="svg-icon svg-icon-md svg-icon-primary">
+                      <!--begin::Svg Icon | path:assets/media/svg/icons/General/Settings-1.svg-->
+                      <inline-svg
+                        src="media/svg/icons/General/Settings-1.svg"
+                      />
+                      <!--end::Svg Icon-->
+                    </span>
                   </router-link>
-                  <a
-                    href="#"
+                  <button
+                    v-on:click="unsubscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
@@ -136,7 +139,7 @@
                       <inline-svg src="media/svg/icons/General/Trash.svg" />
                       <!--end::Svg Icon-->
                     </span>
-                  </a>
+                  </button>
                 </td>
               </tr>
             </template>
@@ -162,7 +165,7 @@ export default {
     };
   },
   created () {
-    em_customers.where("inviter_uid", "==", "0").onSnapshot( querySnapshot => {
+    em_customers.where("uid", "==", "0").onSnapshot( querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -185,7 +188,12 @@ export default {
   components: {},
   methods: {
     setCheck(checked) {
-      this.checked = checked;
+      this.checked = checked
+    },
+    unsubscribeCus(id) {
+      em_customers.doc(id).update({
+        uid: ""
+      })
     }
   }
 };

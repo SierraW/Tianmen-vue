@@ -114,18 +114,6 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <a
-                    href="#"
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm"
-                  >
-                    <span class="svg-icon svg-icon-md svg-icon-primary">
-                      <!--begin::Svg Icon -->
-                      <inline-svg
-                        src="media/svg/icons/General/Save.svg"
-                      />
-                      <!--end::Svg Icon-->
-                    </span>
-                  </a>
                   <router-link v-bind:to="{name:'cus_data', params:{
                     customer_id: item.id
                   }}"
@@ -139,6 +127,18 @@
                       <!--end::Svg Icon-->
                     </span>
                   </router-link>
+                  <button
+                    v-on:click="subscribeCus(item.id)"
+                    class="btn btn-icon btn-light btn-hover-primary btn-sm"
+                  >
+                    <span class="svg-icon svg-icon-md svg-icon-primary">
+                      <!--begin::Svg Icon -->
+                      <inline-svg
+                        src="media/svg/icons/General/Save.svg"
+                      />
+                      <!--end::Svg Icon-->
+                    </span>
+                  </button>
                 </td>
               </tr>
             </template>
@@ -167,7 +167,8 @@ export default {
     //     progress: "100%",
     //     state: "success",
     //     time: firebase.firestore.Timestamp.fromDate(new Date()),
-    //     inviter_uid: "abcd"
+    //     inviter_uid: "abcd",
+    //     uid: ""
     // })
     // .catch(function(err) {
     //   console.log(err);
@@ -178,7 +179,7 @@ export default {
     };
   },
   created () {
-    em_customers.onSnapshot( querySnapshot => {
+    em_customers.where("uid", "==", "").onSnapshot( querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -202,6 +203,11 @@ export default {
   methods: {
     setCheck(checked) {
       this.checked = checked;
+    },
+    subscribeCus(id) {
+      em_customers.doc(id).update({
+        uid: "0"
+      })
     }
   }
 };

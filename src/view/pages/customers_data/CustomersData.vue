@@ -1,8 +1,8 @@
 <template>
   <div class="card card-custom gutter-b">
     <div class="card-header border-0 py-5">
-      <h3 class="card-title font-weight-bolder text-black">Customer Data</h3>
-      <h5>{{form.id}}</h5>
+      <h3 class="card-title font-weight-bolder">Customer Data</h3>
+      <h6>id: {{form.id}}</h6>
     </div>
     <!-- alert area -->
     <div class="mx-3">
@@ -54,7 +54,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
+      <b-form-group id="input-group-2" label="Name:" label-for="input-2">
         <b-form-input
           id="input-2"
           v-model="form.name"
@@ -127,7 +127,7 @@ export default {
       this.$router.back();
     }
     this.$store.dispatch(SET_BREADCRUMB, [
-      { title: "Dashboard", route: "dashboard" },
+      { title: "Dashboard", route: "../dashboard" },
       { title: "Customer data" }
     ]);
   },
