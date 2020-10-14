@@ -191,9 +191,11 @@ export default {
       this.checked = checked
     },
     unsubscribeCus(id) {
-      em_customers.doc(id).update({
-        uid: ""
-      })
+      if (confirm("Are you sure to release this customer? This action cannot be cancel.")) {
+        em_customers.doc(id).update({
+          uid: ""
+        });
+      }
     }
   }
 };

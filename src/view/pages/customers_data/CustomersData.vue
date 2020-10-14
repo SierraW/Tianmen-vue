@@ -123,7 +123,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.currentUser)
     if (this.form.name == '') {
       alert("Customer data not found! Redirecting you to privous page...");
       this.$router.back();

@@ -301,8 +301,8 @@ export default {
       state: "signin",
       // Remove this dummy login info
       form: {
-        email: "admin@demo.com",
-        password: "demo"
+        email: "",
+        password: ""
       }
     };
   },
@@ -435,8 +435,8 @@ export default {
       this.fv.validate();
 
       this.fv.on("core.form.valid", () => {
-        var email = this.form.email;
-        var password = this.form.password;
+        var email = this.$refs.email.value;
+        var password = this.$refs.password.value;
 
         // clear existing errors
         this.$store.dispatch(LOGOUT);

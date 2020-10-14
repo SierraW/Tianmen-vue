@@ -32,13 +32,14 @@ const getters = {
 const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
-      ApiService.post("login", credentials)
+      ApiService.post("postLogin.php", credentials)
         .then(({ data }) => {
-          console.log("Here what post returns", data);
-          console.log("Here what context is", context);
-          console.log("Here what credentials is", credentials);
-          context.commit(SET_AUTH, data);
-          resolve(data);
+          if (data.success == "failed") {
+            context.commit(SET_ERROR, data.message);
+          } else {
+            context.commit(SET_AUTH, data.data);
+            resolve(data);
+          }
         })
         .catch(({ response }) => {
           context.commit(SET_ERROR, response.data.errors);
@@ -61,14 +62,22 @@ const actions = {
     });
   },
   [VERIFY_AUTH](context) {
-    if (JwtService.getToken()) {
-      ApiService.setHeader();
-      ApiService.get("verify")
+    const token = JwtService.getToken();
+    if (token) {
+      const payload = {
+        token
+      };
+      ApiService.post("verify.php", payload)
         .then(({ data }) => {
-          context.commit(SET_AUTH, data);
+          if (data.success == "success") {
+            context.commit(SET_AUTH, data.data);
+          }
+          else {
+            throw new Error( data.message );
+          }
         })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
+        .catch(() => {
+          context.commit(PURGE_AUTH);
         });
     } else {
       context.commit(PURGE_AUTH);
@@ -92,7 +101,7 @@ const mutations = {
     state.isAuthenticated = true;
     state.user = user;
     state.errors = {};
-    JwtService.saveToken(state.user.token);
+    JwtService.saveToken(state.user.user_session);
   },
   [SET_PASSWORD](state, password) {
     state.user.password = password;

@@ -34,7 +34,7 @@
       >
         <h3 class="font-weight-bold m-0">
           User Profile
-          <small class="text-muted font-size-sm ml-2">12 messages</small>
+          <small class="text-muted font-size-sm ml-2"></small>
         </h3>
         <a
           href="#"
@@ -62,23 +62,14 @@
               href="#"
               class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"
             >
-              James Jones
+              {{currentUser.display_name}}
             </a>
-            <div class="text-muted mt-1">Application Developer</div>
+            <div class="text-muted mt-1">{{currentUser.role_name}}</div>
             <div class="navi mt-2">
               <a href="#" class="navi-item">
                 <span class="navi-link p-0 pb-2">
-                  <span class="navi-icon mr-1">
-                    <span class="svg-icon svg-icon-lg svg-icon-primary">
-                      <!--begin::Svg Icon-->
-                      <inline-svg
-                        src="media/svg/icons/Communication/Mail-notification.svg"
-                      />
-                      <!--end::Svg Icon-->
-                    </span>
-                  </span>
                   <span class="navi-text text-muted text-hover-primary">
-                    jm@softplus.com
+                    {{currentUser.user_email}}
                   </span>
                 </span>
               </a>
@@ -259,6 +250,7 @@
 </style>
 
 <script>
+import { mapGetters } from "vuex";
 import { LOGOUT } from "@/core/services/store/auth.module";
 import KTLayoutQuickUser from "@/assets/js/layout/extended/quick-user.js";
 import KTOffcanvas from "@/assets/js/components/offcanvas.js";
@@ -314,6 +306,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentUser']),
     picture() {
       return process.env.BASE_URL + "media/users/300_21.jpg";
     }

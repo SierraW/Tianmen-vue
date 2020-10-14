@@ -205,9 +205,11 @@ export default {
       this.checked = checked;
     },
     subscribeCus(id) {
-      em_customers.doc(id).update({
-        uid: "0"
-      })
+      if (confirm("Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.")) {
+        em_customers.doc(id).update({
+          uid: "0"
+        });
+      }
     }
   }
 };
