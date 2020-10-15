@@ -9,7 +9,7 @@
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-form-group
             id="input-group-1"
-            label="Email address:"
+            label="加入留言:"
             label-for="input-1"
             description="We'll never share your email with anyone else."
           >
