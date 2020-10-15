@@ -1,8 +1,9 @@
 <template>
   <div class="card card-custom gutter-b">
-    <div class="card-header border-0 py-5">
+    <div class="card-header py-6">
       <h3 class="card-title font-weight-bolder">Customer Data</h3>
-      <h6>id: {{form.id}}</h6>
+      <h4 v-if="!newCus"><b-badge pill variant="dark">id: {{form.id}}</b-badge></h4>
+      <h4 v-if="newCus"><b-badge pill>new customer</b-badge></h4>
     </div>
     <!-- alert area -->
     <div class="mx-3">
@@ -41,22 +42,22 @@
   <div class="card-body">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
-        id="input-group-1"
+        id="input-group-cpy"
         label="Company Name:"
-        label-for="input-1"
+        label-for="input-cpy"
         description="Customer's company name"
       >
         <b-form-input
-          id="input-1"
+          id="input-cpy"
           v-model="form.company"
           required
           placeholder="ARAIN Company"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Name:" label-for="input-2">
+      <b-form-group id="input-group-nme" label="Name:" label-for="input-nme">
         <b-form-input
-          id="input-2"
+          id="input-nme"
           v-model="form.name"
           required
           placeholder="Enter name"
@@ -64,12 +65,12 @@
       </b-form-group>
 
       <b-form-group
-        id="input-group-1"
+        id="input-group-eml"
         label="Email:"
-        label-for="input-1"
+        label-for="input-eml"
       >
         <b-form-input
-          id="input-1"
+          id="input-eml"
           v-model="form.email"
           required
           type="email"
@@ -78,16 +79,33 @@
       </b-form-group>
 
       <b-form-group
-        id="input-group-1"
+        id="input-group-phe"
         label="Phone:"
-        label-for="input-1"
+        label-for="input-phe"
       >
         <b-form-input
-          id="input-1"
+          id="input-phe"
           v-model="form.phone"
           required
           placeholder="+1 123-123-1234"
         ></b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="input-group-gen"
+        label="Gender:"
+        label-for="input-gen"
+      >
+        <b-form-radio-group 
+          id="input-gen"
+          v-model="form.selectedGender"
+          required
+          buttons
+          :options="genderOptions"
+          button-variant="outline-primary"
+          name="radio-gender"
+        >
+        </b-form-radio-group>
       </b-form-group>
 
       <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
@@ -117,9 +135,15 @@ export default {
         phone: '',
         email: '',
         progress: '',
-        state: ''
+        state: '',
+        selectedGender: ''
       },
-      show: true
+      newCus: false,
+      show: true,
+      genderOptions: [
+        { text: '女士', value: 'female' },
+        { text: '男士', value: 'male' }
+      ]
     }
   },
   mounted() {
@@ -133,7 +157,13 @@ export default {
     ]);
   },
   beforeRouteEnter(to, from, next) {
-    em_customers.doc(to.params.customer_id).get().then( function (doc) {
+    if (to.params.new_customer) {
+      next(vm => {
+        vm.newCus = true
+        vm.form.name = "New Customer"
+      });
+    } else {
+      em_customers.doc(to.params.customer_id).get().then( function (doc) {
       next(vm => {
         vm.form.id = doc.id
         vm.form.head = doc.data().head
@@ -143,8 +173,10 @@ export default {
         vm.form.email = doc.data().email
         vm.form.progress = doc.data().progress
         vm.form.state = doc.data().state
+        vm.form.selectedGender = doc.data().gender
       })
     });
+    }
   },
   computed: {
     ...mapGetters([
@@ -174,6 +206,7 @@ export default {
         phone: this.form.phone,
         progress: this.form.progress,
         state: this.form.state,
+        gender: this.form.selectedGender
       }
       var instance = this
       em_customers.doc(this.form.id).update(cusData).then(function() {
@@ -193,6 +226,7 @@ export default {
       this.form.email = ''
       this.form.progress = ''
       this.form.state = ''
+      this.form.selectedGender = ''
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {

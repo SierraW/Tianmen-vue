@@ -26,6 +26,11 @@ export default new Router({
           component: () => import("@/view/pages/customers_data/CustomersData.vue")
         },
         {
+          path: "/history/:customer_id",
+          name: "cus_his",
+          component: () => import("@/view/pages/customers_data/CustomerSupportHistory.vue")
+        },
+        {
           path: "/builder",
           name: "builder",
           component: () => import("@/view/pages/Builder.vue")

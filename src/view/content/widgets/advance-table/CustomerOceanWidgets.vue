@@ -11,12 +11,16 @@
         </span>
       </h3>
       <div class="card-toolbar">
-        <a href="#" class="btn btn-success font-weight-bolder font-size-sm">
+        <router-link v-bind:to="{name:'cus_data', params:{
+                    new_customer: true
+                  }}"
+        class="btn btn-success font-weight-bolder font-size-sm"
+        >
           <span class="svg-icon svg-icon-md svg-icon-white">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
             <inline-svg src="media/svg/icons/Communication/Add-user.svg" />
             <!--end::Svg Icon--> </span
-          >Add New Member</a
+          >Add New Member</router-link
         >
       </div>
     </div>
@@ -114,19 +118,6 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <router-link v-bind:to="{name:'cus_data', params:{
-                    customer_id: item.id
-                  }}"
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-                  >
-                    <span class="svg-icon svg-icon-md svg-icon-primary">
-                      <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->
-                      <inline-svg
-                        src="media/svg/icons/Communication/Write.svg"
-                      />
-                      <!--end::Svg Icon-->
-                    </span>
-                  </router-link>
                   <button
                     v-on:click="subscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
@@ -153,7 +144,8 @@
 </template>
 
 <script>
-import { em_customers } from '@/core/services/firebaseInit';
+import { em_customers, em_histories, firebase } from '@/core/services/firebaseInit';
+import { mapGetters } from "vuex";
 
 export default {
   name: "widget-cusocean",
@@ -200,6 +192,7 @@ export default {
     });
   },
   components: {},
+  computed: mapGetters(['currentUser']),
   methods: {
     setCheck(checked) {
       this.checked = checked;
@@ -208,6 +201,14 @@ export default {
       if (confirm("Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.")) {
         em_customers.doc(id).update({
           uid: "0"
+        });
+        em_histories.add({
+          customer_id: id,
+          message: "",
+          type: "subscribe",
+          root: "system",
+          from: this.currentUser.id,
+          time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       }
     }

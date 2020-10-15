@@ -105,8 +105,9 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <a
-                    href="#"
+                  <router-link v-bind:to="{name:'cus_his', params:{
+                    customer_id: item.id
+                  }}"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
@@ -116,9 +117,10 @@
                       />
                       <!--end::Svg Icon-->
                     </span>
-                  </a>
+                  </router-link>
                   <router-link v-bind:to="{name:'cus_data', params:{
-                    customer_id: item.id
+                    customer_id: item.id,
+                    new_customer: false
                   }}"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
                   >
@@ -154,7 +156,8 @@
 </template>
 
 <script>
-import { em_customers } from '@/core/services/firebaseInit';
+import { em_customers, em_histories, firebase } from '@/core/services/firebaseInit';
+import { mapGetters } from "vuex";
 
 export default {
   name: "widget-2",
@@ -186,6 +189,7 @@ export default {
     });
   },
   components: {},
+  computed: mapGetters(['currentUser']),
   methods: {
     setCheck(checked) {
       this.checked = checked
@@ -194,6 +198,14 @@ export default {
       if (confirm("Are you sure to release this customer? This action cannot be cancel.")) {
         em_customers.doc(id).update({
           uid: ""
+        });
+        em_histories.add({
+          customer_id: id,
+          message: "",
+          type: "unsubscribe",
+          root: "system",
+          from: this.currentUser.id,
+          time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       }
     }
