@@ -26,7 +26,7 @@ export default new Router({
           component: () => import("@/view/pages/customers_data/CustomersData.vue")
         },
         {
-          path: "/history/:customer_id",
+          path: "/history/:customer_name",
           name: "cus_his",
           component: () => import("@/view/pages/customers_data/CustomerSupportHistory.vue")
         },

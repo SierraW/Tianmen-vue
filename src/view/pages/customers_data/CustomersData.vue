@@ -1,7 +1,7 @@
 <template>
   <div class="card card-custom gutter-b">
     <div class="card-header py-6">
-      <h3 class="card-title font-weight-bolder">Customer Data</h3>
+      <h3 class="card-title">{{form.company}}<br/>{{form.name}}</h3>
       <h4 v-if="!newCus"><b-badge pill variant="dark">id: {{form.id}}</b-badge></h4>
       <h4 v-if="newCus"><b-badge pill>new customer</b-badge></h4>
     </div>
@@ -39,6 +39,7 @@
         ></b-progress>
       </b-alert>
     </div>
+    <!-- end of alert area -->
   <div class="card-body">
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
@@ -108,6 +109,18 @@
         </b-form-radio-group>
       </b-form-group>
 
+      <b-form-group
+        id="input-group-hea"
+        label="Head (Optional):"
+        label-for="input-hea"
+      >
+        <b-form-input
+          id="input-hea"
+          v-model="form.head"
+          placeholder="media/svg/avatars/001-boy.svg"
+        ></b-form-input>
+      </b-form-group>
+
       <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
@@ -118,7 +131,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
-import { em_customers } from '@/core/services/firebaseInit';
+import { em_histories, em_customers, firebase } from '@/core/services/firebaseInit';
 
 export default {
   name: "cus_data",
@@ -127,9 +140,10 @@ export default {
       dismissSecs: 5,
       dismissCountDownFailed: 0,
       dismissCountDownSuccess: 0,
+      toastCount: 0,
       form: {
         id: '',
-        head: '',
+        head: 'media/svg/avatars/001-boy.svg',
         name: '',
         company: '',
         phone: '',
@@ -147,34 +161,35 @@ export default {
     }
   },
   mounted() {
-    if (this.form.name == '') {
-      alert("Customer data not found! Redirecting you to privous page...");
-      this.$router.back();
-    }
-    this.$store.dispatch(SET_BREADCRUMB, [
-      { title: "Dashboard", route: "../dashboard" },
-      { title: "Customer data" }
-    ]);
-  },
-  beforeRouteEnter(to, from, next) {
-    if (to.params.new_customer) {
-      next(vm => {
-        vm.newCus = true
-        vm.form.name = "New Customer"
-      });
+    if (this.newCus) {
+      this.$store.dispatch(SET_BREADCRUMB, [
+        { title: "Dashboard", route: "../dashboard" },
+        { title: "Ocean", route: "../ocean" },
+        { title: "Customer data" }
+      ]);
     } else {
-      em_customers.doc(to.params.customer_id).get().then( function (doc) {
-      next(vm => {
-        vm.form.id = doc.id
-        vm.form.head = doc.data().head
-        vm.form.name = doc.data().name
-        vm.form.company = doc.data().company
-        vm.form.phone = doc.data().phone
-        vm.form.email = doc.data().email
-        vm.form.progress = doc.data().progress
-        vm.form.state = doc.data().state
-        vm.form.selectedGender = doc.data().gender
-      })
+      this.$store.dispatch(SET_BREADCRUMB, [
+        { title: "Dashboard", route: "../dashboard" },
+        { title: "Customer data" }
+      ]);
+    }
+  },
+  created() {
+    if (this.$route.params.new_customer) {
+      this.newCus = true
+      this.form.name = "New Customer"
+    } else {
+      var instance = this;
+      em_customers(this.currentUser.fs_key).doc(this.$route.params.customer_id).get().then( function (doc) {
+      instance.form.id = doc.id
+      instance.form.head = doc.data().head
+      instance.form.name = doc.data().name
+      instance.form.company = doc.data().company
+      instance.form.phone = doc.data().phone
+      instance.form.email = doc.data().email
+      instance.form.progress = doc.data().progress
+      instance.form.state = doc.data().state
+      instance.form.selectedGender = doc.data().gender
     });
     }
   },
@@ -184,6 +199,14 @@ export default {
     ]),
   },
   methods: {
+    makeToast(title, message) {
+      this.toastCount++
+      this.$bvToast.toast(message, {
+        title: title,
+        autoHideDelay: 5000,
+        appendToast: true
+      })
+    },
     countDownChangedFailed(dismissCountDown) {
       this.dismissCountDownFailed = dismissCountDown
     },
@@ -196,31 +219,85 @@ export default {
     showAlertSuccess() {
       this.dismissCountDownSuccess = this.dismissSecs
     },
-    onSubmit(evt) {
+    async onSubmit(evt) {
       evt.preventDefault()
-      var cusData = {
-        company: this.form.company,
-        email: this.form.email,
-        head: this.form.head,
-        name: this.form.name,
-        phone: this.form.phone,
-        progress: this.form.progress,
-        state: this.form.state,
-        gender: this.form.selectedGender
+      if (!this.currentUser.fs_key) {
+        this.showAlertFailed();
+        return;
       }
-      var instance = this
-      em_customers.doc(this.form.id).update(cusData).then(function() {
-        instance.showAlertSuccess()
-      }).catch(function(err) {
-        instance.showAlertFailed()
-        console.log(err);
-      })
+      const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/
+      if (!pattern.test(this.form.phone)) {
+        this.makeToast("Data invalid", `Phone number invalid, your input is ${this.form.phone}. Valid phone number example: +16476543210`);
+        return;
+      }
+      var instance = this;
+      if (this.newCus) {
+        const result = await em_customers(this.currentUser.fs_key).where("phone", "==", this.form.phone).get();
+        if(result.size > 0) {
+          this.makeToast("Profile exist", `This phone number ${this.form.phone} already has a associated profile.`);
+          return;
+        }
+        em_customers(this.currentUser.fs_key).add({
+          company: this.form.company,
+          email: this.form.email,
+          head: this.form.head,
+          inviter_uid: this.currentUser.id,
+          name: this.form.name,
+          phone: this.form.phone,
+          progress: "100%",
+          state: "primary",
+          uid: "",
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
+          gender: this.form.selectedGender
+        }).then(function() {
+          instance.showAlertSuccess()
+        }).catch(function(err) {
+          instance.showAlertFailed()
+          console.log(err);
+        })
+        em_histories(this.currentUser.fs_key).add({
+          customerId: this.form.phone,
+          message: "Profile creation",
+          type: "create",
+          root: "system",
+          isRoot: false,
+          from: this.currentUser.user_login,
+          time: firebase.firestore.Timestamp.fromDate(new Date())
+        });
+      } else {
+        var cusData = {
+          company: this.form.company,
+          email: this.form.email,
+          head: this.form.head,
+          name: this.form.name,
+          phone: this.form.phone,
+          progress: this.form.progress,
+          state: this.form.state,
+          gender: this.form.selectedGender
+        };
+        em_customers(this.currentUser.fs_key).doc(this.form.id).update(cusData).then  (function() {
+          instance.showAlertSuccess()
+        }).catch(function(err) {
+          instance.showAlertFailed()
+          console.log(err);
+        });
+        em_histories(this.currentUser.fs_key).add({
+          customerId: this.form.phone,
+          message: JSON.stringify(cusData),
+          type: "modify",
+          root: "system",
+          isRoot: false,
+          from: this.currentUser.user_login,
+          time: firebase.firestore.Timestamp.fromDate(new Date())
+        });
+      }
     },
     onReset(evt) {
       evt.preventDefault()
       // Reset our form values
       this.form.id = ''
       this.form.name = ''
+      this.form.head = 'media/svg/avatars/001-boy.svg'
       this.form.company = ''
       this.form.phone = ''
       this.form.email = ''

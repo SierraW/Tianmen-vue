@@ -106,7 +106,10 @@
                 </td>
                 <td class="pr-0 text-right">
                   <router-link v-bind:to="{name:'cus_his', params:{
-                    customer_id: item.id
+                    customer_id: item.id,
+                    customer_name: item.name,
+                    customer_company: item.company,
+                    fs_key: currentUser.fs_key
                   }}"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
@@ -168,7 +171,7 @@ export default {
     };
   },
   created () {
-    em_customers.where("uid", "==", "0").onSnapshot( querySnapshot => {
+    em_customers(this.currentUser.fs_key).where("uid", "==", this.currentUser.id).onSnapshot( querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -196,18 +199,22 @@ export default {
     },
     unsubscribeCus(id) {
       if (confirm("Are you sure to release this customer? This action cannot be cancel.")) {
-        em_customers.doc(id).update({
+        em_customers(this.currentUser.fs_key).doc(id).update({
           uid: ""
         });
-        em_histories.add({
-          customer_id: id,
+        em_histories(this.currentUser.fs_key).add({
+          customerId: id,
           message: "",
           type: "unsubscribe",
           root: "system",
-          from: this.currentUser.id,
+          isRoot: false,
+          from: this.currentUser.user_login,
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       }
+    },
+    getFSKey() {
+      return this.currentUser.fs_key;
     }
   }
 };

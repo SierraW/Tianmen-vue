@@ -9,9 +9,19 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 const em_chat = db.collection("em_chat");
-const em_customers = "em_customers";
-const em_histories = "em_cus_histories";
 const em = db.collection("em_company");
+
+function em_customers(fs_key) {
+	return em.doc(fs_key).collection("em_customers");
+}
+
+function em_histories(fs_key) {
+	return em.doc(fs_key).collection("em_cus_histories");
+}
+
+function timestamp() {
+	return firebase.firestore.Timestamp.fromDate(new Date());
+} 
 
 export {
 	firebase,
@@ -20,5 +30,6 @@ export {
 	em,
 	em_chat,
 	em_customers,
-	em_histories
+	em_histories,
+	timestamp
 };

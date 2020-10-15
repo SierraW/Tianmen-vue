@@ -2,24 +2,101 @@
   <div>
     <div class="row card card-custom gutter-b">
       <div class="card-header py-6">
-        <h3 class="card-title font-weight-bolder">Customer Data</h3>
+        <h3 class="card-title">{{cusCom}}<br/>{{cusName}}</h3>
         <h4><b-badge pill variant="dark">id: {{cusId}}</b-badge></h4>
       </div>
       <div class="col-md-12 card-body">
+
+    <!-- alert area -->
+    <div class="mx-3">
+      <b-alert
+        :show="dismissCountDownFailed"
+        dismissible
+        variant="danger"
+        @dismissed="dismissCountDownFailed=0"
+        @dismiss-count-down="countDownChangedFailed"
+      >
+        <p>Data upload failed... Please try again later.</p>
+        <b-progress
+          variant="dark"
+          :max="dismissSecs"
+          :value="dismissCountDownFailed"
+          height="4px"
+        ></b-progress>
+      </b-alert>
+
+      <b-alert
+        :show="dismissCountDownSuccess"
+        dismissible
+        variant="success"
+        @dismissed="dismissCountDownSuccess=0"
+        @dismiss-count-down="countDownChangedSuccess"
+      >
+        <p>Upload successful!</p>
+        <b-progress
+          variant="info"
+          :max="dismissSecs"
+          :value="dismissCountDownSuccess"
+          height="4px"
+        ></b-progress>
+      </b-alert>
+    </div>
+    <!-- end of alert area -->
+
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-form-group
             id="input-group-1"
             label="加入留言:"
             label-for="input-1"
-            description="We'll never share your email with anyone else."
           >
             <b-form-input
               id="input-1"
-              v-model="form.email"
-              type="email"
+              v-model="form.message"
+              type="text"
               required
-              placeholder="Enter email"
+              placeholder="Enter Message"
             ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-father"
+            label="父节点"
+            label-for="input-father"
+            description="Fill in only if you certain what you are doing."
+            >
+            <b-form-select v-model="form.root" :options="options"></b-form-select>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-type"
+            label="类别:"
+            label-for="input-type"
+            description="Default: Message"
+          >
+            <b-form-input
+              id="input-type"
+              v-model="form.type"
+              type="text"
+              required
+              placeholder="Message"
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-opt-father"
+            label="这是一个父节点"
+            label-for="input-opt-father"
+            description="Check only if you certain what you are doing."
+            >
+            <b-form-checkbox
+              id="input-opt-father"
+              v-model="form.optfather"
+              name="input-opt-father"
+              value=true
+              unchecked-value=false
+            >
+            root
+            </b-form-checkbox>
           </b-form-group>
 
           <b-button type="submit" variant="primary">Submit</b-button>
@@ -56,17 +133,26 @@
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import { mapGetters } from "vuex";
-import { em_histories } from '@/core/services/firebaseInit';
+import { em_histories, firebase } from '@/core/services/firebaseInit';
 
 export default {
   name: "CustomerSupportHistory",
   computed: mapGetters(['currentUser']),
   data() {
     return {
+      dismissSecs: 5,
+      dismissCountDownFailed: 0,
+      dismissCountDownSuccess: 0,
       cusId: '',
+      cusName: '',
+      cusCom: '',
       form: {
-        email: ''
+        message: '',
+        isRoot: false,
+        root: 'user-defined',
+        type: 'Message'
       },
+      options: [],
       show: true,
       search: '',
       headers: [
@@ -79,6 +165,7 @@ export default {
         { text: '父类型', value: 'root' },
         { text: '类型', value: 'type' },
         { text: '留言', value: 'message' },
+        { text: '父节点', value: 'isRoot'},
         { text: '时间戳', value: 'time' },
       ],
       logs: []
@@ -86,30 +173,86 @@ export default {
   },
   components: {
   },
-  beforeRouteEnter(to, from, next) {
-    em_histories.where("customer_id", "==", to.params.customer_id).onSnapshot(function(querySnapshot) {
+  created () {
+    this.cusId = this.$route.params.customer_id;
+    this.cusName = this.$route.params.customer_name;
+    this.cusCom = this.$route.params.customer_company;
+    var instance = this;
+    em_histories(this.currentUser.fs_key).where("customerId", "==", this.cusId).onSnapshot(function(querySnapshot) {
       var logs = [];
+      var roots = [
+        {
+          value: "user-defined",
+          text: "Default"
+        }
+      ];
       querySnapshot.forEach(function(doc) {
         logs.push({
           id: doc.id,
           from: doc.data().from,
           message: doc.data().message,
           root: doc.data().root,
-          type: doc.data().type
+          type: doc.data().type,
+          isRoot: doc.data().isRoot,
+          time: doc.data().time.toDate()
         });
+        if (doc.data().isRoot) {
+          roots.push({
+            value: doc.data().type,
+            text: `${doc.data().type}: ${doc.data().message}`
+          });
+        }
       });
-
-      next(vm => {
-        vm.logs = logs
-        vm.cusId = to.params.customer_id
-      });
-
+      instance.logs = logs;
+      instance.options = roots;
     });
   },
   methods: {
+    makeToast(title, message) {
+      this.toastCount++
+      this.$bvToast.toast(message, {
+        title: title,
+        autoHideDelay: 5000,
+        appendToast: true
+      })
+    },
+    countDownChangedFailed(dismissCountDown) {
+      this.dismissCountDownFailed = dismissCountDown
+    },
+    countDownChangedSuccess(dismissCountDown) {
+      this.dismissCountDownSuccess = dismissCountDown
+    },
+    showAlertFailed() {
+      this.dismissCountDownFailed = this.dismissSecs
+    },
+    showAlertSuccess() {
+      this.dismissCountDownSuccess = this.dismissSecs
+    },
     onSubmit(evt) {
       evt.preventDefault()
-      alert(JSON.stringify(this.form))
+      if(!this.cusId) {
+        this.showAlertFailed();
+        return;
+      }
+      if (this.form.type.toLowerCase() == "system" || this.form.root.toLowerCase() == "system" || this.form.type.toLowerCase() == "user-defined" || this.form.root.toLowerCase() == "user-defined") {
+        this.makeToast("Reserved keyword", `One of system reserve keyword are being used. Reverved keyword are: system, user-defined`);
+        return;
+      }
+      var instance = this;
+      em_histories(this.currentUser.fs_key).add({
+        customerId: this.cusId,
+        from: this.currentUser.user_login,
+        message: this.form.message,
+        root: this.form.root,
+        type: this.form.type,
+        isRoot: this.form.isRoot,
+        time: firebase.firestore.Timestamp.fromDate(new Date())
+      }).then(function() {
+        instance.showAlertSuccess()
+      }).catch(function(err) {
+        instance.showAlertFailed()
+        console.log(err);
+      });
     },
     onReset(evt) {
       evt.preventDefault()

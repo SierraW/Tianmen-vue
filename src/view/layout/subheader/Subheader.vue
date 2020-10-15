@@ -75,12 +75,18 @@
               </router-link>
             </b-dropdown-text>
             <b-dropdown-text tag="div" class="navi-item">
-              <a href="#" class="navi-link">
+              <router-link v-bind:to="{name:'cus_data', params:{
+                customer_id: 'new_customer',
+                new_customer: true,
+                fs_key: this.currentUser.fs_key
+                }}"
+              class="navi-link"
+              >
                 <span class="navi-icon">
                   <i class="flaticon2-list-3"></i>
                 </span>
-                <span class="navi-text">Contacts</span>
-              </a>
+                <span class="navi-text">添加新用户</span>
+              </router-link>
             </b-dropdown-text>
             <b-dropdown-text tag="div" class="navi-item">
               <a href="#" class="navi-link">
@@ -181,7 +187,7 @@ export default {
     title: String
   },
   computed: {
-    ...mapGetters(["layoutConfig"]),
+    ...mapGetters(["layoutConfig", "currentUser"]),
 
     /**
      * Check if subheader width is fluid

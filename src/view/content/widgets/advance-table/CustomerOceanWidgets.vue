@@ -12,7 +12,9 @@
       </h3>
       <div class="card-toolbar">
         <router-link v-bind:to="{name:'cus_data', params:{
-                    new_customer: true
+                    customer_id: 'new_customer',
+                    new_customer: true,
+                    fs_key: this.currentUser.fs_key
                   }}"
         class="btn btn-success font-weight-bolder font-size-sm"
         >
@@ -171,7 +173,7 @@ export default {
     };
   },
   created () {
-    em_customers.where("uid", "==", "").onSnapshot( querySnapshot => {
+    em_customers(this.currentUser.fs_key).where("uid", "==", "").onSnapshot( querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -184,7 +186,7 @@ export default {
             progress: doc.data().progress,
             state: doc.data().state,
             time: doc.data().time,
-            inviter_uid: "abcd"
+            inviter_uid: doc.data().inviter_uid
           };
           emCusRecords.push(cusRecord);
         });
@@ -199,15 +201,16 @@ export default {
     },
     subscribeCus(id) {
       if (confirm("Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.")) {
-        em_customers.doc(id).update({
-          uid: "0"
+        em_customers(this.currentUser.fs_key).doc(id).update({
+          uid: this.currentUser.id
         });
-        em_histories.add({
-          customer_id: id,
+        em_histories(this.currentUser.fs_key).add({
+          customerId: id,
           message: "",
           type: "subscribe",
           root: "system",
-          from: this.currentUser.id,
+          isRoot: false,
+          from: this.currentUser.user_login,
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       }
