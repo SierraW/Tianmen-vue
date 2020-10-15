@@ -90,7 +90,7 @@
             >
             <b-form-checkbox
               id="input-opt-father"
-              v-model="form.optfather"
+              v-model="form.isRoot"
               name="input-opt-father"
               value=true
               unchecked-value=false
@@ -234,11 +234,13 @@ export default {
         this.showAlertFailed();
         return;
       }
-      if (this.form.type.toLowerCase() == "system" || this.form.root.toLowerCase() == "system" || this.form.type.toLowerCase() == "user-defined" || this.form.root.toLowerCase() == "user-defined") {
+      if (this.form.type.toLowerCase() == "system" || this.form.root.toLowerCase() == "system" || this.form.type.toLowerCase() == "user-defined") {
         this.makeToast("Reserved keyword", `One of system reserve keyword are being used. Reverved keyword are: system, user-defined`);
         return;
       }
       var instance = this;
+      console.log("tf?", this.form.isRoot);
+
       em_histories(this.currentUser.fs_key).add({
         customerId: this.cusId,
         from: this.currentUser.user_login,
@@ -248,16 +250,22 @@ export default {
         isRoot: this.form.isRoot,
         time: firebase.firestore.Timestamp.fromDate(new Date())
       }).then(function() {
-        instance.showAlertSuccess()
+        instance.showAlertSuccess();
+        instance.onReset();
       }).catch(function(err) {
         instance.showAlertFailed()
         console.log(err);
       });
     },
     onReset(evt) {
-      evt.preventDefault()
+      if (evt) {
+        evt.preventDefault();
+      }
       // Reset our form values
-      this.form.email = ''
+      this.form.message = ''
+      this.form.isRoot = false
+      this.form.root = 'user-defined'
+      this.form.type = 'Message'
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
