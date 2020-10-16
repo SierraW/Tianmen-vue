@@ -141,6 +141,7 @@ export default {
       dismissCountDownFailed: 0,
       dismissCountDownSuccess: 0,
       toastCount: 0,
+      old: '',
       form: {
         id: '',
         head: 'media/svg/avatars/001-boy.svg',
@@ -190,6 +191,18 @@ export default {
       instance.form.progress = doc.data().progress
       instance.form.state = doc.data().state
       instance.form.selectedGender = doc.data().gender
+
+      instance.old = {
+        id: doc.id,
+        head: doc.data().head,
+        name: doc.data().name,
+        company: doc.data().company,
+        phone: doc.data().phone,
+        email: doc.data().email,
+        progress: doc.data().progress,
+        state: doc.data().state,
+        selectedGender: doc.data().gender
+      };
     });
     }
   },
@@ -237,7 +250,7 @@ export default {
           this.makeToast("Profile exist", `This phone number ${this.form.phone} already has a associated profile.`);
           return;
         }
-        em_customers(this.currentUser.fs_key).add({
+        const newCusData = {
           company: this.form.company,
           email: this.form.email,
           head: this.form.head,
@@ -249,15 +262,16 @@ export default {
           uid: "",
           time: firebase.firestore.Timestamp.fromDate(new Date()),
           gender: this.form.selectedGender
-        }).then(function() {
+        };
+        em_customers(this.currentUser.fs_key).add(newCusData).then(function() {
           instance.showAlertSuccess()
         }).catch(function(err) {
           instance.showAlertFailed()
           console.log(err);
         })
         em_histories(this.currentUser.fs_key).add({
-          customerId: this.form.phone,
-          message: "Profile creation",
+          customerId: this.form.id,
+          message: JSON.stringify(newCusData),
           type: "create",
           root: "system",
           isRoot: false,
@@ -281,9 +295,10 @@ export default {
           instance.showAlertFailed()
           console.log(err);
         });
+        const diff = this.different(cusData);
         em_histories(this.currentUser.fs_key).add({
-          customerId: this.form.phone,
-          message: JSON.stringify(cusData),
+          customerId: this.form.id,
+          message: JSON.stringify(diff),
           type: "modify",
           root: "system",
           isRoot: false,
@@ -291,6 +306,16 @@ export default {
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       }
+    },
+    different(a) {
+      var diff = [];
+      for (const [key, value] of Object.entries(a)) {
+        if (this.old[key] && this.old[key] !== value) {
+          diff.push(`${key}: ${value}`);
+        }
+      }
+      this.old = a;
+      return diff;
     },
     onReset(evt) {
       evt.preventDefault()
