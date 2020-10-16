@@ -121,10 +121,18 @@
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="logs"
+              :items="filteredLogs"
               :search="search"
             ></v-data-table>
         </v-card>
+        <b-form-group label="Display filters:" class="mt-6">
+          <b-form-checkbox-group
+            v-model="selected"
+            :options="filterOptions"
+            name="buttons-1"
+            @change="toggleLogCat($event)"
+          ></b-form-checkbox-group>
+        </b-form-group>
       </div>
     </div>
   </div>
@@ -137,9 +145,16 @@ import { em_histories, firebase } from '@/core/services/firebaseInit';
 
 export default {
   name: "CustomerSupportHistory",
-  computed: mapGetters(['currentUser']),
+  computed: {
+    ...mapGetters(['currentUser'])
+  },
   data() {
     return {
+      selected: ["1","2"],
+      filterOptions: [
+        { text: 'System', value: '1' },
+        { text: 'User-defined', value: '2' },
+      ],
       dismissSecs: 5,
       dismissCountDownFailed: 0,
       dismissCountDownSuccess: 0,
@@ -168,7 +183,8 @@ export default {
         { text: '父节点', value: 'isRoot'},
         { text: '时间戳', value: 'time' },
       ],
-      logs: []
+      logs: [],
+      filteredLogs: []
     }
   },
   components: {
@@ -204,10 +220,35 @@ export default {
         }
       });
       instance.logs = logs;
+      instance.filterLogs();
       instance.options = roots;
     });
   },
   methods: {
+    toggleLogCat(e) {
+      this.filterLogs(e);
+    },
+    filterLogs(e) {
+      var displayUserDef = true;
+      var displaySysDef = true;
+
+      if (!e) {
+
+      } else if (e.length == 0) {
+        displayUserDef = false;
+        displaySysDef = false;
+      } else if (e.length == 1) {
+        if (e[0] == 1) {
+          displayUserDef = false;
+        } else {
+          displaySysDef = false;
+        }
+      }
+      
+      this.filteredLogs = this.logs.filter(log => {
+        return ((displaySysDef && log.root == "system") || (displayUserDef && log.root != "system"));
+      });
+    },
     makeToast(title, message) {
       this.toastCount++
       this.$bvToast.toast(message, {
