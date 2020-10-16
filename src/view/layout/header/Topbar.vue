@@ -35,7 +35,6 @@
 </style>
 
 <script>
-
 import KTQuickUser from "@/view/layout/extras/offcanvas/QuickUser.vue";
 
 export default {

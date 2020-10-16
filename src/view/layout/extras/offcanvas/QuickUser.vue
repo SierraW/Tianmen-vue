@@ -12,13 +12,13 @@
       <span
         class="text-white opacity-90 font-weight-bolder font-size-base d-none d-md-inline mr-4"
       >
-        {{currentUser.user_login}}
+        {{ currentUser.user_login }}
       </span>
       <span class="symbol symbol-35">
         <span
           class="symbol-label text-white font-size-h5 font-weight-bold bg-white-o-30"
         >
-          {{currentUser.user_login.charAt(0).toUpperCase()}}
+          {{ currentUser.user_login.charAt(0).toUpperCase() }}
         </span>
       </span>
     </div>
@@ -55,21 +55,20 @@
         <div class="d-flex align-items-center mt-5">
           <div class="symbol symbol-100 mr-5">
             <img class="symbol-label" :src="picture" alt="" />
-            
           </div>
           <div class="d-flex flex-column">
             <a
               href="#"
               class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"
             >
-              {{currentUser.display_name}}
+              {{ currentUser.display_name }}
             </a>
-            <div class="text-muted mt-1">{{currentUser.role_name}}</div>
+            <div class="text-muted mt-1">{{ currentUser.role_name }}</div>
             <div class="navi mt-2">
               <a href="#" class="navi-item">
                 <span class="navi-link p-0 pb-2">
                   <span class="navi-text text-muted text-hover-primary">
-                    {{currentUser.user_email}}
+                    {{ currentUser.user_email }}
                   </span>
                 </span>
               </a>
@@ -149,7 +148,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUser']),
+    ...mapGetters(["currentUser"]),
     picture() {
       return process.env.BASE_URL + "media/users/300_21.jpg";
     }

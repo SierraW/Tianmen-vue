@@ -71,9 +71,8 @@ const actions = {
         .then(({ data }) => {
           if (data.success == "success") {
             context.commit(SET_AUTH, data.data);
-          }
-          else {
-            throw new Error( data.message );
+          } else {
+            throw new Error(data.message);
           }
         })
         .catch(() => {

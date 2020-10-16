@@ -2,7 +2,9 @@ const path = require("path");
 
 module.exports = {
   publicPath:
-    process.env.NODE_ENV === "production" ? "/Documents/UKin/Tianmen-vue/" : "/",
+    process.env.NODE_ENV === "production"
+      ? "./"
+      : "/",
   configureWebpack: {
     resolve: {
       alias: {

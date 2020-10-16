@@ -18,23 +18,26 @@ export default new Router({
         {
           path: "/ocean",
           name: "cus_ocean",
-          component: () => import("@/view/pages/customers_data/CustomersOcean.vue")
+          component: () =>
+            import("@/view/pages/customers_data/CustomersOcean.vue")
         },
         {
           path: "/customer/:customer_id",
           name: "cus_data",
-          component: () => import("@/view/pages/customers_data/CustomersData.vue")
+          component: () =>
+            import("@/view/pages/customers_data/CustomersData.vue")
         },
         {
           path: "/history/:customer_name",
           name: "cus_his",
-          component: () => import("@/view/pages/customers_data/CustomerSupportHistory.vue")
+          component: () =>
+            import("@/view/pages/customers_data/CustomerSupportHistory.vue")
         },
         {
           path: "/builder",
           name: "builder",
           component: () => import("@/view/pages/Builder.vue")
-        },
+        }
       ]
     },
     {

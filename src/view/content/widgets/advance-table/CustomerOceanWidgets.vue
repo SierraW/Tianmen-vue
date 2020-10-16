@@ -11,12 +11,16 @@
         </span>
       </h3>
       <div class="card-toolbar">
-        <router-link v-bind:to="{name:'cus_data', params:{
-                    customer_id: 'new_customer',
-                    new_customer: true,
-                    fs_key: this.currentUser.fs_key
-                  }}"
-        class="btn btn-success font-weight-bolder font-size-sm"
+        <router-link
+          v-bind:to="{
+            name: 'cus_data',
+            params: {
+              customer_id: 'new_customer',
+              new_customer: true,
+              fs_key: this.currentUser.fs_key
+            }
+          }"
+          class="btn btn-success font-weight-bolder font-size-sm"
         >
           <span class="svg-icon svg-icon-md svg-icon-white">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
@@ -120,15 +124,15 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <button v-b-tooltip.hover title="拉入此客户"
+                  <button
+                    v-b-tooltip.hover
+                    title="拉入此客户"
                     v-on:click="subscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
                       <!--begin::Svg Icon -->
-                      <inline-svg
-                        src="media/svg/icons/General/Save.svg"
-                      />
+                      <inline-svg src="media/svg/icons/General/Save.svg" />
                       <!--end::Svg Icon-->
                     </span>
                   </button>
@@ -146,7 +150,11 @@
 </template>
 
 <script>
-import { em_customers, em_histories, firebase } from '@/core/services/firebaseInit';
+import {
+  em_customers,
+  em_histories,
+  firebase
+} from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
 
 export default {
@@ -172,8 +180,10 @@ export default {
       checked: false
     };
   },
-  created () {
-    em_customers(this.currentUser.fs_key).where("uid", "==", "").onSnapshot( querySnapshot => {
+  created() {
+    em_customers(this.currentUser.fs_key)
+      .where("uid", "==", "")
+      .onSnapshot(querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -191,19 +201,25 @@ export default {
           emCusRecords.push(cusRecord);
         });
         this.list = emCusRecords;
-    });
+      });
   },
   components: {},
-  computed: mapGetters(['currentUser']),
+  computed: mapGetters(["currentUser"]),
   methods: {
     setCheck(checked) {
       this.checked = checked;
     },
     subscribeCus(id) {
-      if (confirm("Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.")) {
-        em_customers(this.currentUser.fs_key).doc(id).update({
-          uid: this.currentUser.id
-        });
+      if (
+        confirm(
+          "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription."
+        )
+      ) {
+        em_customers(this.currentUser.fs_key)
+          .doc(id)
+          .update({
+            uid: this.currentUser.id
+          });
         em_histories(this.currentUser.fs_key).add({
           customerId: id,
           message: "",

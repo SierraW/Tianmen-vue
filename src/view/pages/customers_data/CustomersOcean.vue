@@ -23,7 +23,6 @@
           >
             INFO:
           </span>
-          
         </p>
       </div>
     </div>
@@ -50,6 +49,6 @@ export default {
       { title: "Dashboard", route: "dashboard" },
       { title: "Customer ocean" }
     ]);
-  },
+  }
 };
 </script>

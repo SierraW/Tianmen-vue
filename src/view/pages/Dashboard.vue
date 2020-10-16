@@ -16,7 +16,7 @@
       </div>
     </div> -->
 
-<!--     <div class="row">
+    <!--     <div class="row">
       <div class="col-xxl-6 order-1 order-xxl-2">
         <ListWidget14></ListWidget14>
       </div>
@@ -35,7 +35,7 @@ import AdvancedTableWidget2 from "@/view/content/widgets/advance-table/Widget2.v
 export default {
   name: "dashboard",
   components: {
-    AdvancedTableWidget2,
+    AdvancedTableWidget2
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Dashboard" }]);

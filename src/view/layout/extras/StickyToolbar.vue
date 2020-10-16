@@ -11,7 +11,8 @@
         </router-link>
       </li>
       <li v-b-tooltip.hover.left="'Ocean'" class="nav-item">
-        <router-link to="/ocean"
+        <router-link
+          to="/ocean"
           class="btn btn-sm btn-icon btn-bg-light btn-text-warning btn-hover-warning"
         >
           <i class="flaticon2-drop"></i>

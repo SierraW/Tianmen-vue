@@ -105,12 +105,18 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <router-link v-b-tooltip.hover title="追踪客户历史" v-bind:to="{name:'cus_his', params:{
-                    customer_id: item.id,
-                    customer_name: item.name,
-                    customer_company: item.company,
-                    fs_key: currentUser.fs_key
-                  }}"
+                  <router-link
+                    v-b-tooltip.hover
+                    title="追踪客户历史"
+                    v-bind:to="{
+                      name: 'cus_his',
+                      params: {
+                        customer_id: item.id,
+                        customer_name: item.name,
+                        customer_company: item.company,
+                        fs_key: currentUser.fs_key
+                      }
+                    }"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
@@ -121,10 +127,16 @@
                       <!--end::Svg Icon-->
                     </span>
                   </router-link>
-                  <router-link v-b-tooltip.hover title="修改客户资料" v-bind:to="{name:'cus_data', params:{
-                    customer_id: item.id,
-                    new_customer: false
-                  }}"
+                  <router-link
+                    v-b-tooltip.hover
+                    title="修改客户资料"
+                    v-bind:to="{
+                      name: 'cus_data',
+                      params: {
+                        customer_id: item.id,
+                        new_customer: false
+                      }
+                    }"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
                   >
                     <span class="svg-icon svg-icon-md svg-icon-primary">
@@ -135,7 +147,9 @@
                       <!--end::Svg Icon-->
                     </span>
                   </router-link>
-                  <button v-b-tooltip.hover title="放弃客户"
+                  <button
+                    v-b-tooltip.hover
+                    title="放弃客户"
                     v-on:click="unsubscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
@@ -159,7 +173,11 @@
 </template>
 
 <script>
-import { em_customers, em_histories, firebase } from '@/core/services/firebaseInit';
+import {
+  em_customers,
+  em_histories,
+  firebase
+} from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
 
 export default {
@@ -170,8 +188,10 @@ export default {
       checked: false
     };
   },
-  created () {
-    em_customers(this.currentUser.fs_key).where("uid", "==", this.currentUser.id).onSnapshot( querySnapshot => {
+  created() {
+    em_customers(this.currentUser.fs_key)
+      .where("uid", "==", this.currentUser.id)
+      .onSnapshot(querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
           const cusRecord = {
@@ -189,19 +209,25 @@ export default {
           emCusRecords.push(cusRecord);
         });
         this.list = emCusRecords;
-    });
+      });
   },
   components: {},
-  computed: mapGetters(['currentUser']),
+  computed: mapGetters(["currentUser"]),
   methods: {
     setCheck(checked) {
-      this.checked = checked
+      this.checked = checked;
     },
     unsubscribeCus(id) {
-      if (confirm("Are you sure to release this customer? This action cannot be cancel.")) {
-        em_customers(this.currentUser.fs_key).doc(id).update({
-          uid: ""
-        });
+      if (
+        confirm(
+          "Are you sure to release this customer? This action cannot be cancel."
+        )
+      ) {
+        em_customers(this.currentUser.fs_key)
+          .doc(id)
+          .update({
+            uid: ""
+          });
         em_histories(this.currentUser.fs_key).add({
           customerId: id,
           message: "",
