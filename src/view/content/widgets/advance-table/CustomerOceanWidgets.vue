@@ -120,7 +120,7 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <button
+                  <button v-b-tooltip.hover title="拉入此客户"
                     v-on:click="subscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >

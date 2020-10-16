@@ -218,16 +218,76 @@ export default {
           isRoot: doc.data().isRoot,
           time: doc.data().time.toDate()
         });
-        if (doc.data().isRoot) {
-          roots.push({
-            value: doc.data().type,
-            text: `${doc.data().type}: ${doc.data().message}`
-          });
-        }
       });
+
+      //fetch options
+      var f_root = [];
+      var f_proot = [];
+      var f_child = [];
+      var f_disjoint = [];
+      for (var i = 0 ; i < logs.length; i++) {
+        var item = logs[i];
+        var option = {
+          root: item.root,
+          message: item.message,
+          type: item.type,
+          isRoot: item.isRoot,
+          child: []
+        }
+        if (option.root == "user-defined") {
+          f_root.push(option);
+        } else {
+          f_child.push(option);
+        }
+        if (option.isRoot) {
+          f_proot.push(option);
+        }
+      }
+
+      for (var m = 0 ; m < f_child.length; m++) {
+        var child = f_child[m];
+        var success = false;
+        for (var j = 0; j < f_proot.length; j++) {
+          
+          if (child.root ==  f_proot[j].type) {
+            success = true;
+            f_proot[j].child.push(child);
+            break;
+          }
+        }
+        if (!success) {
+          f_disjoint.push(child)
+        }
+      }
+
+      // recursive indent
+      function ri(list, prefix) {
+        var output = [];
+        for (var k = 0; k < list.length; k++) {
+          var opt = list[k];
+
+          if (opt.isRoot) {
+            output.push({
+              value: opt.type,
+              text: `${prefix} ${opt.type}: ${opt.message}`
+            });
+          } else {
+            return output;
+          }
+          
+          if (opt.child.length > 0) {
+            var result = ri(opt.child, prefix+" - - - - ");
+            for (var l = 0; l < result.length; l++) {
+              output.push(result[l]);
+            }
+          }
+        }
+        return output;
+      }
+
       instance.logs = logs;
       instance.filterLogs();
-      instance.options = roots;
+      instance.options = roots.concat(ri(f_root, "｜- "));
     });
   },
   methods: {
@@ -238,7 +298,7 @@ export default {
       var displayUserDef = true;
       var displaySysDef = true;
 
-      if (!e) {
+      if (!e) { // eslint-disable-line
 
       } else if (e.length == 0) {
         displayUserDef = false;

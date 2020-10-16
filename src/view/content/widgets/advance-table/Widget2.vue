@@ -105,7 +105,7 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <router-link v-bind:to="{name:'cus_his', params:{
+                  <router-link v-b-tooltip.hover title="追踪客户历史" v-bind:to="{name:'cus_his', params:{
                     customer_id: item.id,
                     customer_name: item.name,
                     customer_company: item.company,
@@ -121,7 +121,7 @@
                       <!--end::Svg Icon-->
                     </span>
                   </router-link>
-                  <router-link v-bind:to="{name:'cus_data', params:{
+                  <router-link v-b-tooltip.hover title="修改客户资料" v-bind:to="{name:'cus_data', params:{
                     customer_id: item.id,
                     new_customer: false
                   }}"
@@ -135,7 +135,7 @@
                       <!--end::Svg Icon-->
                     </span>
                   </router-link>
-                  <button
+                  <button v-b-tooltip.hover title="放弃客户"
                     v-on:click="unsubscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
