@@ -105,26 +105,8 @@
       </div>
     </div>
 
-    <div class="row card card-custom gutter-b">
-      <div class="col-md-12 card-body">
-        <v-card>
-          <v-card-title>
-            Log Table
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="search"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-            </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :items="filteredLogs"
-              :search="search"
-            ></v-data-table>
-        </v-card>
+    <div class="row card-custom gutter-b">
+      <div class="card-body">
         <b-form-group label="Display filters:" class="mt-6">
           <b-form-checkbox-group
             v-model="selected"
@@ -133,6 +115,30 @@
             @change="toggleLogCat($event)"
           ></b-form-checkbox-group>
         </b-form-group>
+        <v-app id="my_vue_app">
+          <v-main>
+            <v-card>
+              <v-card-title>
+                Log Table
+                <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="search"
+                  append-icon="search"
+                  label="Search"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-card-title>
+              <v-data-table
+                :headers="headers"
+                :items="filteredLogs"
+                :sort-by="['time']"
+                :search="search"
+              ></v-data-table>
+            </v-card>
+          </v-main>
+        </v-app>
+        
       </div>
     </div>
   </div>
@@ -322,3 +328,9 @@ export default {
   }
 };
 </script>
+
+<style scope>
+.v-application--wrap {
+  min-height: 0px !important;
+}
+</style>
