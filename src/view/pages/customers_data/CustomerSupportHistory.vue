@@ -60,9 +60,9 @@
 
           <b-form-group
             id="input-group-father"
-            label="父节点"
+            label="父节点:"
             label-for="input-father"
-            description="Fill in only if you certain what you are doing."
+            description='Always select "Default" when you are confusing.'
             >
             <b-form-select v-model="form.root" :options="options"></b-form-select>
           </b-form-group>
@@ -84,7 +84,7 @@
 
           <b-form-group
             id="input-group-opt-father"
-            label="这是一个父节点"
+            label="这是一个父节点:"
             label-for="input-opt-father"
             description="Check only if you certain what you are doing."
             >
