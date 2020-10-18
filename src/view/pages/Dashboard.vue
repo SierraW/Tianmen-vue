@@ -6,25 +6,6 @@
         <AdvancedTableWidget2></AdvancedTableWidget2>
       </div>
     </div>
-
-    <!-- <div class="row">
-      <div class="col-xxl-4">
-        <ListWidget1></ListWidget1>
-      </div>
-      <div class="col-xxl-8">
-        <AdvancedTableWidget2></AdvancedTableWidget2>
-      </div>
-    </div> -->
-
-    <!--     <div class="row">
-      <div class="col-xxl-6 order-1 order-xxl-2">
-        <ListWidget14></ListWidget14>
-      </div>
-      <div class="col-xxl-6 order-1 order-xxl-2">
-        <ListWidget15></ListWidget15>
-      </div>
-    </div> -->
-    <!--end::Dashboard-->
   </div>
 </template>
 

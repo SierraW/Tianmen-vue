@@ -4,7 +4,7 @@
       <div class="card-header py-6">
         <h3 class="card-title">{{ cusCom }}<br />{{ cusName }}</h3>
         <h4>
-          <b-badge pill variant="dark">id: {{ cusId }}</b-badge>
+          <b-badge pill variant="dark">客户id: {{ cusId }}</b-badge>
         </h4>
       </div>
       <div class="col-md-12 card-body">
@@ -45,7 +45,9 @@
         <!-- end of alert area -->
 
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-          <b-form-group
+          <b-tabs content-class="mt-3">
+    <b-tab title="留言" active>
+      <b-form-group
             id="input-group-1"
             label="加入留言:"
             label-for="input-1"
@@ -58,8 +60,9 @@
               placeholder="Enter Message"
             ></b-form-input>
           </b-form-group>
-
-          <b-form-group
+    </b-tab>
+    <b-tab title="高级选项">
+      <b-form-group
             id="input-group-father"
             label="父节点:"
             label-for="input-father"
@@ -102,6 +105,8 @@
               root
             </b-form-checkbox>
           </b-form-group>
+    </b-tab>
+</b-tabs>
 
           <b-button type="submit" variant="primary">Submit</b-button>
           <b-button type="reset" variant="danger">Reset</b-button>
@@ -162,7 +167,7 @@ export default {
       selected: ["1", "2"],
       filterOptions: [
         { text: "System", value: "1" },
-        { text: "User-defined", value: "2" }
+        { text: "用户定义", value: "2" }
       ],
       dismissSecs: 5,
       dismissCountDownFailed: 0,
@@ -186,10 +191,9 @@ export default {
           sortable: false,
           value: "from"
         },
-        { text: "父类型", value: "root" },
+        { text: "父类型", value: "root", align: " d-none" },
         { text: "类型", value: "type" },
         { text: "留言", value: "message" },
-        { text: "父节点", value: "isRoot" },
         { text: "时间戳", value: "time" }
       ],
       logs: [],
@@ -359,7 +363,6 @@ export default {
         return;
       }
       var instance = this;
-      console.log("tf?", this.form.isRoot);
 
       em_histories(this.currentUser.fs_key)
         .add({

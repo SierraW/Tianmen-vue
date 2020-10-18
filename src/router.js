@@ -34,9 +34,10 @@ export default new Router({
             import("@/view/pages/customers_data/CustomerSupportHistory.vue")
         },
         {
-          path: "/builder",
-          name: "builder",
-          component: () => import("@/view/pages/Builder.vue")
+          path: "/activation_code",
+          name: "activation",
+          component: () =>
+            import("@/view/pages/activation/ActivationCodeGen.vue")
         }
       ]
     },

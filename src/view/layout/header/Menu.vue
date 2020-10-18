@@ -14,7 +14,7 @@
         ]"
       >
         <a :href="href" class="menu-link" @click="navigate">
-          <span class="menu-text"> Dashboard </span>
+          <span class="menu-text"> 个人面板 </span>
         </a>
       </li>
     </router-link>
@@ -33,7 +33,27 @@
         ]"
       >
         <a :href="href" class="menu-link" @click="navigate">
-          <span class="menu-text"> Ocean </span>
+          <span class="menu-text"> 公海 </span>
+        </a>
+      </li>
+    </router-link>
+
+    <router-link
+      to="/activation_code"
+      v-slot="{ href, navigate, isActive, isExactActive }"
+    >
+      <li
+        aria-haspopup="true"
+        data-menu-toggle="hover"
+        class="menu-item"
+        :class="[
+          isActive && 'menu-item-active',
+          isExactActive && 'menu-item-active'
+        ]"
+        v-if="isAdmin()"
+      >
+        <a :href="href" class="menu-link" @click="navigate">
+          <span class="menu-text"> 注册码 </span>
         </a>
       </li>
     </router-link>
@@ -41,11 +61,18 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "KTMenu",
+  computed: {
+    ...mapGetters(["currentUser"])
+  },
   methods: {
     hasActiveChildren(match) {
       return this.$route["path"].indexOf(match) !== -1;
+    },
+    isAdmin() {
+      return this.currentUser.role_id < 3;
     }
   }
 };
