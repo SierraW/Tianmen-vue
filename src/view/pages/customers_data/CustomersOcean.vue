@@ -46,8 +46,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
-      { title: "Dashboard", route: "dashboard" },
-      { title: "Customer ocean" }
+      { title: this.$t('MENU.DASHBOARD', { msg: '仪表板' }), route: "dashboard" },
+      { title: this.$t('CUSTOMER.OCEAN', { msg: '公海' }) }
     ]);
   }
 };

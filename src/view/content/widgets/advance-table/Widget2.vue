@@ -4,10 +4,10 @@
     <div class="card-header border-0 py-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark">
-          Customer Stats
+          {{ $t('CUSTOMER.STATES', { msg: 'Customer States' }) }}
         </span>
         <span class="text-muted mt-3 font-weight-bold font-size-sm">
-          Management Panel
+          {{ $t('CUSTOMER.MANAGEMENT', { msg: 'Management Panel' }) }}
         </span>
       </h3>
     </div>
@@ -31,11 +31,11 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="width: 50px">公司</th>
+              <th class="pr-0" style="width: 50px"> {{ $t('CUSTOMER.COM', { msg: 'COMPANY' }) }} </th>
               <th style="min-width: 200px"></th>
-              <th style="min-width: 150px">联系人</th>
-              <th style="min-width: 150px">进度</th>
-              <th class="pr-0 text-right" style="min-width: 150px">action</th>
+              <th style="min-width: 150px"> {{ $t('CUSTOMER.CON', { msg: 'CONTACT' }) }} </th>
+              <th style="min-width: 150px"> {{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }} </th>
+              <th class="pr-0 text-right" style="min-width: 150px"> {{ $t('CUSTOMER.ACTI', { msg: 'ACTION' }) }} </th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +88,7 @@
                         >{{ item.progress }}</span
                       >
                       <span class="text-muted font-size-sm font-weight-bold"
-                        >Progress</span
+                        > {{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }} </span
                       >
                     </div>
                     <div class="progress progress-xs w-100">
@@ -107,7 +107,7 @@
                 <td class="pr-0 text-right">
                   <router-link
                     v-b-tooltip.hover
-                    title="追踪客户历史"
+                    :title="$t('CUSTOMER.TRACK', { msg: 'History' })"
                     v-bind:to="{
                       name: 'cus_his',
                       params: {
@@ -129,7 +129,7 @@
                   </router-link>
                   <router-link
                     v-b-tooltip.hover
-                    title="修改客户资料"
+                    :title="$t('CUSTOMER.EDIT', { msg: 'Edit' })"
                     v-bind:to="{
                       name: 'cus_data',
                       params: {
@@ -149,7 +149,7 @@
                   </router-link>
                   <button
                     v-b-tooltip.hover
-                    title="放弃客户"
+                    :title="$t('CUSTOMER.POP', { msg: 'Unsubscribe' })"
                     v-on:click="unsubscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >

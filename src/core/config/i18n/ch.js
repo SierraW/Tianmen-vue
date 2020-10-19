@@ -3,9 +3,38 @@ export const locale = {
   TRANSLATOR: {
     SELECT: "选择你的语言"
   },
+  GREETING: {
+    HI: "您好，",
+    SIGN_OUT: "登出账号",
+    USER_PROFILE: "用户资料"
+  },
+  CUSTOMER: {
+    NEW: "添加新用户",
+    CUS_ID: "客户识别码",
+    OCEAN: "公海",
+    STATES: "客户列表",
+    MANAGEMENT: "管理面板",
+    OCEAN_STATES: "公海客户列表",
+    COM: "公司/邮箱",
+    CON: "联系方式",
+    PROG: "进度",
+    ACTI: "行动",
+    PUSH: "拉入此用户",
+    POP: "放弃客户至公海",
+    EDIT: "编辑客户资料",
+    TRACK: "跟踪客户进程",
+    SUPPORT_HISTORY: "管理历史",
+    MESSAGE: "留言",
+    ADD_MSG: "加入留言",
+    ENTER_MSG: "输入新留言",
+    ADVANCED_OPT: "高级选项",
+    SUBMIT: "提交",
+    RESET: "重置"
+  },
   MENU: {
     NEW: "新",
     ACTIONS: "行动",
+    ACTIVATION: "注册码",
     CREATE_POST: "创建新帖子",
     PAGES: "Pages",
     FEATURES: "特征",

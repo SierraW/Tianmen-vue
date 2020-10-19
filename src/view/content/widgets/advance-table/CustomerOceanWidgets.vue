@@ -4,10 +4,10 @@
     <div class="card-header border-0 py-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark">
-          Customer Stats
+          {{ $t('CUSTOMER.STATES', { msg: 'Customer States' }) }}
         </span>
         <span class="text-muted mt-3 font-weight-bold font-size-sm">
-          Management Panel
+          {{ $t('CUSTOMER.MANAGEMENT', { msg: 'Management Panel' }) }}
         </span>
       </h3>
       <div class="card-toolbar">
@@ -26,7 +26,7 @@
             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
             <inline-svg src="media/svg/icons/Communication/Add-user.svg" />
             <!--end::Svg Icon--> </span
-          >Add New Member</router-link
+          >{{$t('CUSTOMER.NEW', { msg: '添加新用户' })}}</router-link
         >
       </div>
     </div>
@@ -50,11 +50,11 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="width: 50px">公司</th>
+              <th class="pr-0" style="width: 50px">{{ $t('CUSTOMER.COM', { msg: 'COMPANY' }) }}</th>
               <th style="min-width: 200px"></th>
-              <th style="min-width: 150px">联系人</th>
-              <th style="min-width: 150px">进度</th>
-              <th class="pr-0 text-right" style="min-width: 150px">action</th>
+              <th style="min-width: 150px">{{ $t('CUSTOMER.CON', { msg: 'CONTACT' }) }}</th>
+              <th style="min-width: 150px">{{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }}</th>
+              <th class="pr-0 text-right" style="min-width: 150px">{{ $t('CUSTOMER.ACTI', { msg: 'ACTION' }) }}</th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +107,7 @@
                         >{{ item.progress }}</span
                       >
                       <span class="text-muted font-size-sm font-weight-bold"
-                        >Progress</span
+                        > {{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }} </span
                       >
                     </div>
                     <div class="progress progress-xs w-100">
@@ -126,7 +126,7 @@
                 <td class="pr-0 text-right">
                   <button
                     v-b-tooltip.hover
-                    title="拉入此客户"
+                    :title="$t('CUSTOMER.PUSH', { msg: '拉入' })"
                     v-on:click="subscribeCus(item.id)"
                     class="btn btn-icon btn-light btn-hover-primary btn-sm"
                   >
@@ -160,21 +160,6 @@ import { mapGetters } from "vuex";
 export default {
   name: "widget-cusocean",
   data() {
-    // em_customers.doc(`abcd@abcd.com`).set({
-    //     head: "media/svg/avatars/001-boy.svg",
-    //     company: "Company Name",
-    //     email: "Customer Email",
-    //     name: "Customer Name",
-    //     phone: "Customer Phone",
-    //     progress: "100%",
-    //     state: "success",
-    //     time: firebase.firestore.Timestamp.fromDate(new Date()),
-    //     inviter_uid: "abcd",
-    //     uid: ""
-    // })
-    // .catch(function(err) {
-    //   console.log(err);
-    // });
     return {
       list: [],
       checked: false

@@ -14,7 +14,7 @@
         ]"
       >
         <a :href="href" class="menu-link" @click="navigate">
-          <span class="menu-text"> 个人面板 </span>
+          <span class="menu-text">{{$t('MENU.DASHBOARD', { msg: '仪表板' })}}</span>
         </a>
       </li>
     </router-link>
@@ -33,7 +33,7 @@
         ]"
       >
         <a :href="href" class="menu-link" @click="navigate">
-          <span class="menu-text"> 公海 </span>
+          <span class="menu-text"> {{ $t('CUSTOMER.OCEAN', { msg: '公海' }) }} </span>
         </a>
       </li>
     </router-link>
@@ -53,7 +53,7 @@
         v-if="isAdmin()"
       >
         <a :href="href" class="menu-link" @click="navigate">
-          <span class="menu-text"> 注册码 </span>
+          <span class="menu-text"> {{ $t('MENU.ACTIVATION', { msg: '注册码' }) }} </span>
         </a>
       </li>
     </router-link>

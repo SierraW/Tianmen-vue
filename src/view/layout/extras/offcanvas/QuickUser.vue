@@ -7,7 +7,7 @@
       <span
         class="text-white opacity-70 font-weight-bold font-size-base d-none d-md-inline mr-1"
       >
-        Hi,
+        {{ $t('GREETING.HI', { msg: 'Hi,' }) }}
       </span>
       <span
         class="text-white opacity-90 font-weight-bolder font-size-base d-none d-md-inline mr-4"
@@ -33,7 +33,7 @@
         class="offcanvas-header d-flex align-items-center justify-content-between pb-5"
       >
         <h3 class="font-weight-bold m-0">
-          User Profile
+          {{ $t('GREETING.USER_PROFILE', { msg: 'User Profile' }) }}
           <small class="text-muted font-size-sm ml-2"></small>
         </h3>
         <a
@@ -74,7 +74,7 @@
               </a>
             </div>
             <button class="btn btn-light-primary btn-bold" @click="onLogout">
-              Sign out
+              {{ $t('GREETING.SIGN_OUT', { msg: 'Sign Out' }) }}
             </button>
           </div>
         </div>
@@ -99,40 +99,6 @@ import KTOffcanvas from "@/assets/js/components/offcanvas.js";
 
 export default {
   name: "KTQuickUser",
-  data() {
-    return {
-      list: [
-        {
-          title: "Another purpose persuade",
-          desc: "Due in 2 Days",
-          alt: "+28%",
-          svg: "media/svg/icons/Home/Library.svg",
-          type: "warning"
-        },
-        {
-          title: "Would be to people",
-          desc: "Due in 2 Days",
-          alt: "+50%",
-          svg: "media/svg/icons/Communication/Write.svg",
-          type: "success"
-        },
-        {
-          title: "Purpose would be to persuade",
-          desc: "Due in 2 Days",
-          alt: "-27%",
-          svg: "media/svg/icons/Communication/Group-chat.svg",
-          type: "danger"
-        },
-        {
-          title: "The best product",
-          desc: "Due in 2 Days",
-          alt: "+8%",
-          svg: "media/svg/icons/General/Attachment2.svg",
-          type: "info"
-        }
-      ]
-    };
-  },
   mounted() {
     // Init Quick User Panel
     KTLayoutQuickUser.init(this.$refs["kt_quick_user"]);

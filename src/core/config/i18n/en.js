@@ -3,9 +3,38 @@ export const locale = {
   TRANSLATOR: {
     SELECT: "Select your language"
   },
+  GREETING: {
+    HI: "Hi,",
+    SIGN_OUT: "Sign Out",
+    USER_PROFILE: "User Profile"
+  },
+  CUSTOMER: {
+    NEW: "Add New User",
+    CUS_ID: "Customer ID",
+    OCEAN: "Ocean",
+    STATES: "Customer List",
+    MANAGEMENT: "Management Panel",
+    OCEAN_STATES: "CUSTOMER OCEAN",
+    COM: "Company / Email",
+    CON: "CONTACT",
+    PROG: "PROGRESS",
+    ACTI: "ACTION",
+    PUSH: "Subscribe this Customer",
+    POP: "Unsubscribe",
+    EDIT: "Edit Profile",
+    TRACK: "Track Footprint",
+    SUPPORT_HISTORY: "Support History",
+    MESSAGE: "Message",
+    ADD_MSG: "Leave a Message",
+    ENTER_MSG: "Enter New Message",
+    ADVANCED_OPT: "Advanced Options",
+    SUBMIT: "Submit",
+    RESET: "Reset"
+  },
   MENU: {
     NEW: "new",
     ACTIONS: "Actions",
+    ACTIVATION: "Activation Code",
     CREATE_POST: "Create New Post",
     PAGES: "Pages",
     FEATURES: "Features",

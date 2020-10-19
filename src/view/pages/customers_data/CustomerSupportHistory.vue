@@ -4,7 +4,7 @@
       <div class="card-header py-6">
         <h3 class="card-title">{{ cusCom }}<br />{{ cusName }}</h3>
         <h4>
-          <b-badge pill variant="dark">客户id: {{ cusId }}</b-badge>
+          <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { msg: 'id' })}}: {{ cusId }}</b-badge>
         </h4>
       </div>
       <div class="col-md-12 card-body">
@@ -46,10 +46,10 @@
 
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-tabs content-class="mt-3">
-    <b-tab title="留言" active>
+    <b-tab :title="$t('CUSTOMER.MESSAGE', { msg: 'msg' })" active>
       <b-form-group
             id="input-group-1"
-            label="加入留言:"
+            :label="$t('CUSTOMER.ADD_MSG', { msg: 'msg' })"
             label-for="input-1"
           >
             <b-form-input
@@ -57,11 +57,11 @@
               v-model="form.message"
               type="text"
               required
-              placeholder="Enter Message"
+              :placeholder="$t('CUSTOMER.ENTER_MSG', { msg: 'New message' })"
             ></b-form-input>
           </b-form-group>
     </b-tab>
-    <b-tab title="高级选项">
+    <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
       <b-form-group
             id="input-group-father"
             label="父类别:"
@@ -108,8 +108,8 @@
     </b-tab>
 </b-tabs>
 
-          <b-button type="submit" variant="primary">Submit</b-button>
-          <b-button type="reset" variant="danger">Reset</b-button>
+          <b-button type="submit" variant="primary">{{ $t('CUSTOMER.SUBMIT', { msg: 'Submit' }) }}</b-button>
+          <b-button type="reset" variant="danger"> {{ $t('CUSTOMER.RESET', { msg: 'Reset' }) }} </b-button>
         </b-form>
       </div>
     </div>
@@ -401,8 +401,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
-      { title: "Dashboard", route: "../dashboard" },
-      { title: "SupportHistory" }
+      { title: this.$t('MENU.DASHBOARD', { msg: '仪表板' }), route: "../dashboard" },
+      { title: this.$t('CUSTOMER.SUPPORT_HISTORY', { msg: 'History' }) }
     ]);
   }
 };

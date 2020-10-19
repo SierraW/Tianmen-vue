@@ -3,14 +3,43 @@ export const locale = {
   TRANSLATOR: {
     SELECT: "choisissez votre langue"
   },
+  GREETING: {
+    HI: "Bonjour,",
+    SIGN_OUT: "Déconnexion",
+    USER_PROFILE: "Profil utilisateur"
+  },
+  CUSTOMER: {
+    NEW: "Ajouter un nouvel utilisateur",
+    CUS_ID: "Client id",
+    OCEAN: "Océan",
+    STATES: "Liste des clients",
+    MANAGEMENT: "Panneau de gestion",
+    OCEAN_STATES: "Océan client",
+    COM: "Entreprise / Email",
+    CON: "CONTACT",
+    PROG: "PROGRÈS",
+    ACTI: "ACTION",
+    PUSH: "Abonnez-vous à ce client",
+    POP: "Se désabonner",
+    EDIT: "Modifier le profil",
+    TRACK: "Suivre l'empreinte",
+    SUPPORT_HISTORY: "Historique de l'assistance",
+    MESSAGE: "Message",
+    ADD_MSG: "laisser un message",
+    ENTER_MSG: "Entrer un nouveau message",
+    ADVANCED_OPT: "Options avancées",
+    SUBMIT: "Soumettre",
+    RESET: "Réinitialiser"
+  },
   MENU: {
     NEW: "Nouveau",
-    ACTIONS: "Actes",
-    CREATE_POST: "Créer un nouveau Post",
+    ACTIONS: "Actions",
+    ACTIVATION: "Code d'activation",
+    CREATE_POST: "Créer un nouveau message",
     PAGES: "Pages",
-    FEATURES: "Fonctionnalités",
-    APPS: "Applications",
-    DASHBOARD: "Tableau de Bord"
+    FEATURES: "Caractéristiques",
+    APPS: "Apps",
+    DASHBOARD: "Tableau de bord"
   },
   AUTH: {
     GENERAL: {
