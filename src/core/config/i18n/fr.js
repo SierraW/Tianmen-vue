@@ -9,6 +9,7 @@ export const locale = {
     USER_PROFILE: "Profil utilisateur"
   },
   STATE: {
+    TITLE: "State",
     SUCCESS: "Téléchargement réussi!",
     FAIL: "Échec du téléchargement des données ... Veuillez réessayer plus tard."
   },
@@ -43,7 +44,18 @@ export const locale = {
     },
     DATA: {
       DESCRIPTION: "Descriptions",
-      PHONE_ALREADY_EXIST: ""
+      PHONE_ALREADY_EXIST: "This phone number {number} already has a associated profile.",
+      PROGRESS: {
+        IN_PROGRESS_GROUP: "Progressing",
+        CONTACTING: "Contacting",
+        FIRST_CON: "Contacted",
+        PLANNING: "Planning",
+        REQ_GATHERING: "Requirement gathering",
+        PLANNING_SECOND: "Stage planning",
+        PRICE_NEGOTIATING: "Price negotiating",
+        CONTRACT: "Successful"
+      },
+      STATE: "Project failed"
     }
   },
   MENU: {

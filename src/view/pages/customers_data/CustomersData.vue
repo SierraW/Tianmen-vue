@@ -7,41 +7,7 @@
       </h4>
       <h4 v-if="newCus"><b-badge pill>{{ $t('CUSTOMER.NEW_CUS_ID') }}</b-badge></h4>
     </div>
-    <!-- alert area -->
-    <div class="mx-3">
-      <b-alert
-        :show="dismissCountDownFailed"
-        dismissible
-        variant="danger"
-        @dismissed="dismissCountDownFailed = 0"
-        @dismiss-count-down="countDownChangedFailed"
-      >
-        <p>{{ $t('STATE.FAIL') }}</p>
-        <b-progress
-          variant="dark"
-          :max="dismissSecs"
-          :value="dismissCountDownFailed"
-          height="4px"
-        ></b-progress>
-      </b-alert>
 
-      <b-alert
-        :show="dismissCountDownSuccess"
-        dismissible
-        variant="success"
-        @dismissed="dismissCountDownSuccess = 0"
-        @dismiss-count-down="countDownChangedSuccess"
-      >
-        <p>{{ $t('STATE.SUCCESS') }}</p>
-        <b-progress
-          variant="info"
-          :max="dismissSecs"
-          :value="dismissCountDownSuccess"
-          height="4px"
-        ></b-progress>
-      </b-alert>
-    </div>
-    <!-- end of alert area -->
     <div class="card-body">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group
@@ -104,6 +70,33 @@
         </b-form-group>
 
         <b-form-group
+          id="input-group-pro"
+          :label="$t('CUSTOMER.PROG')"
+          label-for="input-pro"
+        >
+          <b-form-select id="input-pro" v-model="form.progress" class="mb-3">
+            <optgroup :label="$t('CUSTOMER.DATA.PROGRESS.IN_PROGRESS_GROUP')">
+              <option value="10%"> {{ $t('CUSTOMER.DATA.PROGRESS.CONTACTING') }} </option>
+              <option value="20%"> {{ $t('CUSTOMER.DATA.PROGRESS.FIRST_CON') }} </option>
+              <option value="30%"> {{ $t('CUSTOMER.DATA.PROGRESS.PLANNING') }} </option>
+              <option value="50%"> {{ $t('CUSTOMER.DATA.PROGRESS.REQ_GATHERING') }} </option>
+              <option value="60%"> {{ $t('CUSTOMER.DATA.PROGRESS.PLANNING_SECOND') }} </option>
+              <option value="80%"> {{ $t('CUSTOMER.DATA.PROGRESS.PRICE_NEGOTIATING') }} </option>
+              <option value="100%"> {{ $t('CUSTOMER.DATA.PROGRESS.CONTRACT') }} </option>
+            </optgroup>
+          </b-form-select>
+          <b-form-checkbox
+            id="checkbox-ProgressState"
+            v-model="form.state"
+            name="checkbox-ProgressState"
+            value="danger"
+            unchecked-value="primary"
+          >
+            {{ $t('CUSTOMER.DATA.STATE') }}
+          </b-form-checkbox>
+        </b-form-group>
+
+        <b-form-group
           id="input-group-des"
           :label="$t('CUSTOMER.DATA.DESCRIPTION')"
           label-for="input-des"
@@ -148,8 +141,8 @@ export default {
         company: "N/A",
         phone: "N/A",
         email: "N/A@n.a",
-        progress: "",
-        state: "",
+        progress: "10%",
+        state: "primary",
         selectedGender: "",
         description: ""
       },
@@ -223,17 +216,23 @@ export default {
         appendToast: true
       });
     },
-    countDownChangedFailed(dismissCountDown) {
-      this.dismissCountDownFailed = dismissCountDown;
-    },
-    countDownChangedSuccess(dismissCountDown) {
-      this.dismissCountDownSuccess = dismissCountDown;
-    },
     showAlertFailed() {
-      this.dismissCountDownFailed = this.dismissSecs;
+      this.$bvToast.toast( this.$t('STATE.FAIL'), {
+        title: this.$t('STATE.TITLE'),
+        variant: 'danger',
+        solid: true,
+        toaster: 'b-toaster-top-center',
+        append: true
+      })
     },
     showAlertSuccess() {
-      this.dismissCountDownSuccess = this.dismissSecs;
+      this.$bvToast.toast( this.$t('STATE.SUCCESS'), {
+        title: this.$t('STATE.TITLE'),
+        variant: 'success',
+        solid: true,
+        toaster: 'b-toaster-top-center',
+        append: true
+      })
     },
     async onSubmit(evt) {
       evt.preventDefault();
@@ -266,12 +265,12 @@ export default {
           inviter_uid: this.currentUser.id,
           name: this.form.name,
           phone: this.form.phone,
-          progress: "100%",
-          state: "primary",
+          progress: this.form.progress,
+          state: this.form.progress == "100%" ? "success" : this.form.state,
           uid: "",
           time: firebase.firestore.Timestamp.fromDate(new Date()),
           gender: this.form.selectedGender,
-          description: this.form.description
+          description: this.form.description ? this.form.description : ""
         };
         em_customers(this.currentUser.fs_key)
           .add(newCusData)
@@ -298,10 +297,11 @@ export default {
           name: this.form.name,
           phone: this.form.phone,
           progress: this.form.progress,
-          state: this.form.state,
+          state: this.form.progress == "100%" ? "success" : this.form.state,
           gender: this.form.selectedGender,
-          description: this.form.description
+          description: this.form.description ? this.form.description : ""
         };
+        console.log("pro", cusData);
         em_customers(this.currentUser.fs_key)
           .doc(this.form.id)
           .update(cusData)
@@ -342,8 +342,8 @@ export default {
       this.form.company = "";
       this.form.phone = "";
       this.form.email = "";
-      this.form.progress = "";
-      this.form.state = "";
+      this.form.progress = "10%";
+      this.form.state = "primary";
       this.form.selectedGender = "";
       this.form.description = "";
       // Trick to reset/clear native browser form validation state

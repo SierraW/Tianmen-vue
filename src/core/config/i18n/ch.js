@@ -9,6 +9,7 @@ export const locale = {
     USER_PROFILE: "用户资料"
   },
   STATE: {
+    TITLE: "状态",
     SUCCESS: "数据更新成功",
     FAIL: "数据更新失败，请重试。"
   },
@@ -43,7 +44,18 @@ export const locale = {
     },
     DATA: {
       DESCRIPTION: "补充描述",
-      PHONE_ALREADY_EXIST: "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？"
+      PHONE_ALREADY_EXIST: "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？",
+      PROGRESS: {
+        IN_PROGRESS_GROUP: "进度",
+        CONTACTING: "联系中 1/7",
+        FIRST_CON: "初次交谈 2/7",
+        PLANNING: "方案整理中 3/7",
+        REQ_GATHERING: "需求沟通 4/7",
+        PLANNING_SECOND: "方案整理中 5/7",
+        PRICE_NEGOTIATING: "价格谈判 6/7",
+        CONTRACT: "成功签约"
+      },
+      STATE: "项目已失败"
     }
   },
   MENU: {

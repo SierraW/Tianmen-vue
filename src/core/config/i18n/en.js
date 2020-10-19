@@ -9,6 +9,7 @@ export const locale = {
     USER_PROFILE: "User Profile"
   },
   STATE: {
+    TITLE: "State",
     SUCCESS: "Upload successful!",
     FAIL: "Data upload failed... Please try again later."
   },
@@ -43,7 +44,18 @@ export const locale = {
     },
     DATA: {
       DESCRIPTION: "Descriptions",
-      PHONE_ALREADY_EXIST: "This phone number {number} already has a associated profile."
+      PHONE_ALREADY_EXIST: "This phone number {number} already has a associated profile.",
+      PROGRESS: {
+        IN_PROGRESS_GROUP: "Progressing",
+        CONTACTING: "Contacting",
+        FIRST_CON: "Contacted",
+        PLANNING: "Planning",
+        REQ_GATHERING: "Requirement gathering",
+        PLANNING_SECOND: "Detail planning",
+        PRICE_NEGOTIATING: "Price negotiating",
+        CONTRACT: "Successful"
+      },
+      STATE: "Project failed"
     }
   },
   MENU: {

@@ -104,7 +104,7 @@
                     >
                       <span
                         class="text-muted mr-2 font-size-sm font-weight-bold"
-                        >{{ item.progress }}</span
+                        > {{ item.progress }} </span
                       >
                       <span class="text-muted font-size-sm font-weight-bold"
                         > {{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }} </span
