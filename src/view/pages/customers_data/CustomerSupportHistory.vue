@@ -64,7 +64,7 @@
     <b-tab title="高级选项">
       <b-form-group
             id="input-group-father"
-            label="父节点:"
+            label="父类别:"
             label-for="input-father"
             description='Always select "Default" when you are confusing.'
           >
@@ -91,7 +91,7 @@
 
           <b-form-group
             id="input-group-opt-father"
-            label="这是一个父节点:"
+            label="更多选项:"
             label-for="input-opt-father"
             description="Check only if you certain what you are doing."
           >
@@ -102,7 +102,7 @@
               value="true"
               unchecked-value="false"
             >
-              root
+              这是一个父类别
             </b-form-checkbox>
           </b-form-group>
     </b-tab>
