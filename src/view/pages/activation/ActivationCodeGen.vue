@@ -2,10 +2,9 @@
   <div class="card card-custom gutter-b">
     <div class="card-header">
       <div class="card-title">
-        <h1> Act Gen </h1>
+        <h1>Act Gen</h1>
       </div>
-      <div class="card-body">
-      </div>
+      <div class="card-body"></div>
     </div>
   </div>
 </template>

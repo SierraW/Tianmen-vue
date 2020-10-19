@@ -56,7 +56,7 @@
           v-b-tooltip.hover="'Quick actions'"
         >
           <template #button-content>
-            {{$t('MENU.ACTIONS', { msg: '行动' })}}
+            {{ $t("MENU.ACTIONS", { msg: "行动" }) }}
           </template>
           <!--begin::Navigation-->
           <div class="navi navi-hover min-w-md-250px">
@@ -65,7 +65,9 @@
                 <span class="navi-icon">
                   <i class="flaticon2-drop"></i>
                 </span>
-                <span class="navi-text">{{ $t('CUSTOMER.OCEAN', { msg: '公海' }) }}</span>
+                <span class="navi-text">{{
+                  $t("CUSTOMER.OCEAN", { msg: "公海" })
+                }}</span>
               </router-link>
             </b-dropdown-text>
             <b-dropdown-text tag="div" class="navi-item">
@@ -83,7 +85,9 @@
                 <span class="navi-icon">
                   <i class="flaticon2-list-3"></i>
                 </span>
-                <span class="navi-text">{{ $t('CUSTOMER.NEW', { msg: '添加新用户' }) }}</span>
+                <span class="navi-text">{{
+                  $t("CUSTOMER.NEW", { msg: "添加新用户" })
+                }}</span>
               </router-link>
             </b-dropdown-text>
           </div>

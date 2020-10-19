@@ -19,7 +19,9 @@ export default {
     AdvancedTableWidget2
   },
   mounted() {
-    this.$store.dispatch(SET_BREADCRUMB, [{ title: this.$t('MENU.DASHBOARD', { msg: '仪表板' }) }]);
+    this.$store.dispatch(SET_BREADCRUMB, [
+      { title: this.$t("MENU.DASHBOARD", { msg: "仪表板" }) }
+    ]);
   },
   methods: {
     setActiveTab1(event) {

@@ -44,7 +44,8 @@ export const locale = {
     },
     DATA: {
       DESCRIPTION: "补充描述",
-      PHONE_ALREADY_EXIST: "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？",
+      PHONE_ALREADY_EXIST:
+        "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？",
       PROGRESS: {
         IN_PROGRESS_GROUP: "进度",
         CONTACTING: "联系中 1/7",

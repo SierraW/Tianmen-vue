@@ -3,9 +3,13 @@
     <div class="card-header py-6">
       <h3 class="card-title">{{ form.company }}<br />{{ form.name }}</h3>
       <h4 v-if="!newCus">
-        <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { id: form.id })}}</b-badge>
+        <b-badge pill variant="dark">{{
+          $t("CUSTOMER.CUS_ID", { id: form.id })
+        }}</b-badge>
       </h4>
-      <h4 v-if="newCus"><b-badge pill>{{ $t('CUSTOMER.NEW_CUS_ID') }}</b-badge></h4>
+      <h4 v-if="newCus">
+        <b-badge pill>{{ $t("CUSTOMER.NEW_CUS_ID") }}</b-badge>
+      </h4>
     </div>
 
     <div class="card-body">
@@ -76,13 +80,27 @@
         >
           <b-form-select id="input-pro" v-model="form.progress" class="mb-3">
             <optgroup :label="$t('CUSTOMER.DATA.PROGRESS.IN_PROGRESS_GROUP')">
-              <option value="10%"> {{ $t('CUSTOMER.DATA.PROGRESS.CONTACTING') }} </option>
-              <option value="20%"> {{ $t('CUSTOMER.DATA.PROGRESS.FIRST_CON') }} </option>
-              <option value="30%"> {{ $t('CUSTOMER.DATA.PROGRESS.PLANNING') }} </option>
-              <option value="50%"> {{ $t('CUSTOMER.DATA.PROGRESS.REQ_GATHERING') }} </option>
-              <option value="60%"> {{ $t('CUSTOMER.DATA.PROGRESS.PLANNING_SECOND') }} </option>
-              <option value="80%"> {{ $t('CUSTOMER.DATA.PROGRESS.PRICE_NEGOTIATING') }} </option>
-              <option value="100%"> {{ $t('CUSTOMER.DATA.PROGRESS.CONTRACT') }} </option>
+              <option value="10%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.CONTACTING") }}
+              </option>
+              <option value="20%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.FIRST_CON") }}
+              </option>
+              <option value="30%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.PLANNING") }}
+              </option>
+              <option value="50%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.REQ_GATHERING") }}
+              </option>
+              <option value="60%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.PLANNING_SECOND") }}
+              </option>
+              <option value="80%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.PRICE_NEGOTIATING") }}
+              </option>
+              <option value="100%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.CONTRACT") }}
+              </option>
             </optgroup>
           </b-form-select>
           <b-form-checkbox
@@ -92,7 +110,7 @@
             value="danger"
             unchecked-value="primary"
           >
-            {{ $t('CUSTOMER.DATA.STATE') }}
+            {{ $t("CUSTOMER.DATA.STATE") }}
           </b-form-checkbox>
         </b-form-group>
 
@@ -129,9 +147,6 @@ export default {
   name: "cus_data",
   data() {
     return {
-      dismissSecs: 5,
-      dismissCountDownFailed: 0,
-      dismissCountDownSuccess: 0,
       toastCount: 0,
       old: "",
       form: {
@@ -217,22 +232,22 @@ export default {
       });
     },
     showAlertFailed() {
-      this.$bvToast.toast( this.$t('STATE.FAIL'), {
-        title: this.$t('STATE.TITLE'),
-        variant: 'danger',
+      this.$bvToast.toast(this.$t("STATE.FAIL"), {
+        title: this.$t("STATE.TITLE"),
+        variant: "danger",
         solid: true,
-        toaster: 'b-toaster-top-center',
+        toaster: "b-toaster-top-center",
         append: true
-      })
+      });
     },
     showAlertSuccess() {
-      this.$bvToast.toast( this.$t('STATE.SUCCESS'), {
-        title: this.$t('STATE.TITLE'),
-        variant: 'success',
+      this.$bvToast.toast(this.$t("STATE.SUCCESS"), {
+        title: this.$t("STATE.TITLE"),
+        variant: "success",
         solid: true,
-        toaster: 'b-toaster-top-center',
+        toaster: "b-toaster-top-center",
         append: true
-      })
+      });
     },
     async onSubmit(evt) {
       evt.preventDefault();
@@ -254,7 +269,13 @@ export default {
           .where("phone", "==", this.form.phone)
           .get();
         if (result.size > 0) {
-          if (!confirm(this.$t('CUSTOMER.DATA.PHONE_ALREADY_EXIST', { number: this.form.phone} ))) {
+          if (
+            !confirm(
+              this.$t("CUSTOMER.DATA.PHONE_ALREADY_EXIST", {
+                number: this.form.phone
+              })
+            )
+          ) {
             return;
           }
         }
@@ -301,7 +322,6 @@ export default {
           gender: this.form.selectedGender,
           description: this.form.description ? this.form.description : ""
         };
-        console.log("pro", cusData);
         em_customers(this.currentUser.fs_key)
           .doc(this.form.id)
           .update(cusData)

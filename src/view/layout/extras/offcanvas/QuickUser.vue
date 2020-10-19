@@ -7,7 +7,7 @@
       <span
         class="text-white opacity-70 font-weight-bold font-size-base d-none d-md-inline mr-1"
       >
-        {{ $t('GREETING.HI', { msg: 'Hi,' }) }}
+        {{ $t("GREETING.HI", { msg: "Hi," }) }}
       </span>
       <span
         class="text-white opacity-90 font-weight-bolder font-size-base d-none d-md-inline mr-4"
@@ -33,7 +33,7 @@
         class="offcanvas-header d-flex align-items-center justify-content-between pb-5"
       >
         <h3 class="font-weight-bold m-0">
-          {{ $t('GREETING.USER_PROFILE', { msg: 'User Profile' }) }}
+          {{ $t("GREETING.USER_PROFILE", { msg: "User Profile" }) }}
           <small class="text-muted font-size-sm ml-2"></small>
         </h3>
         <a
@@ -74,7 +74,7 @@
               </a>
             </div>
             <button class="btn btn-light-primary btn-bold" @click="onLogout">
-              {{ $t('GREETING.SIGN_OUT', { msg: 'Sign Out' }) }}
+              {{ $t("GREETING.SIGN_OUT", { msg: "Sign Out" }) }}
             </button>
           </div>
         </div>

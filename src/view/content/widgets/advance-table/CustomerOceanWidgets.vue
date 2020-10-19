@@ -4,10 +4,10 @@
     <div class="card-header border-0 py-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark">
-          {{ $t('CUSTOMER.STATES', { msg: 'Customer States' }) }}
+          {{ $t("CUSTOMER.STATES", { msg: "Customer States" }) }}
         </span>
         <span class="text-muted mt-3 font-weight-bold font-size-sm">
-          {{ $t('CUSTOMER.MANAGEMENT', { msg: 'Management Panel' }) }}
+          {{ $t("CUSTOMER.MANAGEMENT", { msg: "Management Panel" }) }}
         </span>
       </h3>
       <div class="card-toolbar">
@@ -26,7 +26,7 @@
             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
             <inline-svg src="media/svg/icons/Communication/Add-user.svg" />
             <!--end::Svg Icon--> </span
-          >{{$t('CUSTOMER.NEW', { msg: '添加新用户' })}}</router-link
+          >{{ $t("CUSTOMER.NEW", { msg: "添加新用户" }) }}</router-link
         >
       </div>
     </div>
@@ -50,11 +50,19 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="width: 50px">{{ $t('CUSTOMER.COM', { msg: 'COMPANY' }) }}</th>
+              <th class="pr-0" style="width: 50px">
+                {{ $t("CUSTOMER.COM", { msg: "COMPANY" }) }}
+              </th>
               <th style="min-width: 200px"></th>
-              <th style="min-width: 150px">{{ $t('CUSTOMER.CON', { msg: 'CONTACT' }) }}</th>
-              <th style="min-width: 150px">{{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }}</th>
-              <th class="pr-0 text-right" style="min-width: 150px">{{ $t('CUSTOMER.ACTI', { msg: 'ACTION' }) }}</th>
+              <th style="min-width: 150px">
+                {{ $t("CUSTOMER.CON", { msg: "CONTACT" }) }}
+              </th>
+              <th style="min-width: 150px">
+                {{ $t("CUSTOMER.PROG", { msg: "PROGRESS" }) }}
+              </th>
+              <th class="pr-0 text-right" style="min-width: 150px">
+                {{ $t("CUSTOMER.ACTI", { msg: "ACTION" }) }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -104,11 +112,12 @@
                     >
                       <span
                         class="text-muted mr-2 font-size-sm font-weight-bold"
-                        > {{ item.progress }} </span
                       >
-                      <span class="text-muted font-size-sm font-weight-bold"
-                        > {{ $t('CUSTOMER.PROG', { msg: 'PROGRESS' }) }} </span
-                      >
+                        {{ item.progress }}
+                      </span>
+                      <span class="text-muted font-size-sm font-weight-bold">
+                        {{ $t("CUSTOMER.PROG", { msg: "PROGRESS" }) }}
+                      </span>
                     </div>
                     <div class="progress progress-xs w-100">
                       <div

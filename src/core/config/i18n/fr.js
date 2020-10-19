@@ -11,7 +11,8 @@ export const locale = {
   STATE: {
     TITLE: "State",
     SUCCESS: "Téléchargement réussi!",
-    FAIL: "Échec du téléchargement des données ... Veuillez réessayer plus tard."
+    FAIL:
+      "Échec du téléchargement des données ... Veuillez réessayer plus tard."
   },
   CUSTOMER: {
     NEW: "Ajouter un nouvel utilisateur",
@@ -44,7 +45,8 @@ export const locale = {
     },
     DATA: {
       DESCRIPTION: "Descriptions",
-      PHONE_ALREADY_EXIST: "This phone number {number} already has a associated profile.",
+      PHONE_ALREADY_EXIST:
+        "This phone number {number} already has a associated profile.",
       PROGRESS: {
         IN_PROGRESS_GROUP: "Progressing",
         CONTACTING: "Contacting",

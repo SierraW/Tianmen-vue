@@ -4,148 +4,121 @@
       <div class="card-header py-6">
         <h3 class="card-title">{{ cusCom }}<br />{{ cusName }}</h3>
         <h4>
-          <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { id: cusId })}}</b-badge>
+          <b-badge pill variant="dark">{{
+            $t("CUSTOMER.CUS_ID", { id: cusId })
+          }}</b-badge>
         </h4>
       </div>
       <div class="card-body">
-        <!-- alert area -->
-        <div class="mx-3">
-          <b-alert
-            :show="dismissCountDownFailed"
-            dismissible
-            variant="danger"
-            @dismissed="dismissCountDownFailed = 0"
-            @dismiss-count-down="countDownChangedFailed"
-          >
-            <p>{{ $t('STATE.FAIL') }}</p>
-            <b-progress
-              variant="dark"
-              :max="dismissSecs"
-              :value="dismissCountDownFailed"
-              height="4px"
-            ></b-progress>
-          </b-alert>
-
-          <b-alert
-            :show="dismissCountDownSuccess"
-            dismissible
-            variant="success"
-            @dismissed="dismissCountDownSuccess = 0"
-            @dismiss-count-down="countDownChangedSuccess"
-          >
-            <p>{{ $t('STATE.SUCCESS') }}</p>
-            <b-progress
-              variant="info"
-              :max="dismissSecs"
-              :value="dismissCountDownSuccess"
-              height="4px"
-            ></b-progress>
-          </b-alert>
-        </div>
-        <!-- end of alert area -->
-
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
           <b-tabs content-class="mt-3">
-    <b-tab :title="$t('CUSTOMER.MESSAGE', { msg: 'msg' })" active>
-      <b-form-group
-            id="input-group-1"
-            :label="$t('CUSTOMER.ADD_MSG', { msg: 'msg' })"
-            label-for="input-1"
-          >
-            <b-form-input
-              id="input-1"
-              v-model="form.message"
-              type="text"
-              required
-              :placeholder="$t('CUSTOMER.ENTER_MSG', { msg: 'New message' })"
-            ></b-form-input>
-          </b-form-group>
-    </b-tab>
-    <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
-      <b-form-group
-            id="input-group-father"
-            :label="$t('CUSTOMER.HISTORY_ADV.ROOT')"
-            label-for="input-father"
-            description='Always select "Default" when you are confusing.'
-          >
-            <b-form-select
-              v-model="form.root"
-              :options="options"
-            ></b-form-select>
-          </b-form-group>
+            <b-tab :title="$t('CUSTOMER.MESSAGE', { msg: 'msg' })" active>
+              <b-form-group
+                id="input-group-1"
+                :label="$t('CUSTOMER.ADD_MSG', { msg: 'msg' })"
+                label-for="input-1"
+              >
+                <b-form-input
+                  id="input-1"
+                  v-model="form.message"
+                  type="text"
+                  required
+                  :placeholder="
+                    $t('CUSTOMER.ENTER_MSG', { msg: 'New message' })
+                  "
+                ></b-form-input>
+              </b-form-group>
+            </b-tab>
+            <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
+              <b-form-group
+                id="input-group-father"
+                :label="$t('CUSTOMER.HISTORY_ADV.ROOT')"
+                label-for="input-father"
+                description='Always select "Default" when you are confusing.'
+              >
+                <b-form-select
+                  v-model="form.root"
+                  :options="options"
+                ></b-form-select>
+              </b-form-group>
 
-          <b-form-group
-            id="input-group-type"
-            :label="$t('CUSTOMER.HISTORY_ADV.TYPE')"
-            label-for="input-type"
-            description="Default: Message"
-          >
-            <b-form-input
-              id="input-type"
-              v-model="form.type"
-              type="text"
-              required
-              placeholder="Message"
-            ></b-form-input>
-          </b-form-group>
+              <b-form-group
+                id="input-group-type"
+                :label="$t('CUSTOMER.HISTORY_ADV.TYPE')"
+                label-for="input-type"
+                description="Default: Message"
+              >
+                <b-form-input
+                  id="input-type"
+                  v-model="form.type"
+                  type="text"
+                  required
+                  placeholder="Message"
+                ></b-form-input>
+              </b-form-group>
 
-          <b-form-group
-            id="input-group-opt-father"
-            :label="$t('CUSTOMER.HISTORY_ADV.MORE_OPT')"
-            label-for="input-opt-father"
-            description="Check only if you certain what you are doing."
-          >
-            <b-form-checkbox
-              id="input-opt-father"
-              v-model="form.isRoot"
-              name="input-opt-father"
-              value="true"
-              unchecked-value="false"
-            >
-              {{ $t('CUSTOMER.HISTORY_ADV.IS_ROOT') }}
-            </b-form-checkbox>
-          </b-form-group>
-    </b-tab>
-</b-tabs>
+              <b-form-group
+                id="input-group-opt-father"
+                :label="$t('CUSTOMER.HISTORY_ADV.MORE_OPT')"
+                label-for="input-opt-father"
+                description="Check only if you certain what you are doing."
+              >
+                <b-form-checkbox
+                  id="input-opt-father"
+                  v-model="form.isRoot"
+                  name="input-opt-father"
+                  value="true"
+                  unchecked-value="false"
+                >
+                  {{ $t("CUSTOMER.HISTORY_ADV.IS_ROOT") }}
+                </b-form-checkbox>
+              </b-form-group>
+            </b-tab>
+          </b-tabs>
 
-          <b-button type="submit" variant="primary" class="mr-3">{{ $t('CUSTOMER.SUBMIT', { msg: 'Submit' }) }}</b-button>
-          <b-button type="reset" variant="danger"> {{ $t('CUSTOMER.RESET', { msg: 'Reset' }) }} </b-button>
+          <b-button type="submit" variant="primary" class="mr-3">{{
+            $t("CUSTOMER.SUBMIT", { msg: "Submit" })
+          }}</b-button>
+          <b-button type="reset" variant="danger">
+            {{ $t("CUSTOMER.RESET", { msg: "Reset" }) }}
+          </b-button>
         </b-form>
       </div>
     </div>
 
-      <div>
-        <b-form-group label="Display filters:" class="mt-6">
-          <b-form-checkbox-group
-            v-model="selected"
-            :options="filterOptions"
-            name="buttons-1"
-            @change="toggleLogCat($event)"
-          ></b-form-checkbox-group>
-        </b-form-group>
-        <v-app id="my_vue_app">
-          <v-main>
-            <v-card>
-              <v-card-title>
-                Log Table
-                <v-spacer></v-spacer>
-                <v-text-field
-                  v-model="search"
-                  append-icon="search"
-                  label="Search"
-                  single-line
-                  hide-details
-                ></v-text-field>
-              </v-card-title>
-              <v-data-table
-                :headers="headers"
-                :items="filteredLogs"
-                :sort-by="['time']"
-                :search="search"
-              ></v-data-table>
-            </v-card>
-          </v-main>
-        </v-app>
+    <div>
+      <b-form-group label="Display filters:" class="mt-6">
+        <b-form-checkbox-group
+          v-model="selected"
+          :options="filterOptions"
+          name="buttons-1"
+          @change="toggleLogCat($event)"
+        ></b-form-checkbox-group>
+      </b-form-group>
+      <v-app id="my_vue_app">
+        <v-main>
+          <v-card>
+            <v-card-title>
+              Log Table
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Search"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table
+              :headers="headers"
+              :items="filteredLogs"
+              :sort-by="['time']"
+              :sort-desc="true"
+              :search="search"
+            ></v-data-table>
+          </v-card>
+        </v-main>
+      </v-app>
     </div>
   </div>
 </template>
@@ -162,14 +135,11 @@ export default {
   },
   data() {
     return {
-      selected: ["1", "2"],
+      selected: ["2"],
       filterOptions: [
         { text: "System", value: "1" },
         { text: "用户定义", value: "2" }
       ],
-      dismissSecs: 5,
-      dismissCountDownFailed: 0,
-      dismissCountDownSuccess: 0,
       cusId: "",
       cusName: "",
       cusCom: "",
@@ -214,6 +184,27 @@ export default {
             text: "Default"
           }
         ];
+        function datePrettyPrint(dt) {
+          return `${dt
+            .getFullYear()
+            .toString()
+            .padStart(
+              4,
+              "0"
+            )}/${(dt.getMonth() + 1).toString().padStart(2, "0")}/${dt
+            .getDate()
+            .toString()
+            .padStart(2, "0")} ${dt
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${dt
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}:${dt
+            .getSeconds()
+            .toString()
+            .padStart(2, "0")}`;
+        }
         querySnapshot.forEach(function(doc) {
           logs.push({
             id: doc.id,
@@ -222,7 +213,7 @@ export default {
             root: doc.data().root,
             type: doc.data().type,
             isRoot: doc.data().isRoot,
-            time: doc.data().time.toDate()
+            time: datePrettyPrint(doc.data().time.toDate())
           });
         });
 
@@ -303,8 +294,8 @@ export default {
       var displayUserDef = true;
       var displaySysDef = true;
 
-      if (!e) { // eslint-disable-line
-
+      if (!e) {
+        displaySysDef = false;
       } else if (e.length == 0) {
         displayUserDef = false;
         displaySysDef = false;
@@ -331,17 +322,23 @@ export default {
         appendToast: true
       });
     },
-    countDownChangedFailed(dismissCountDown) {
-      this.dismissCountDownFailed = dismissCountDown;
-    },
-    countDownChangedSuccess(dismissCountDown) {
-      this.dismissCountDownSuccess = dismissCountDown;
-    },
     showAlertFailed() {
-      this.dismissCountDownFailed = this.dismissSecs;
+      this.$bvToast.toast(this.$t("STATE.FAIL"), {
+        title: this.$t("STATE.TITLE"),
+        variant: "danger",
+        solid: true,
+        toaster: "b-toaster-top-center",
+        append: true
+      });
     },
     showAlertSuccess() {
-      this.dismissCountDownSuccess = this.dismissSecs;
+      this.$bvToast.toast(this.$t("STATE.SUCCESS"), {
+        title: this.$t("STATE.TITLE"),
+        variant: "success",
+        solid: true,
+        toaster: "b-toaster-top-center",
+        append: true
+      });
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -376,9 +373,8 @@ export default {
           instance.showAlertSuccess();
           instance.onReset();
         })
-        .catch(function(err) {
+        .catch(function() {
           instance.showAlertFailed();
-          console.log(err);
         });
     },
     onReset(evt) {
@@ -399,8 +395,11 @@ export default {
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
-      { title: this.$t('MENU.DASHBOARD', { msg: '仪表板' }), route: "../dashboard" },
-      { title: this.$t('CUSTOMER.SUPPORT_HISTORY', { msg: 'History' }) }
+      {
+        title: this.$t("MENU.DASHBOARD", { msg: "仪表板" }),
+        route: "../dashboard"
+      },
+      { title: this.$t("CUSTOMER.SUPPORT_HISTORY", { msg: "History" }) }
     ]);
   }
 };
