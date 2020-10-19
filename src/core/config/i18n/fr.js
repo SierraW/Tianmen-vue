@@ -8,9 +8,14 @@ export const locale = {
     SIGN_OUT: "Déconnexion",
     USER_PROFILE: "Profil utilisateur"
   },
+  STATE: {
+    SUCCESS: "Téléchargement réussi!",
+    FAIL: "Échec du téléchargement des données ... Veuillez réessayer plus tard."
+  },
   CUSTOMER: {
     NEW: "Ajouter un nouvel utilisateur",
-    CUS_ID: "Client id",
+    NEW_CUS_ID: "NouveauClient",
+    CUS_ID: "Client id: {id}",
     OCEAN: "Océan",
     STATES: "Liste des clients",
     MANAGEMENT: "Panneau de gestion",
@@ -29,7 +34,17 @@ export const locale = {
     ENTER_MSG: "Entrer un nouveau message",
     ADVANCED_OPT: "Options avancées",
     SUBMIT: "Soumettre",
-    RESET: "Réinitialiser"
+    RESET: "Réinitialiser",
+    HISTORY_ADV: {
+      ROOT: "Root",
+      IS_ROOT: "This is a root",
+      TYPE: "Type",
+      MORE_OPT: "More Options"
+    },
+    DATA: {
+      DESCRIPTION: "Descriptions",
+      PHONE_ALREADY_EXIST: ""
+    }
   },
   MENU: {
     NEW: "Nouveau",

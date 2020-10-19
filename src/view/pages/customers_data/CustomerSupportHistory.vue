@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="row card card-custom gutter-b">
+    <div class="card card-custom gutter-b col-xxl-12">
       <div class="card-header py-6">
         <h3 class="card-title">{{ cusCom }}<br />{{ cusName }}</h3>
         <h4>
-          <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { msg: 'id' })}}: {{ cusId }}</b-badge>
+          <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { id: cusId })}}</b-badge>
         </h4>
       </div>
-      <div class="col-md-12 card-body">
+      <div class="card-body">
         <!-- alert area -->
         <div class="mx-3">
           <b-alert
@@ -17,7 +17,7 @@
             @dismissed="dismissCountDownFailed = 0"
             @dismiss-count-down="countDownChangedFailed"
           >
-            <p>Data upload failed... Please try again later.</p>
+            <p>{{ $t('STATE.FAIL') }}</p>
             <b-progress
               variant="dark"
               :max="dismissSecs"
@@ -33,7 +33,7 @@
             @dismissed="dismissCountDownSuccess = 0"
             @dismiss-count-down="countDownChangedSuccess"
           >
-            <p>Upload successful!</p>
+            <p>{{ $t('STATE.SUCCESS') }}</p>
             <b-progress
               variant="info"
               :max="dismissSecs"
@@ -64,7 +64,7 @@
     <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
       <b-form-group
             id="input-group-father"
-            label="父类别:"
+            :label="$t('CUSTOMER.HISTORY_ADV.ROOT')"
             label-for="input-father"
             description='Always select "Default" when you are confusing.'
           >
@@ -76,7 +76,7 @@
 
           <b-form-group
             id="input-group-type"
-            label="类别:"
+            :label="$t('CUSTOMER.HISTORY_ADV.TYPE')"
             label-for="input-type"
             description="Default: Message"
           >
@@ -91,7 +91,7 @@
 
           <b-form-group
             id="input-group-opt-father"
-            label="更多选项:"
+            :label="$t('CUSTOMER.HISTORY_ADV.MORE_OPT')"
             label-for="input-opt-father"
             description="Check only if you certain what you are doing."
           >
@@ -102,20 +102,19 @@
               value="true"
               unchecked-value="false"
             >
-              这是一个父类别
+              {{ $t('CUSTOMER.HISTORY_ADV.IS_ROOT') }}
             </b-form-checkbox>
           </b-form-group>
     </b-tab>
 </b-tabs>
 
-          <b-button type="submit" variant="primary">{{ $t('CUSTOMER.SUBMIT', { msg: 'Submit' }) }}</b-button>
+          <b-button type="submit" variant="primary" class="mr-3">{{ $t('CUSTOMER.SUBMIT', { msg: 'Submit' }) }}</b-button>
           <b-button type="reset" variant="danger"> {{ $t('CUSTOMER.RESET', { msg: 'Reset' }) }} </b-button>
         </b-form>
       </div>
     </div>
 
-    <div class="row card-custom gutter-b">
-      <div class="card-body">
+      <div>
         <b-form-group label="Display filters:" class="mt-6">
           <b-form-checkbox-group
             v-model="selected"
@@ -147,7 +146,6 @@
             </v-card>
           </v-main>
         </v-app>
-      </div>
     </div>
   </div>
 </template>

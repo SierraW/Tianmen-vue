@@ -1,11 +1,11 @@
 <template>
-  <div class="card card-custom gutter-b">
+  <div class="card card-custom gutter-b col-xxl-12">
     <div class="card-header py-6">
       <h3 class="card-title">{{ form.company }}<br />{{ form.name }}</h3>
       <h4 v-if="!newCus">
-        <b-badge pill variant="dark">id: {{ form.id }}</b-badge>
+        <b-badge pill variant="dark">{{$t('CUSTOMER.CUS_ID', { id: form.id })}}</b-badge>
       </h4>
-      <h4 v-if="newCus"><b-badge pill>new customer</b-badge></h4>
+      <h4 v-if="newCus"><b-badge pill>{{ $t('CUSTOMER.NEW_CUS_ID') }}</b-badge></h4>
     </div>
     <!-- alert area -->
     <div class="mx-3">
@@ -16,7 +16,7 @@
         @dismissed="dismissCountDownFailed = 0"
         @dismiss-count-down="countDownChangedFailed"
       >
-        <p>Data upload failed... Please try again later.</p>
+        <p>{{ $t('STATE.FAIL') }}</p>
         <b-progress
           variant="dark"
           :max="dismissSecs"
@@ -32,7 +32,7 @@
         @dismissed="dismissCountDownSuccess = 0"
         @dismiss-count-down="countDownChangedSuccess"
       >
-        <p>Upload successful!</p>
+        <p>{{ $t('STATE.SUCCESS') }}</p>
         <b-progress
           variant="info"
           :max="dismissSecs"
@@ -82,7 +82,7 @@
             id="input-phe"
             v-model="form.phone"
             required
-            placeholder="+1 123-123-1234"
+            placeholder="+11231231234"
           ></b-form-input>
         </b-form-group>
 
@@ -104,15 +104,16 @@
         </b-form-group>
 
         <b-form-group
-          id="input-group-hea"
-          label="Head (Optional):"
-          label-for="input-hea"
+          id="input-group-des"
+          :label="$t('CUSTOMER.DATA.DESCRIPTION')"
+          label-for="input-des"
         >
-          <b-form-input
-            id="input-hea"
-            v-model="form.head"
-            placeholder="media/svg/avatars/001-boy.svg"
-          ></b-form-input>
+          <b-form-textarea
+            id="textarea-rows"
+            v-model="form.description"
+            placeholder="Tall textarea"
+            rows="8"
+          ></b-form-textarea>
         </b-form-group>
 
         <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
@@ -144,12 +145,13 @@ export default {
         id: "",
         head: "media/svg/avatars/001-boy.svg",
         name: "",
-        company: "",
-        phone: "",
-        email: "",
+        company: "N/A",
+        phone: "N/A",
+        email: "N/A@n.a",
         progress: "",
         state: "",
-        selectedGender: ""
+        selectedGender: "",
+        description: ""
       },
       newCus: false,
       show: true,
@@ -192,6 +194,7 @@ export default {
           instance.form.progress = doc.data().progress;
           instance.form.state = doc.data().state;
           instance.form.selectedGender = doc.data().gender;
+          instance.form.description = doc.data().description;
 
           instance.old = {
             id: doc.id,
@@ -202,7 +205,8 @@ export default {
             email: doc.data().email,
             progress: doc.data().progress,
             state: doc.data().state,
-            selectedGender: doc.data().gender
+            selectedGender: doc.data().gender,
+            description: doc.data().description
           };
         });
     }
@@ -238,7 +242,7 @@ export default {
         return;
       }
       const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/;
-      if (!pattern.test(this.form.phone)) {
+      if (!pattern.test(this.form.phone) && this.form.phone != "N/A") {
         this.makeToast(
           "Data invalid",
           `Phone number invalid, your input is ${this.form.phone}. Valid phone number example: +16476543210`
@@ -251,11 +255,9 @@ export default {
           .where("phone", "==", this.form.phone)
           .get();
         if (result.size > 0) {
-          this.makeToast(
-            "Profile exist",
-            `This phone number ${this.form.phone} already has a associated profile.`
-          );
-          return;
+          if (!confirm(this.$t('CUSTOMER.DATA.PHONE_ALREADY_EXIST', { number: this.form.phone} ))) {
+            return;
+          }
         }
         const newCusData = {
           company: this.form.company,
@@ -268,7 +270,8 @@ export default {
           state: "primary",
           uid: "",
           time: firebase.firestore.Timestamp.fromDate(new Date()),
-          gender: this.form.selectedGender
+          gender: this.form.selectedGender,
+          description: this.form.description
         };
         em_customers(this.currentUser.fs_key)
           .add(newCusData)
@@ -296,7 +299,8 @@ export default {
           phone: this.form.phone,
           progress: this.form.progress,
           state: this.form.state,
-          gender: this.form.selectedGender
+          gender: this.form.selectedGender,
+          description: this.form.description
         };
         em_customers(this.currentUser.fs_key)
           .doc(this.form.id)
@@ -341,6 +345,7 @@ export default {
       this.form.progress = "";
       this.form.state = "";
       this.form.selectedGender = "";
+      this.form.description = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {

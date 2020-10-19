@@ -8,9 +8,14 @@ export const locale = {
     SIGN_OUT: "Sign Out",
     USER_PROFILE: "User Profile"
   },
+  STATE: {
+    SUCCESS: "Upload successful!",
+    FAIL: "Data upload failed... Please try again later."
+  },
   CUSTOMER: {
     NEW: "Add New User",
-    CUS_ID: "Customer ID",
+    NEW_CUS_ID: "NewCustomer",
+    CUS_ID: "Customer ID: {id}",
     OCEAN: "Ocean",
     STATES: "Customer List",
     MANAGEMENT: "Management Panel",
@@ -29,7 +34,17 @@ export const locale = {
     ENTER_MSG: "Enter New Message",
     ADVANCED_OPT: "Advanced Options",
     SUBMIT: "Submit",
-    RESET: "Reset"
+    RESET: "Reset",
+    HISTORY_ADV: {
+      ROOT: "Root",
+      IS_ROOT: "This is a root",
+      TYPE: "Type",
+      MORE_OPT: "More Options"
+    },
+    DATA: {
+      DESCRIPTION: "Descriptions",
+      PHONE_ALREADY_EXIST: "This phone number {number} already has a associated profile."
+    }
   },
   MENU: {
     NEW: "new",

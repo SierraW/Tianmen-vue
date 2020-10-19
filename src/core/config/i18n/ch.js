@@ -8,9 +8,14 @@ export const locale = {
     SIGN_OUT: "登出账号",
     USER_PROFILE: "用户资料"
   },
+  STATE: {
+    SUCCESS: "数据更新成功",
+    FAIL: "数据更新失败，请重试。"
+  },
   CUSTOMER: {
     NEW: "添加新用户",
-    CUS_ID: "客户识别码",
+    NEW_CUS_ID: "XinYongHu",
+    CUS_ID: "客户识别码: {id}",
     OCEAN: "公海",
     STATES: "客户列表",
     MANAGEMENT: "管理面板",
@@ -29,7 +34,17 @@ export const locale = {
     ENTER_MSG: "输入新留言",
     ADVANCED_OPT: "高级选项",
     SUBMIT: "提交",
-    RESET: "重置"
+    RESET: "重置",
+    HISTORY_ADV: {
+      ROOT: "父类别",
+      IS_ROOT: "这是一个父类别",
+      TYPE: "类别",
+      MORE_OPT: "更多选项"
+    },
+    DATA: {
+      DESCRIPTION: "补充描述",
+      PHONE_ALREADY_EXIST: "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？"
+    }
   },
   MENU: {
     NEW: "新",
