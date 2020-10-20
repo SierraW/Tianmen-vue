@@ -139,16 +139,22 @@
                 </p>
               </div>
               <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >用户名</label
+                >
                 <input
                   class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                   type="text"
-                  placeholder="Fullname"
-                  name="fullname"
-                  ref="fullname"
+                  placeholder="Login Name"
+                  name="login"
+                  ref="rlogin"
                   autocomplete="off"
                 />
               </div>
               <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >邮箱</label
+                >
                 <input
                   class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                   type="email"
@@ -159,6 +165,22 @@
                 />
               </div>
               <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >昵称</label
+                >
+                <input
+                  class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
+                  type="text"
+                  placeholder="Display Name"
+                  name="display"
+                  ref="rdisplay"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >密码</label
+                >
                 <input
                   class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                   type="password"
@@ -169,12 +191,28 @@
                 />
               </div>
               <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >重新输入密码</label
+                >
                 <input
                   class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                   type="password"
                   placeholder="Confirm password"
                   name="cpassword"
                   ref="cpassword"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark"
+                  >激活码</label
+                >
+                <input
+                  class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
+                  type="text"
+                  placeholder="Activation Code"
+                  name="actcod"
+                  ref="ractcod"
                   autocomplete="off"
                 />
               </div>
@@ -292,7 +330,7 @@ import SubmitButton from "@/assets/plugins/formvalidation/dist/es6/plugins/Submi
 import KTUtil from "@/assets/js/components/util";
 import { mapGetters, mapState } from "vuex";
 import { LOGIN, LOGOUT, REGISTER } from "@/core/services/store/auth.module";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 
 export default {
   name: "login-1",
@@ -349,10 +387,24 @@ export default {
 
     this.fv1 = formValidation(signup_form, {
       fields: {
-        fullname: {
+        login: {
           validators: {
             notEmpty: {
-              message: "Full name is required"
+              message: "Login name is required"
+            }
+          }
+        },
+        display: {
+          validators: {
+            notEmpty: {
+              message: "Display name is required"
+            }
+          }
+        },
+        actcod: {
+          validators: {
+            notEmpty: {
+              message: "Activation code is required"
             }
           }
         },
@@ -422,6 +474,16 @@ export default {
     });
   },
   methods: {
+    toast(title, body, variant, append = false) {
+      this.counter++
+      this.$bvToast.toast(body, {
+        title: title,
+        toaster: 'b-toaster-top-center',
+        solid: true,
+        variant: variant,
+        appendToast: append
+      })
+    },
     showForm(form) {
       this.state = form;
       var form_name = "kt_login_" + form + "_form";
@@ -432,27 +494,28 @@ export default {
     },
 
     onSubmitLogin() {
-      this.fv.validate();
-
-      this.fv.on("core.form.valid", () => {
-        var email = this.$refs.email.value;
-        var password = this.$refs.password.value;
+      this.emergSingleValidationProcess(this.fv)
+      .then(() => {
+        const email = this.$refs.email.value;
+        const password = this.$refs.password.value;
 
         // clear existing errors
         this.$store.dispatch(LOGOUT);
 
         // set spinner to submit button
-        const submitButton = this.$refs["kt_login_signin_submit"];
+        const submitButton = this.$refs["kt_login_signup_submit"];
         submitButton.classList.add("spinner", "spinner-light", "spinner-right");
 
         // dummy delay
         setTimeout(() => {
-          // send login request
+          // send register request
           this.$store
             .dispatch(LOGIN, { email, password })
             // go to which page after successfully login
             .then(() => this.$router.push({ name: "dashboard" }))
-            .catch(() => {});
+            .catch((response) => {
+              this.toast("Login Failed", response, "danger");
+            });
 
           submitButton.classList.remove(
             "spinner",
@@ -460,25 +523,72 @@ export default {
             "spinner-right"
           );
         }, 2000);
-      });
 
-      this.fv.on("core.form.invalid", () => {
-        Swal.fire({
-          title: "",
-          text: "Please, provide correct data!",
-          icon: "error",
-          confirmButtonClass: "btn btn-secondary",
-          heightAuto: false
-        });
-      });
+      })
+      // this.fv.validate();
+
+      // this.fv.on("core.form.valid", () => {
+      //   var email = this.$refs.email.value;
+      //   var password = this.$refs.password.value;
+
+      //   // clear existing errors
+      //   this.$store.dispatch(LOGOUT);
+
+      //   // set spinner to submit button
+      //   const submitButton = this.$refs["kt_login_signin_submit"];
+      //   submitButton.classList.add("spinner", "spinner-light", "spinner-right");
+
+      //   // dummy delay
+      //   setTimeout(() => {
+      //     // send login request
+      //     this.$store
+      //       .dispatch(LOGIN, { email, password })
+      //       // go to which page after successfully login
+      //       .then(() => this.$router.push({ name: "dashboard" }))
+      //       .catch((response) => {
+      //         console.log(response);
+      //         if (response) {
+      //           this.toast("Login Failed", response, "danger");
+      //         }
+      //       });
+
+      //     submitButton.classList.remove(
+      //       "spinner",
+      //       "spinner-light",
+      //       "spinner-right"
+      //     );
+      //   }, 2000);
+      // });
+
+      // this.fv.on("core.form.invalid", () => {
+      //   Swal.fire({
+      //     title: "",
+      //     text: "Please, provide correct data!",
+      //     icon: "error",
+      //     confirmButtonClass: "btn btn-secondary",
+      //     heightAuto: false
+      //   });
+      // });
     },
-
-    onSubmitRegister() {
-      this.fv1.validate();
-
-      this.fv1.on("core.form.valid", () => {
+    emergSingleValidationProcess(form) {
+      return new Promise((resolve, reject) => {
+        form.validate();
+        form.on("core.form.valid", () => {
+          resolve();
+        });
+        form.on("core.form.invalid", () => {
+          reject();
+        });
+      })
+    },
+    async onSubmitRegister() {
+      this.emergSingleValidationProcess(this.fv1)
+      .then(() => {
+        const login = this.$refs.rlogin.value;
         const email = this.$refs.remail.value;
         const password = this.$refs.rpassword.value;
+        const display_name = this.$refs.rdisplay.value;
+        const actcod = this.$refs.ractcod.value;
 
         // clear existing errors
         this.$store.dispatch(LOGOUT);
@@ -492,10 +602,17 @@ export default {
           // send register request
           this.$store
             .dispatch(REGISTER, {
+              username: login,
               email: email,
-              password: password
+              password: password,
+              display_name: display_name,
+              act_code: actcod
             })
-            .then(() => this.$router.push({ name: "dashboard" }));
+            .then((response) => {
+              this.toast("Signup Successful", response, "success");
+              this.showForm('signin');
+            })
+            .catch((response) => this.toast("Signup Failed", response, "danger"));
 
           submitButton.classList.remove(
             "spinner",
@@ -503,17 +620,56 @@ export default {
             "spinner-right"
           );
         }, 2000);
-      });
 
-      this.fv1.on("core.form.invalid", () => {
-        Swal.fire({
-          title: "",
-          text: "Please, provide correct data!",
-          icon: "error",
-          confirmButtonClass: "btn btn-secondary",
-          heightAuto: false
-        });
-      });
+      })
+
+      // this.fv1.validate();
+
+      // this.fv1.on("core.form.valid", () => {
+      //   const login = this.$refs.rlogin.value;
+      //   const email = this.$refs.remail.value;
+      //   const password = this.$refs.rpassword.value;
+      //   const display_name = this.$refs.rdisplay.value;
+      //   const actcod = this.$refs.ractcod.value;
+
+      //   // clear existing errors
+      //   this.$store.dispatch(LOGOUT);
+
+      //   // set spinner to submit button
+      //   const submitButton = this.$refs["kt_login_signup_submit"];
+      //   submitButton.classList.add("spinner", "spinner-light", "spinner-right");
+
+      //   // dummy delay
+      //   setTimeout(() => {
+      //     // send register request
+      //     this.$store
+      //       .dispatch(REGISTER, {
+      //         username: login,
+      //         email: email,
+      //         password: password,
+      //         display_name: display_name,
+      //         act_code: actcod
+      //       })
+      //       .then(() => this.$router.push({ name: "dashboard" }))
+      //       .catch((response) => this.toast("Signup Failed", response));
+
+      //     submitButton.classList.remove(
+      //       "spinner",
+      //       "spinner-light",
+      //       "spinner-right"
+      //     );
+      //   }, 2000);
+      // });
+
+      // this.fv1.on("core.form.invalid", () => {
+      //   Swal.fire({
+      //     title: "",
+      //     text: "Please, provide correct data!",
+      //     icon: "error",
+      //     confirmButtonClass: "btn btn-secondary",
+      //     heightAuto: false
+      //   });
+      // });
     }
   }
 };

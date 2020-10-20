@@ -31,18 +31,19 @@ const getters = {
 
 const actions = {
   [LOGIN](context, credentials) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       ApiService.post("postLogin.php", credentials)
         .then(({ data }) => {
           if (data.success == "failed") {
-            context.commit(SET_ERROR, data.message);
+            reject(data.message);
           } else {
             context.commit(SET_AUTH, data.data);
             resolve(data);
           }
         })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
+        .catch((response) => {
+          context.commit(SET_ERROR, response);
+          reject(response);
         });
     });
   },
@@ -50,14 +51,19 @@ const actions = {
     context.commit(PURGE_AUTH);
   },
   [REGISTER](context, credentials) {
-    return new Promise(resolve => {
-      ApiService.post("login", credentials)
+    return new Promise((resolve, reject) => {
+      ApiService.post("signup.php", credentials)
         .then(({ data }) => {
-          context.commit(SET_AUTH, data);
-          resolve(data);
+          if (data.success == "success") {
+            // context.commit(SET_AUTH, data.data);
+            resolve(data.message);
+          } else {
+            reject(data.message);
+          }          
         })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
+        .catch((response) => {
+          context.commit(SET_ERROR, response);
+          reject(response);
         });
     });
   },
