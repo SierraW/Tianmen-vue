@@ -13,6 +13,26 @@ export const locale = {
     SUCCESS: "数据更新成功",
     FAIL: "数据更新失败，请重试。"
   },
+  ACT: {
+    MOD_NAME: "注册码生成器",
+    NUM: "需要生成的激活码数量",
+    ROLE: {
+      NAME: "用户权限",
+      ADMIN: "超级管理员",
+      DEV: "管理员",
+      USR: "用户"
+    },
+    TITLE: {
+      NAME: "用户群组",
+      FS: "Fine Studio",
+      CS: "Customers"
+    },
+    COM: {
+      NAME: "所属单位",
+      FS: "Fine Studio"
+    },
+    DES: "短说明（选填）"
+  },
   CUSTOMER: {
     NEW: "添加新用户",
     NEW_CUS_ID: "XinYongHu",

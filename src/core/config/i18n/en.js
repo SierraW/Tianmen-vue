@@ -13,6 +13,26 @@ export const locale = {
     SUCCESS: "Upload successful!",
     FAIL: "Data upload failed... Please try again later."
   },
+  ACT: {
+    MOD_NAME: "Activation Code Generator",
+    NUM: "Number of codes needed",
+    ROLE: {
+      NAME: "User Role",
+      ADMIN: "Root",
+      DEV: "Admin",
+      USR: "User"
+    },
+    TITLE: {
+      NAME: "User Group",
+      FS: "Fine Studio",
+      CS: "Customers"
+    },
+    COM: {
+      NAME: "Company",
+      FS: "Fine Studio"
+    },
+    DES: "Short Descriptions (Optional)"
+  },
   CUSTOMER: {
     NEW: "Add New User",
     NEW_CUS_ID: "NewCustomer",

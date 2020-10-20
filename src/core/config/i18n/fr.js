@@ -14,6 +14,26 @@ export const locale = {
     FAIL:
       "Échec du téléchargement des données ... Veuillez réessayer plus tard."
   },
+  ACT: {
+    MOD_NAME: "Activation Code Generator",
+    NUM: "Number of codes needed",
+    ROLE: {
+      NAME: "User Role",
+      ADMIN: "Root",
+      DEV: "Admin",
+      USR: "User"
+    },
+    TITLE: {
+      NAME: "User Group",
+      FS: "Fine Studio",
+      CS: "Customers"
+    },
+    COM: {
+      NAME: "Company",
+      FS: "Fine Studio"
+    },
+    DES: "Short Descriptions (Optional)"
+  },
   CUSTOMER: {
     NEW: "Ajouter un nouvel utilisateur",
     NEW_CUS_ID: "NouveauClient",
