@@ -138,6 +138,16 @@ export default {
     };
   },
   methods: {
+    toast(title, body, variant, append = false) {
+      this.counter++;
+      this.$bvToast.toast(body, {
+        title: title,
+        toaster: "b-toaster-top-center",
+        solid: true,
+        variant: variant,
+        appendToast: append
+      });
+    },
     onSubmit(evt) {
       evt.preventDefault();
       var formData = {
@@ -153,8 +163,8 @@ export default {
           this.items = data.data;
           this.description = this.form.description;
         })
-        .catch(err => {
-          console.log(err);
+        .catch(({ message }) => {
+          this.toast("Generate Failed", message, "danger");
         });
     },
     onReset(evt) {
