@@ -41,7 +41,7 @@ const actions = {
             resolve(data);
           }
         })
-        .catch((response) => {
+        .catch(response => {
           context.commit(SET_ERROR, response);
           reject(response);
         });
@@ -59,9 +59,9 @@ const actions = {
             resolve(data.message);
           } else {
             reject(data.message);
-          }          
+          }
         })
-        .catch((response) => {
+        .catch(response => {
           context.commit(SET_ERROR, response);
           reject(response);
         });

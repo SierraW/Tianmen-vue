@@ -475,14 +475,14 @@ export default {
   },
   methods: {
     toast(title, body, variant, append = false) {
-      this.counter++
+      this.counter++;
       this.$bvToast.toast(body, {
         title: title,
-        toaster: 'b-toaster-top-center',
+        toaster: "b-toaster-top-center",
         solid: true,
         variant: variant,
         appendToast: append
-      })
+      });
     },
     showForm(form) {
       this.state = form;
@@ -494,8 +494,7 @@ export default {
     },
 
     onSubmitLogin() {
-      this.emergSingleValidationProcess(this.fv)
-      .then(() => {
+      this.emergSingleValidationProcess(this.fv).then(() => {
         const email = this.$refs.email.value;
         const password = this.$refs.password.value;
 
@@ -513,7 +512,7 @@ export default {
             .dispatch(LOGIN, { email, password })
             // go to which page after successfully login
             .then(() => this.$router.push({ name: "dashboard" }))
-            .catch((response) => {
+            .catch(response => {
               this.toast("Login Failed", response, "danger");
             });
 
@@ -523,8 +522,7 @@ export default {
             "spinner-right"
           );
         }, 2000);
-
-      })
+      });
       // this.fv.validate();
 
       // this.fv.on("core.form.valid", () => {
@@ -579,11 +577,10 @@ export default {
         form.on("core.form.invalid", () => {
           reject();
         });
-      })
+      });
     },
     async onSubmitRegister() {
-      this.emergSingleValidationProcess(this.fv1)
-      .then(() => {
+      this.emergSingleValidationProcess(this.fv1).then(() => {
         const login = this.$refs.rlogin.value;
         const email = this.$refs.remail.value;
         const password = this.$refs.rpassword.value;
@@ -608,11 +605,11 @@ export default {
               display_name: display_name,
               act_code: actcod
             })
-            .then((response) => {
+            .then(response => {
               this.toast("Signup Successful", response, "success");
-              this.showForm('signin');
+              this.showForm("signin");
             })
-            .catch((response) => this.toast("Signup Failed", response, "danger"));
+            .catch(response => this.toast("Signup Failed", response, "danger"));
 
           submitButton.classList.remove(
             "spinner",
@@ -620,8 +617,7 @@ export default {
             "spinner-right"
           );
         }, 2000);
-
-      })
+      });
 
       // this.fv1.validate();
 
