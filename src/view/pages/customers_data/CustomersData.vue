@@ -14,7 +14,7 @@
 
     <div class="card-body">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <CDFormSource :value="form.trace" @input="(newTrace) => {form.trace = newTrace}"></CDFormSource>
+        <CDFormSource :value="form.source" @input="(newSource) => {form.source = newSource}"></CDFormSource>
 
         <b-form-group
           id="input-group-cpy"
@@ -226,7 +226,7 @@ export default {
         oPhone: false,
         email: "",
         oEmail: false,
-        trace: "",
+        source: "",
         progress: "0%",
         state: "primary",
         selectedGender: "",
@@ -272,7 +272,7 @@ export default {
           instance.form.state = doc.data().state;
           instance.form.selectedGender = doc.data().gender;
           instance.form.description = doc.data().description;
-          instance.form.trace = doc.data().trace;
+          instance.form.source = doc.data().source;
 
           instance.old = {
             id: doc.id,
@@ -285,7 +285,7 @@ export default {
             state: doc.data().state,
             selectedGender: doc.data().gender,
             description: doc.data().description,
-            trace: doc.data().trace
+            source: doc.data().source
           };
         });
     }
@@ -379,7 +379,7 @@ export default {
           time: firebase.firestore.Timestamp.fromDate(new Date()),
           gender: this.form.selectedGender,
           description: this.form.description ? this.form.description : "",
-          trace: this.form.trace
+          source: this.form.source
         };
         em_customers(this.currentUser.fs_key)
           .add(newCusData)
@@ -409,7 +409,7 @@ export default {
           state: this.form.progress == "100%" ? "success" : this.form.state,
           gender: this.form.selectedGender,
           description: this.form.description ? this.form.description : "",
-          trace: this.form.trace
+          source: this.form.source
         };
         if (cusData.state == "danger") {
           cusData.uid = "";
@@ -469,7 +469,7 @@ export default {
       this.form.oEmail = false;
       this.form.progress = "0%";
       this.form.state = "primary";
-      this.form.trace = "";
+      this.form.source = "";
       this.form.selectedGender = "";
       this.form.description = "";
       // Trick to reset/clear native browser form validation state

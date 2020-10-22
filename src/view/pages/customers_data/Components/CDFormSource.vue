@@ -27,6 +27,14 @@ export default {
 			get() { return this.value },
 			set(trace) {this.$emit('input', trace)}
 		}
+	},
+	watch: {
+    	trace: {
+        	handler(newVal) {
+            	this.$emit('input', newVal)
+        	},
+        	deep: true
+    	}
 	}
 }
 </script>
