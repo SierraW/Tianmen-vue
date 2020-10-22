@@ -11,7 +11,8 @@ export const locale = {
   STATE: {
     TITLE: "状态",
     SUCCESS: "数据更新成功",
-    FAIL: "数据更新失败，请重试。"
+    FAIL: "数据更新失败，请重试。",
+    UNEXPECTED_REFRESH: "检测到页面不正常刷新，正在返回上一页..."
   },
   ACT: {
     MOD_NAME: "注册码生成器",
@@ -63,6 +64,18 @@ export const locale = {
       MORE_OPT: "更多选项"
     },
     DATA: {
+      TRA: "客户来源",
+      TRA_PLA: "如：YouTube视频广告",
+      COM: "客户公司名",
+      NAME: "客户姓名",
+      EMAIL: "电子邮件",
+      PHONE: "电话",
+      GENDER: {
+        NAME: "称呼",
+        MALE: "先生",
+        FEMALE: "女士"
+      },
+      EMPTY: "暂无信息",
       DESCRIPTION: "补充描述",
       PHONE_ALREADY_EXIST:
         "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？",
@@ -76,11 +89,12 @@ export const locale = {
         PRICE_NEGOTIATING: "价格谈判 6/7",
         CONTRACT: "成功签约"
       },
-      STATE: "项目已失败"
+      STATE: "项目失败"
     }
   },
   MENU: {
     NEW: "新",
+    DATA: "客户信息",
     ACTIONS: "行动",
     ACTIVATION: "注册码",
     CREATE_POST: "创建新帖子",

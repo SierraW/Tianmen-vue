@@ -12,11 +12,12 @@ let messages = {};
 messages = { ...messages, ch, en, fr };
 
 // get current selected language
-const lang = localStorage.getItem("language") || "en";
+const lang = localStorage.getItem("language") || "ch";
 
 // Create VueI18n instance with options
 const i18n = new VueI18n({
   locale: lang, // set locale
+  fallbackLocale: "en",
   messages // set locale messages
 });
 

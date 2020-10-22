@@ -11,7 +11,8 @@ export const locale = {
   STATE: {
     TITLE: "State",
     SUCCESS: "Upload successful!",
-    FAIL: "Data upload failed... Please try again later."
+    FAIL: "Data upload failed... Please try again later.",
+    UNEXPECTED_REFRESH: "Unexpected refresh detected"
   },
   ACT: {
     MOD_NAME: "Activation Code Generator",
@@ -63,6 +64,18 @@ export const locale = {
       MORE_OPT: "More Options"
     },
     DATA: {
+      TRA: "Where to know us?",
+      TRA_PLA: "Example: YouTube Ads",
+      COM: "Customer's Company Name",
+      NAME: "Customer's Name",
+      EMAIL: "Email",
+      PHONE: "Phone",
+      GENDER: {
+        NAME: "Gender",
+        MALE: "Male",
+        FEMALE: "Female"
+      },
+      EMPTY: "No Data",
       DESCRIPTION: "Descriptions",
       PHONE_ALREADY_EXIST:
         "This phone number {number} already has a associated profile.",
@@ -81,6 +94,7 @@ export const locale = {
   },
   MENU: {
     NEW: "new",
+    DATA: "Customer Data",
     ACTIONS: "Actions",
     ACTIVATION: "Activation Code",
     CREATE_POST: "Create New Post",

@@ -15,50 +15,111 @@
     <div class="card-body">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group
+          id="input-group-tra"
+          :label="$t('CUSTOMER.DATA.TRA')"
+          label-for="input-tra"
+        >
+          <b-form-input
+            id="input-tra"
+            v-model="form.trace"
+            required
+            :placeholder="$t('CUSTOMER.DATA.TRA_PLA')"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group
           id="input-group-cpy"
-          label="Company Name:"
+          :label="$t('CUSTOMER.DATA.COM')"
           label-for="input-cpy"
-          description="Customer's company name"
         >
           <b-form-input
             id="input-cpy"
+            v-show="!form.oCompany"
             v-model="form.company"
             required
             placeholder="ARAIN Company"
           ></b-form-input>
+          <b-form-checkbox
+            id="input-opt-cpy"
+            name="input-opt-cpy"
+            value="true"
+            unchecked-value="false"
+            @change="optionsChk(1, $event)"
+          >
+            {{ $t("CUSTOMER.DATA.EMPTY") }}
+          </b-form-checkbox>
         </b-form-group>
 
-        <b-form-group id="input-group-nme" label="Name:" label-for="input-nme">
+        <b-form-group
+          id="input-group-nme"
+          :label="$t('CUSTOMER.DATA.NAME')"
+          label-for="input-nme"
+        >
           <b-form-input
             id="input-nme"
+            v-show="!form.oName"
             v-model="form.name"
             required
             placeholder="Enter name"
           ></b-form-input>
+          <b-form-checkbox
+            name="input-opt-nme"
+            value="true"
+            unchecked-value="false"
+            @change="optionsChk(2, $event)"
+          >
+            {{ $t("CUSTOMER.DATA.EMPTY") }}
+          </b-form-checkbox>
         </b-form-group>
 
-        <b-form-group id="input-group-eml" label="Email:" label-for="input-eml">
+        <b-form-group
+          id="input-group-eml"
+          :label="$t('CUSTOMER.DATA.EMAIL')"
+          label-for="input-eml"
+        >
           <b-form-input
             id="input-eml"
+            v-if="!form.oEmail"
             v-model="form.email"
             required
             type="email"
             placeholder="123@gmail.com"
           ></b-form-input>
+          <b-form-checkbox
+            name="input-opt-eml"
+            value="true"
+            unchecked-value="false"
+            @change="optionsChk(3, $event)"
+          >
+            {{ $t("CUSTOMER.DATA.EMPTY") }}
+          </b-form-checkbox>
         </b-form-group>
 
-        <b-form-group id="input-group-phe" label="Phone:" label-for="input-phe">
+        <b-form-group
+          id="input-group-phe"
+          :label="$t('CUSTOMER.DATA.PHONE')"
+          label-for="input-phe"
+        >
           <b-form-input
             id="input-phe"
+            v-if="!form.oPhone"
             v-model="form.phone"
             required
             placeholder="+11231231234"
           ></b-form-input>
+          <b-form-checkbox
+            name="input-opt-phe"
+            value="true"
+            unchecked-value="false"
+            @change="optionsChk(4, $event)"
+          >
+            {{ $t("CUSTOMER.DATA.EMPTY") }}
+          </b-form-checkbox>
         </b-form-group>
 
         <b-form-group
           id="input-group-gen"
-          label="Gender:"
+          :label="$t('CUSTOMER.DATA.GENDER.NAME')"
           label-for="input-gen"
         >
           <b-form-radio-group
@@ -66,10 +127,15 @@
             v-model="form.selectedGender"
             required
             buttons
-            :options="genderOptions"
             button-variant="outline-primary"
             name="radio-gender"
           >
+            <b-form-radio value="female">
+              {{ $t("CUSTOMER.DATA.GENDER.FEMALE") }}
+            </b-form-radio>
+            <b-form-radio value="male">
+              {{ $t("CUSTOMER.DATA.GENDER.MALE") }}
+            </b-form-radio>
           </b-form-radio-group>
         </b-form-group>
 
@@ -122,7 +188,6 @@
           <b-form-textarea
             id="textarea-rows"
             v-model="form.description"
-            placeholder="Tall textarea"
             rows="8"
           ></b-form-textarea>
         </b-form-group>
@@ -153,40 +218,43 @@ export default {
         id: "",
         head: "media/svg/avatars/001-boy.svg",
         name: "",
-        company: "N/A",
-        phone: "N/A",
-        email: "N/A@n.a",
+        oName: false,
+        company: "",
+        oCompany: false,
+        phone: "",
+        oPhone: false,
+        email: "",
+        oEmail: false,
+        trace: "",
         progress: "10%",
         state: "primary",
         selectedGender: "",
         description: ""
       },
       newCus: false,
-      show: true,
-      genderOptions: [
-        { text: "女士", value: "female" },
-        { text: "男士", value: "male" }
-      ]
+      show: true
     };
   },
   mounted() {
     if (this.newCus) {
       this.$store.dispatch(SET_BREADCRUMB, [
-        { title: "Dashboard", route: "../dashboard" },
-        { title: "Ocean", route: "../ocean" },
-        { title: "Customer data" }
+        { title: this.$t("MENU.DASHBOARD"), route: "../dashboard" },
+        { title: this.$t("CUSTOMER.OCEAN"), route: "../ocean" },
+        { title: this.$t("MENU.DATA") }
       ]);
     } else {
       this.$store.dispatch(SET_BREADCRUMB, [
-        { title: "Dashboard", route: "../dashboard" },
-        { title: "Customer data" }
+        { title: this.$t("MENU.DASHBOARD"), route: "../dashboard" },
+        { title: this.$t("MENU.DATA") }
       ]);
     }
   },
   created() {
     if (this.$route.params.new_customer) {
       this.newCus = true;
-      this.form.name = "New Customer";
+    } else if (this.$route.params.customer_id == "new_customer") {
+      alert(this.$t("STATE.UNEXPECTED_REFRESH"));
+      this.$router.push({ name: "cus_ocean" });
     } else {
       var instance = this;
       em_customers(this.currentUser.fs_key)
@@ -203,6 +271,7 @@ export default {
           instance.form.state = doc.data().state;
           instance.form.selectedGender = doc.data().gender;
           instance.form.description = doc.data().description;
+          instance.form.trace = doc.data().trace;
 
           instance.old = {
             id: doc.id,
@@ -214,7 +283,8 @@ export default {
             progress: doc.data().progress,
             state: doc.data().state,
             selectedGender: doc.data().gender,
-            description: doc.data().description
+            description: doc.data().description,
+            trace: doc.data().trace
           };
         });
     }
@@ -223,6 +293,22 @@ export default {
     ...mapGetters(["currentUser"])
   },
   methods: {
+    optionsChk(item, e) {
+      const condi = e == "true";
+      switch (item) {
+        case 1:
+          this.form.oCompany = condi;
+          break;
+        case 2:
+          this.form.oName = condi;
+          break;
+        case 3:
+          this.form.oEmail = condi;
+          break;
+        case 4:
+          this.form.oPhone = condi;
+      }
+    },
     makeToast(title, message) {
       this.toastCount++;
       this.$bvToast.toast(message, {
@@ -256,7 +342,7 @@ export default {
         return;
       }
       const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/;
-      if (!pattern.test(this.form.phone) && this.form.phone != "N/A") {
+      if (!pattern.test(this.form.phone) && !this.form.oPhone) {
         this.makeToast(
           "Data invalid",
           `Phone number invalid, your input is ${this.form.phone}. Valid phone number example: +16476543210`
@@ -280,18 +366,19 @@ export default {
           }
         }
         const newCusData = {
-          company: this.form.company,
-          email: this.form.email,
+          company: this.form.oCompany ? "N/A" : this.form.company,
+          email: this.form.oEmail ? "N/A@n.a" : this.form.email,
           head: this.form.head,
           inviter_uid: this.currentUser.id,
-          name: this.form.name,
-          phone: this.form.phone,
+          name: this.form.oName ? "N/A" : this.form.name,
+          phone: this.form.oPhone ? "N/A" : this.form.phone,
           progress: this.form.progress,
           state: this.form.progress == "100%" ? "success" : this.form.state,
           uid: "",
           time: firebase.firestore.Timestamp.fromDate(new Date()),
           gender: this.form.selectedGender,
-          description: this.form.description ? this.form.description : ""
+          description: this.form.description ? this.form.description : "",
+          trace: this.form.trace
         };
         em_customers(this.currentUser.fs_key)
           .add(newCusData)
@@ -312,15 +399,16 @@ export default {
         });
       } else {
         var cusData = {
-          company: this.form.company,
-          email: this.form.email,
+          company: this.form.oCompany ? "N/A" : this.form.company,
+          email: this.form.oEmail ? "N/A@n.a" : this.form.email,
           head: this.form.head,
-          name: this.form.name,
-          phone: this.form.phone,
+          name: this.form.oName ? "N/A" : this.form.name,
+          phone: this.form.oPhone ? "N/A" : this.form.phone,
           progress: this.form.progress,
           state: this.form.progress == "100%" ? "success" : this.form.state,
           gender: this.form.selectedGender,
-          description: this.form.description ? this.form.description : ""
+          description: this.form.description ? this.form.description : "",
+          trace: this.form.trace
         };
         em_customers(this.currentUser.fs_key)
           .doc(this.form.id)
@@ -358,12 +446,17 @@ export default {
       // Reset our form values
       this.form.id = "";
       this.form.name = "";
+      this.form.oName = false;
       this.form.head = "media/svg/avatars/001-boy.svg";
       this.form.company = "";
+      this.form.oCompany = false;
       this.form.phone = "";
+      this.form.oPhone = false;
       this.form.email = "";
+      this.form.oEmail = false;
       this.form.progress = "10%";
       this.form.state = "primary";
+      this.form.trace = "";
       this.form.selectedGender = "";
       this.form.description = "";
       // Trick to reset/clear native browser form validation state

@@ -12,7 +12,8 @@ export const locale = {
     TITLE: "State",
     SUCCESS: "Téléchargement réussi!",
     FAIL:
-      "Échec du téléchargement des données ... Veuillez réessayer plus tard."
+      "Échec du téléchargement des données ... Veuillez réessayer plus tard.",
+    UNEXPECTED_REFRESH: "Unexpected refresh detected"
   },
   ACT: {
     MOD_NAME: "Activation Code Generator",
@@ -35,6 +36,8 @@ export const locale = {
     DES: "Short Descriptions (Optional)"
   },
   CUSTOMER: {
+    TRA: "Where to know us?",
+    TRA_PLA: "Example: YouTube Ads",
     NEW: "Ajouter un nouvel utilisateur",
     NEW_CUS_ID: "NouveauClient",
     CUS_ID: "Client id: {id}",
@@ -64,6 +67,16 @@ export const locale = {
       MORE_OPT: "More Options"
     },
     DATA: {
+      COM: "Customer's Company Name",
+      NAME: "Customer's Name",
+      EMAIL: "Email",
+      PHONE: "Phone",
+      GENDER: {
+        NAME: "Gender",
+        MALE: "Male",
+        FEMALE: "Female"
+      },
+      EMPTY: "No Data",
       DESCRIPTION: "Descriptions",
       PHONE_ALREADY_EXIST:
         "This phone number {number} already has a associated profile.",
@@ -82,6 +95,7 @@ export const locale = {
   },
   MENU: {
     NEW: "Nouveau",
+    DATA: "Customer Data",
     ACTIONS: "Actions",
     ACTIVATION: "Code d'activation",
     CREATE_POST: "Créer un nouveau message",
