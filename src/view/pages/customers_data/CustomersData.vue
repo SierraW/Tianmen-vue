@@ -14,18 +14,7 @@
 
     <div class="card-body">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group
-          id="input-group-tra"
-          :label="$t('CUSTOMER.DATA.TRA')"
-          label-for="input-tra"
-        >
-          <b-form-input
-            id="input-tra"
-            v-model="form.trace"
-            required
-            :placeholder="$t('CUSTOMER.DATA.TRA_PLA')"
-          ></b-form-input>
-        </b-form-group>
+        <CDFormSource :value="form.trace" @input="(newTrace) => {form.trace = newTrace}"></CDFormSource>
 
         <b-form-group
           id="input-group-cpy"
@@ -215,9 +204,13 @@ import {
   em_customers,
   firebase
 } from "@/core/services/firebaseInit";
+import CDFormSource from "./Components/CDFormSource"
 
 export default {
   name: "cus_data",
+  components: {
+    CDFormSource
+  },
   data() {
     return {
       toastCount: 0,
@@ -352,8 +345,8 @@ export default {
       const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/;
       if (!pattern.test(this.form.phone) && !this.form.oPhone) {
         this.makeToast(
-          "Data invalid",
-          `Phone number invalid, your input is ${this.form.phone}. Valid phone number example: +16476543210`
+          this.$t('CUSTOMER.WARNINGS.PHONE_INVALID_TITLE'),
+          this.$t('CUSTOMER.WARNINGS.PHONE_INVALID_BODY', {number: this.form.phone})
         );
         return;
       }

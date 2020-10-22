@@ -12,7 +12,9 @@ export const locale = {
     TITLE: "状态",
     SUCCESS: "数据更新成功",
     FAIL: "数据更新失败，请重试。",
-    UNEXPECTED_REFRESH: "检测到页面不正常刷新，正在返回上一页..."
+    UNEXPECTED_REFRESH: "检测到页面不正常刷新，正在返回上一页...",
+    SUBS: "您确定要把这位客户拉入您的仪表板吗？拉入之后，没有其他人能看见这位客户，意味着您要全权负责这位客户的后续跟进了。",
+    UNSUBS: "您确定要把这位客户放入\"公海\"吗？在这之后，其他人就能看到，并可能把这位客户拉入到他们的服务列表中了。"
   },
   ACT: {
     MOD_NAME: "注册码生成器",
@@ -97,7 +99,9 @@ export const locale = {
       RESEVERED_KEYWORD_BODY:
         "其中一个或多个系统预留名称被占用。系统预定名称有：system、user-defined 不区分大小写。",
       EMPTY_MESSAGE_TITLE: "空白信息",
-      EMPTY_MESSAGE_BODY: "不能留下空白信息的记录"
+      EMPTY_MESSAGE_BODY: "不能留下空白信息的记录",
+      PHONE_INVALID_TITLE: "电话号码格式错误",
+      PHONE_INVALID_BODY: "电话号码需要以区域码为前缀，参考样式：+16476543210。您输入的号码为{number}。"
     }
   },
   MENU: {

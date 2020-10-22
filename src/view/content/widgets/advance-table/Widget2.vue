@@ -236,7 +236,7 @@ export default {
     unsubscribeCus(id) {
       if (
         confirm(
-          "Are you sure to release this customer? This action cannot be cancel."
+          this.$t('STATE.UNSUBS')
         )
       ) {
         em_customers(this.currentUser.fs_key)

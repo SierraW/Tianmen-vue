@@ -214,7 +214,7 @@ export default {
     subscribeCus(id) {
       if (
         confirm(
-          "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription."
+          this.$t('STATE.SUBS')
         )
       ) {
         em_customers(this.currentUser.fs_key)
