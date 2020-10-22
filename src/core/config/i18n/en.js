@@ -81,15 +81,23 @@ export const locale = {
         "This phone number {number} already has a associated profile.",
       PROGRESS: {
         IN_PROGRESS_GROUP: "Progressing",
-        CONTACTING: "Contacting",
-        FIRST_CON: "Contacted",
-        PLANNING: "Planning",
-        REQ_GATHERING: "Requirement gathering",
-        PLANNING_SECOND: "Detail planning",
-        PRICE_NEGOTIATING: "Price negotiating",
+        NOT_CON: "Have not being contact",
+        CONTACTING: "Contacting 1/7",
+        FIRST_CON: "Contacted 2/7",
+        PLANNING: "Planning 3/7",
+        REQ_GATHERING: "Requirement gathering 4/7",
+        PLANNING_SECOND: "Detail planning 5/7",
+        PRICE_NEGOTIATING: "Price negotiating 6/7",
         CONTRACT: "Successful"
       },
       STATE: "Project failed"
+    },
+    WARNINGS: {
+      RESEVERED_KEYWORD_TITLE: "Reserved keyword",
+      RESEVERED_KEYWORD_BODY:
+        "One of system reserve keyword are being used. Reverved keyword are: system, user-defined.",
+      EMPTY_MESSAGE_TITLE: "Empty Message Body",
+      EMPTY_MESSAGE_BODY: "Must not pass empty message body."
     }
   },
   MENU: {

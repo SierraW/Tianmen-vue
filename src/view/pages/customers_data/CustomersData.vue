@@ -144,8 +144,16 @@
           :label="$t('CUSTOMER.PROG')"
           label-for="input-pro"
         >
-          <b-form-select id="input-pro" v-model="form.progress" class="mb-3">
+          <b-form-select
+            v-show="form.state == 'primary'"
+            id="input-pro"
+            v-model="form.progress"
+            class="mb-3"
+          >
             <optgroup :label="$t('CUSTOMER.DATA.PROGRESS.IN_PROGRESS_GROUP')">
+              <option value="0%">
+                {{ $t("CUSTOMER.DATA.PROGRESS.NOT_CON") }}
+              </option>
               <option value="10%">
                 {{ $t("CUSTOMER.DATA.PROGRESS.CONTACTING") }}
               </option>
@@ -226,7 +234,7 @@ export default {
         email: "",
         oEmail: false,
         trace: "",
-        progress: "10%",
+        progress: "0%",
         state: "primary",
         selectedGender: "",
         description: ""
@@ -410,6 +418,18 @@ export default {
           description: this.form.description ? this.form.description : "",
           trace: this.form.trace
         };
+        if (cusData.state == "danger") {
+          cusData.uid = "";
+          em_histories(this.currentUser.fs_key).add({
+            customerId: this.form.id,
+            message: "",
+            type: "unsubscribe",
+            root: "system",
+            isRoot: false,
+            from: this.currentUser.user_login,
+            time: firebase.firestore.Timestamp.fromDate(new Date())
+          });
+        }
         em_customers(this.currentUser.fs_key)
           .doc(this.form.id)
           .update(cusData)
@@ -454,7 +474,7 @@ export default {
       this.form.oPhone = false;
       this.form.email = "";
       this.form.oEmail = false;
-      this.form.progress = "10%";
+      this.form.progress = "0%";
       this.form.state = "primary";
       this.form.trace = "";
       this.form.selectedGender = "";

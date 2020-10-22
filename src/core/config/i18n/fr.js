@@ -82,6 +82,7 @@ export const locale = {
         "This phone number {number} already has a associated profile.",
       PROGRESS: {
         IN_PROGRESS_GROUP: "Progressing",
+        NOT_CON: "Have not being contact",
         CONTACTING: "Contacting",
         FIRST_CON: "Contacted",
         PLANNING: "Planning",
@@ -91,6 +92,13 @@ export const locale = {
         CONTRACT: "Successful"
       },
       STATE: "Project failed"
+    },
+    WARNINGS: {
+      RESEVERED_KEYWORD_TITLE: "Reserved keyword",
+      RESEVERED_KEYWORD_BODY:
+        "One of system reserve keyword are being used. Reverved keyword are: system, user-defined",
+      EMPTY_MESSAGE_TITLE: "Empty Message Body",
+      EMPTY_MESSAGE_BODY: "Must not pass empty message body."
     }
   },
   MENU: {

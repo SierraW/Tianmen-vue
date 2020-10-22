@@ -81,6 +81,7 @@ export const locale = {
         "这个电话号码{number}已经拥有记录在册的档案了，还要继续添加吗？",
       PROGRESS: {
         IN_PROGRESS_GROUP: "进度",
+        NOT_CON: "尚未联系",
         CONTACTING: "联系中 1/7",
         FIRST_CON: "初次交谈 2/7",
         PLANNING: "方案整理中 3/7",
@@ -90,6 +91,13 @@ export const locale = {
         CONTRACT: "成功签约"
       },
       STATE: "项目失败"
+    },
+    WARNINGS: {
+      RESEVERED_KEYWORD_TITLE: "系统预留名称",
+      RESEVERED_KEYWORD_BODY:
+        "其中一个或多个系统预留名称被占用。系统预定名称有：system、user-defined 不区分大小写。",
+      EMPTY_MESSAGE_TITLE: "空白信息",
+      EMPTY_MESSAGE_BODY: "不能留下空白信息的记录"
     }
   },
   MENU: {

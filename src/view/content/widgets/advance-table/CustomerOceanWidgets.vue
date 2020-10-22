@@ -50,10 +50,9 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="width: 50px">
+              <th class="pr-0" style="min-width: 250px">
                 {{ $t("CUSTOMER.COM", { msg: "COMPANY" }) }}
               </th>
-              <th style="min-width: 200px"></th>
               <th style="min-width: 150px">
                 {{ $t("CUSTOMER.CON", { msg: "CONTACT" }) }}
               </th>
@@ -74,18 +73,7 @@
                     <span></span>
                   </label>
                 </td>
-                <td class="pr-0">
-                  <div class="symbol symbol-50 symbol-light mt-1">
-                    <span class="symbol-label">
-                      <img
-                        :src="item.head"
-                        class="h-75 align-self-end"
-                        alt=""
-                      />
-                    </span>
-                  </div>
-                </td>
-                <td class="pl-0">
+                <td class="pl-3">
                   <a
                     href="#"
                     class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
@@ -116,7 +104,7 @@
                         {{ item.progress }}
                       </span>
                       <span class="text-muted font-size-sm font-weight-bold">
-                        {{ $t("CUSTOMER.PROG", { msg: "PROGRESS" }) }}
+                        {{ getProgressString(item.progress) }}
                       </span>
                     </div>
                     <div class="progress progress-xs w-100">
@@ -200,6 +188,26 @@ export default {
   components: {},
   computed: mapGetters(["currentUser"]),
   methods: {
+    getProgressString(progress) {
+      switch (progress) {
+        case "0%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.NOT_CON");
+        case "10%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.CONTACTING");
+        case "20%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.FIRST_CON");
+        case "30%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.PLANNING");
+        case "50%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.REQ_GATHERING");
+        case "60%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.PLANNING_SECOND");
+        case "80%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.PRICE_NEGOTIATING");
+        case "100%":
+          return this.$t("CUSTOMER.DATA.PROGRESS.CONTRACT");
+      }
+    },
     setCheck(checked) {
       this.checked = checked;
     },

@@ -18,15 +18,15 @@
                 :label="$t('CUSTOMER.ADD_MSG', { msg: 'msg' })"
                 label-for="input-1"
               >
-                <b-form-input
+                <b-form-textarea
                   id="input-1"
                   v-model="form.message"
-                  type="text"
-                  required
+                  rows="4"
+                  max-rows="7"
                   :placeholder="
                     $t('CUSTOMER.ENTER_MSG', { msg: 'New message' })
                   "
-                ></b-form-input>
+                ></b-form-textarea>
               </b-form-group>
             </b-tab>
             <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
@@ -318,6 +318,7 @@ export default {
       this.toastCount++;
       this.$bvToast.toast(message, {
         title: title,
+        variant: "warning",
         autoHideDelay: 5000,
         appendToast: true
       });
@@ -346,14 +347,21 @@ export default {
         this.showAlertFailed();
         return;
       }
+      if (/^\s*$/.test(this.form.message) && !this.form.isRoot) {
+        this.makeToast(
+          this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_TITLE"),
+          this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_BODY")
+        );
+        return;
+      }
       if (
         this.form.type.toLowerCase() == "system" ||
         this.form.root.toLowerCase() == "system" ||
         this.form.type.toLowerCase() == "user-defined"
       ) {
         this.makeToast(
-          "Reserved keyword",
-          `One of system reserve keyword are being used. Reverved keyword are: system, user-defined`
+          this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_TITLE"),
+          this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_BODY")
         );
         return;
       }
