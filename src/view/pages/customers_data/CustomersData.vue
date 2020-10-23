@@ -14,7 +14,14 @@
 
     <div class="card-body">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <CDFormSource :value="form.source" @input="(newSource) => {form.source = newSource}"></CDFormSource>
+        <CDFormSource
+          :value="form.source"
+          @input="
+            newSource => {
+              form.source = newSource;
+            }
+          "
+        ></CDFormSource>
 
         <b-form-group
           id="input-group-cpy"
@@ -204,7 +211,7 @@ import {
   em_customers,
   firebase
 } from "@/core/services/firebaseInit";
-import CDFormSource from "./Components/CDFormSource"
+import CDFormSource from "./Components/CDFormSource";
 
 export default {
   name: "cus_data",
@@ -345,8 +352,10 @@ export default {
       const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/;
       if (!pattern.test(this.form.phone) && !this.form.oPhone) {
         this.makeToast(
-          this.$t('CUSTOMER.WARNINGS.PHONE_INVALID_TITLE'),
-          this.$t('CUSTOMER.WARNINGS.PHONE_INVALID_BODY', {number: this.form.phone})
+          this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_TITLE"),
+          this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_BODY", {
+            number: this.form.phone
+          })
         );
         return;
       }
@@ -433,15 +442,17 @@ export default {
             instance.showAlertFailed();
           });
         const diff = this.different(cusData);
-        em_histories(this.currentUser.fs_key).add({
-          customerId: this.form.id,
-          message: JSON.stringify(diff),
-          type: "modify",
-          root: "system",
-          isRoot: false,
-          from: this.currentUser.user_login,
-          time: firebase.firestore.Timestamp.fromDate(new Date())
-        });
+        if (diff.length > 0) {
+          em_histories(this.currentUser.fs_key).add({
+            customerId: this.form.id,
+            message: JSON.stringify(diff),
+            type: "modify",
+            root: "system",
+            isRoot: false,
+            from: this.currentUser.user_login,
+            time: firebase.firestore.Timestamp.fromDate(new Date())
+          });
+        }
       }
     },
     different(a) {

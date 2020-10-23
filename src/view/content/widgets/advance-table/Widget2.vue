@@ -234,11 +234,7 @@ export default {
       this.checked = checked;
     },
     unsubscribeCus(id) {
-      if (
-        confirm(
-          this.$t('STATE.UNSUBS')
-        )
-      ) {
+      if (confirm(this.$t("STATE.UNSUBS"))) {
         em_customers(this.currentUser.fs_key)
           .doc(id)
           .update({

@@ -212,11 +212,7 @@ export default {
       this.checked = checked;
     },
     subscribeCus(id) {
-      if (
-        confirm(
-          this.$t('STATE.SUBS')
-        )
-      ) {
+      if (confirm(this.$t("STATE.SUBS"))) {
         em_customers(this.currentUser.fs_key)
           .doc(id)
           .update({

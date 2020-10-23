@@ -14,8 +14,10 @@ export const locale = {
     FAIL:
       "Échec du téléchargement des données ... Veuillez réessayer plus tard.",
     UNEXPECTED_REFRESH: "Unexpected refresh detected",
-    SUBS: "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.",
-    UNSUBS: "Are you sure to release this customer? This action cannot be cancel."
+    SUBS:
+      "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.",
+    UNSUBS:
+      "Are you sure to release this customer? This action cannot be cancel."
   },
   ACT: {
     MOD_NAME: "Activation Code Generator",
@@ -102,7 +104,8 @@ export const locale = {
       EMPTY_MESSAGE_TITLE: "Empty Message Body",
       EMPTY_MESSAGE_BODY: "Must not pass empty message body.",
       PHONE_INVALID_TITLE: "Phone Number invalid",
-      PHONE_INVALID_BODY: "Phone number needs area code as prefix, your input is {number}. Valid phone number example: +16476543210"
+      PHONE_INVALID_BODY:
+        "Phone number needs area code as prefix, your input is {number}. Valid phone number example: +16476543210"
     }
   },
   MENU: {
