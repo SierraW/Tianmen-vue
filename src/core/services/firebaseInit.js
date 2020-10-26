@@ -19,6 +19,10 @@ function em_histories(fs_key) {
   return em.doc(fs_key).collection("em_cus_histories");
 }
 
+function em_sources(fs_key) {
+  return em.doc(fs_key).collection("em_cus_sources");
+}
+
 function timestamp() {
   return firebase.firestore.Timestamp.fromDate(new Date());
 }
@@ -31,5 +35,6 @@ export {
   em_chat,
   em_customers,
   em_histories,
+  em_sources,
   timestamp
 };

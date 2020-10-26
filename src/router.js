@@ -38,6 +38,11 @@ export default new Router({
           name: "activation",
           component: () =>
             import("@/view/pages/activation/ActivationCodeGen.vue")
+        },
+        {
+          path: "/tag",
+          name: "tag_manager",
+          component: () => import("@/view/pages/tag_data/TagDataManager.vue")
         }
       ]
     },

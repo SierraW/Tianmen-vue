@@ -10,7 +10,7 @@
           {{ $t("CUSTOMER.MANAGEMENT", { msg: "Management Panel" }) }}
         </span>
       </h3>
-      <div class="card-toolbar">
+      <div class="card-toolbar" v-if="isOcean">
         <router-link
           v-bind:to="{
             name: 'cus_data',
@@ -53,6 +53,9 @@
               <th class="pr-0" style="min-width: 250px">
                 {{ $t("CUSTOMER.COM", { msg: "COMPANY" }) }}
               </th>
+              <th class="pr-0" style="min-width: 150px">
+                {{ $t("CUSTOMER.CAT") }}
+              </th>
               <th style="min-width: 150px">
                 {{ $t("CUSTOMER.CON", { msg: "CONTACT" }) }}
               </th>
@@ -82,6 +85,12 @@
                   <span
                     class="text-muted font-weight-bold text-muted d-block"
                     >{{ item.email }}</span
+                  >
+                </td>
+                <td>
+                  <span
+                    class="text-dark-75 font-weight-bolder d-block font-size-lg"
+                    >{{ item.category }}</span
                   >
                 </td>
                 <td>
@@ -121,18 +130,14 @@
                   </div>
                 </td>
                 <td class="pr-0 text-right">
-                  <button
-                    v-b-tooltip.hover
-                    :title="$t('CUSTOMER.PUSH', { msg: '拉入' })"
-                    v-on:click="subscribeCus(item.id)"
-                    class="btn btn-icon btn-light btn-hover-primary btn-sm"
-                  >
-                    <span class="svg-icon svg-icon-md svg-icon-primary">
-                      <!--begin::Svg Icon -->
-                      <inline-svg src="media/svg/icons/General/Save.svg" />
-                      <!--end::Svg Icon-->
-                    </span>
-                  </button>
+                  <ActionsGroupOcean
+                    v-if="isOcean"
+                    :item="item"
+                  ></ActionsGroupOcean>
+                  <ActionsGroupDash
+                    v-if="!isOcean"
+                    :item="item"
+                  ></ActionsGroupDash>
                 </td>
               </tr>
             </template>
@@ -147,15 +152,23 @@
 </template>
 
 <script>
-import {
-  em_customers,
-  em_histories,
-  firebase
-} from "@/core/services/firebaseInit";
+import { em_customers } from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
+import ActionsGroupOcean from "@/view/pages/customers_data/components/ActionsGroupOcean";
+import ActionsGroupDash from "@/view/pages/customers_data/components/ActionsGroupDash";
 
 export default {
-  name: "widget-cusocean",
+  name: "CustomerListTable",
+  components: {
+    ActionsGroupOcean,
+    ActionsGroupDash
+  },
+  props: {
+    isOcean: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       list: [],
@@ -163,8 +176,12 @@ export default {
     };
   },
   created() {
+    var condi = "";
+    if (!this.isOcean) {
+      condi = this.currentUser.id;
+    }
     em_customers(this.currentUser.fs_key)
-      .where("uid", "==", "")
+      .where("uid", "==", condi)
       .onSnapshot(querySnapshot => {
         var emCusRecords = [];
         querySnapshot.forEach(function(doc) {
@@ -178,6 +195,7 @@ export default {
             progress: doc.data().progress,
             state: doc.data().state,
             time: doc.data().time,
+            category: doc.data().category,
             inviter_uid: doc.data().inviter_uid
           };
           emCusRecords.push(cusRecord);
@@ -185,7 +203,6 @@ export default {
         this.list = emCusRecords;
       });
   },
-  components: {},
   computed: mapGetters(["currentUser"]),
   methods: {
     getProgressString(progress) {
@@ -210,24 +227,6 @@ export default {
     },
     setCheck(checked) {
       this.checked = checked;
-    },
-    subscribeCus(id) {
-      if (confirm(this.$t("STATE.SUBS"))) {
-        em_customers(this.currentUser.fs_key)
-          .doc(id)
-          .update({
-            uid: this.currentUser.id
-          });
-        em_histories(this.currentUser.fs_key).add({
-          customerId: id,
-          message: "",
-          type: "subscribe",
-          root: "system",
-          isRoot: false,
-          from: this.currentUser.user_login,
-          time: firebase.firestore.Timestamp.fromDate(new Date())
-        });
-      }
     }
   }
 };

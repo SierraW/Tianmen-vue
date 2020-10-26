@@ -3,7 +3,7 @@
     <!--begin::Dashboard-->
     <div class="row">
       <div class="col-xxl-12">
-        <AdvancedTableWidget2></AdvancedTableWidget2>
+        <CustomerListTable :isOcean="false"></CustomerListTable>
       </div>
     </div>
   </div>
@@ -11,12 +11,12 @@
 
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
-import AdvancedTableWidget2 from "@/view/content/widgets/advance-table/Widget2.vue";
+import CustomerListTable from "@/view/content/widgets/advance-table/CustomerListTable.vue";
 
 export default {
   name: "dashboard",
   components: {
-    AdvancedTableWidget2
+    CustomerListTable
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
