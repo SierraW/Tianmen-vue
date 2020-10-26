@@ -319,6 +319,7 @@ export default {
       this.$bvToast.toast(message, {
         title: title,
         variant: "warning",
+        toaster: "b-toaster-top-center",
         autoHideDelay: 5000,
         appendToast: true
       });

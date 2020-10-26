@@ -8,6 +8,12 @@ export const locale = {
     SIGN_OUT: "登出账号",
     USER_PROFILE: "用户资料"
   },
+  SOURCE: {
+    PAGE: "客户来源管理",
+    ADD: "增加",
+    EXIST_SOURCE_TITLE: "来源已存在",
+    EXIST_SOURCE_BODY: "来源信息已存在，无需重复添加"
+  },
   STATE: {
     TITLE: "状态",
     SUCCESS: "数据更新成功",
@@ -16,7 +22,8 @@ export const locale = {
     SUBS:
       "您确定要把这位客户拉入您的仪表板吗？拉入之后，没有其他人能看见这位客户，意味着您要全权负责这位客户的后续跟进了。",
     UNSUBS:
-      '您确定要把这位客户放入"公海"吗？在这之后，其他人就能看到，并可能把这位客户拉入到他们的服务列表中了。'
+      '您确定要把这位客户放入"公海"吗？在这之后，其他人就能看到，并可能把这位客户拉入到他们的服务列表中了。',
+    DEL: "您确定要删除这位客户吗？此操作不可撤回。"
   },
   ACT: {
     MOD_NAME: "注册码生成器",
@@ -39,6 +46,8 @@ export const locale = {
     DES: "短说明（选填）"
   },
   CUSTOMER: {
+    DEL: "删除用户",
+    CAT: "分类",
     NEW: "添加新用户",
     NEW_CUS_ID: "XinYongHu",
     CUS_ID: "客户识别码: {id}",
@@ -68,8 +77,11 @@ export const locale = {
       MORE_OPT: "更多选项"
     },
     DATA: {
+      WECHAT: "微信号",
       TRA: "客户来源",
       TRA_PLA: "如：YouTube视频广告",
+      CAT: "客户分类",
+      CAT_PLA: "如：小程序",
       COM: "客户公司名",
       NAME: "客户姓名",
       EMAIL: "电子邮件",

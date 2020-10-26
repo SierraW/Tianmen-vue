@@ -17,7 +17,9 @@ export const locale = {
     SUBS:
       "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.",
     UNSUBS:
-      "Are you sure to release this customer? This action cannot be cancel."
+      "Are you sure to release this customer? This action cannot be cancel.",
+    DEL:
+      "Are you sure you want to delete this customer? This action cannot be undo."
   },
   ACT: {
     MOD_NAME: "Activation Code Generator",
@@ -40,6 +42,7 @@ export const locale = {
     DES: "Short Descriptions (Optional)"
   },
   CUSTOMER: {
+    DEL: "Delete Costomer",
     TRA: "Where to know us?",
     TRA_PLA: "Example: YouTube Ads",
     NEW: "Ajouter un nouvel utilisateur",

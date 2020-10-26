@@ -30,7 +30,7 @@
         >
           <b-form-input
             id="input-cpy"
-            v-show="!form.oCompany"
+            v-if="!form.oCompany"
             v-model="form.company"
             required
             placeholder="ARAIN Company"
@@ -53,7 +53,7 @@
         >
           <b-form-input
             id="input-nme"
-            v-show="!form.oName"
+            v-if="!form.oName"
             v-model="form.name"
             required
             placeholder="Enter name"
@@ -111,6 +111,14 @@
           >
             {{ $t("CUSTOMER.DATA.EMPTY") }}
           </b-form-checkbox>
+        </b-form-group>
+
+        <b-form-group
+          id="input-group-wec"
+          :label="$t('CUSTOMER.DATA.WECHAT')"
+          label-for="input-wec"
+        >
+          <b-form-input id="input-wec" v-model="form.wechat"></b-form-input>
         </b-form-group>
 
         <b-form-group
@@ -211,7 +219,7 @@ import {
   em_customers,
   firebase
 } from "@/core/services/firebaseInit";
-import CDFormSource from "./Components/CDFormSource";
+import CDFormSource from "./components/CDFormSource";
 
 export default {
   name: "cus_data",
@@ -233,11 +241,15 @@ export default {
         oPhone: false,
         email: "",
         oEmail: false,
-        source: "",
+        source: {
+          source: "",
+          category: ""
+        },
         progress: "0%",
         state: "primary",
         selectedGender: "",
-        description: ""
+        description: "",
+        wechat: ""
       },
       newCus: false,
       show: true
@@ -279,21 +291,27 @@ export default {
           instance.form.state = doc.data().state;
           instance.form.selectedGender = doc.data().gender;
           instance.form.description = doc.data().description;
-          instance.form.source = doc.data().source;
+          instance.form.source.source = doc.data().source;
+          instance.form.source.category = doc.data().category;
+          instance.form.wechat = doc.data().wechat;
 
-          instance.old = {
-            id: doc.id,
-            head: doc.data().head,
-            name: doc.data().name,
-            company: doc.data().company,
-            phone: doc.data().phone,
-            email: doc.data().email,
-            progress: doc.data().progress,
-            state: doc.data().state,
-            selectedGender: doc.data().gender,
-            description: doc.data().description,
-            source: doc.data().source
-          };
+          // instance.old = {
+          //   id: doc.id,
+          //   head: doc.data().head,
+          //   name: doc.data().name,
+          //   company: doc.data().company,
+          //   phone: doc.data().phone,
+          //   email: doc.data().email,
+          //   progress: doc.data().progress,
+          //   state: doc.data().state,
+          //   selectedGender: doc.data().gender,
+          //   description: doc.data().description,
+          //   source: doc.data().source,
+          //   category: doc.data().category,
+          //   wechat: doc.data().wechat
+          // };
+
+          instance.old = instance.form;
         });
     }
   },
@@ -322,6 +340,8 @@ export default {
       this.$bvToast.toast(message, {
         title: title,
         autoHideDelay: 5000,
+        variant: "warning",
+        toaster: "b-toaster-top-center",
         appendToast: true
       });
     },
@@ -350,7 +370,11 @@ export default {
         return;
       }
       const pattern = /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d| 2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]| 4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/;
-      if (!pattern.test(this.form.phone) && !this.form.oPhone) {
+      if (
+        this.form.phone != "N/A" &&
+        !pattern.test(this.form.phone) &&
+        !this.form.oPhone
+      ) {
         this.makeToast(
           this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_TITLE"),
           this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_BODY", {
@@ -360,6 +384,20 @@ export default {
         return;
       }
       var instance = this;
+      var cusData = {
+        company: this.form.oCompany ? "N/A" : this.form.company,
+        email: this.form.oEmail ? "N/A@n.a" : this.form.email,
+        head: this.form.head,
+        name: this.form.oName ? "N/A" : this.form.name,
+        phone: this.form.oPhone ? "N/A" : this.form.phone,
+        progress: this.form.progress,
+        state: this.form.progress == "100%" ? "success" : this.form.state,
+        gender: this.form.selectedGender,
+        description: this.form.description ? this.form.description : "",
+        source: this.form.source.source,
+        category: this.form.source.category,
+        wechat: this.form.wechat
+      };
       if (this.newCus) {
         const result = await em_customers(this.currentUser.fs_key)
           .where("phone", "==", this.form.phone)
@@ -375,23 +413,11 @@ export default {
             return;
           }
         }
-        const newCusData = {
-          company: this.form.oCompany ? "N/A" : this.form.company,
-          email: this.form.oEmail ? "N/A@n.a" : this.form.email,
-          head: this.form.head,
-          inviter_uid: this.currentUser.id,
-          name: this.form.oName ? "N/A" : this.form.name,
-          phone: this.form.oPhone ? "N/A" : this.form.phone,
-          progress: this.form.progress,
-          state: this.form.progress == "100%" ? "success" : this.form.state,
-          uid: "",
-          time: firebase.firestore.Timestamp.fromDate(new Date()),
-          gender: this.form.selectedGender,
-          description: this.form.description ? this.form.description : "",
-          source: this.form.source
-        };
+        cusData.inviter_uid = this.currentUser.id;
+        cusData.uid = "";
+        cusData.time = firebase.firestore.Timestamp.fromDate(new Date());
         em_customers(this.currentUser.fs_key)
-          .add(newCusData)
+          .add(cusData)
           .then(function() {
             instance.showAlertSuccess();
           })
@@ -400,7 +426,7 @@ export default {
           });
         em_histories(this.currentUser.fs_key).add({
           customerId: this.form.id,
-          message: JSON.stringify(newCusData),
+          message: JSON.stringify(cusData),
           type: "create",
           root: "system",
           isRoot: false,
@@ -408,18 +434,6 @@ export default {
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
       } else {
-        var cusData = {
-          company: this.form.oCompany ? "N/A" : this.form.company,
-          email: this.form.oEmail ? "N/A@n.a" : this.form.email,
-          head: this.form.head,
-          name: this.form.oName ? "N/A" : this.form.name,
-          phone: this.form.oPhone ? "N/A" : this.form.phone,
-          progress: this.form.progress,
-          state: this.form.progress == "100%" ? "success" : this.form.state,
-          gender: this.form.selectedGender,
-          description: this.form.description ? this.form.description : "",
-          source: this.form.source
-        };
         if (cusData.state == "danger") {
           cusData.uid = "";
           em_histories(this.currentUser.fs_key).add({
@@ -480,9 +494,11 @@ export default {
       this.form.oEmail = false;
       this.form.progress = "0%";
       this.form.state = "primary";
-      this.form.source = "";
+      this.form.source.source = "";
+      this.form.source.category = "";
       this.form.selectedGender = "";
       this.form.description = "";
+      this.form.wechat = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {

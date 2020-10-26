@@ -8,6 +8,12 @@ export const locale = {
     SIGN_OUT: "Sign Out",
     USER_PROFILE: "User Profile"
   },
+  SOURCE: {
+    PAGE: "客户来源管理",
+    ADD: "增加",
+    EXIST_SOURCE_TITLE: "来源已存在",
+    EXIST_SOURCE_BODY: "来源信息已存在，无需重复添加"
+  },
   STATE: {
     TITLE: "State",
     SUCCESS: "Upload successful!",
@@ -16,7 +22,9 @@ export const locale = {
     SUBS:
       "Are you sure to hold this customer? You will be responsible for connecting this customer after subscription.",
     UNSUBS:
-      "Are you sure to release this customer? This action cannot be cancel."
+      "Are you sure to release this customer? This action cannot be cancel.",
+    DEL:
+      "Are you sure you want to delete this customer? This action cannot be undo."
   },
   ACT: {
     MOD_NAME: "Activation Code Generator",
@@ -39,6 +47,8 @@ export const locale = {
     DES: "Short Descriptions (Optional)"
   },
   CUSTOMER: {
+    DEL: "Delete Costomer",
+    CAT: "Category",
     NEW: "Add New User",
     NEW_CUS_ID: "NewCustomer",
     CUS_ID: "Customer ID: {id}",
@@ -68,8 +78,11 @@ export const locale = {
       MORE_OPT: "More Options"
     },
     DATA: {
+      WECHAT: "Wechat",
       TRA: "Where to know us?",
       TRA_PLA: "Example: YouTube Ads",
+      CAT: "客户分类",
+      CAT_PLA: "如：小程序",
       COM: "Customer's Company Name",
       NAME: "Customer's Name",
       EMAIL: "Email",
