@@ -71,7 +71,8 @@ export default {
         em_customers(this.currentUser.fs_key)
           .doc(id)
           .update({
-            uid: this.currentUser.id
+            uid: this.currentUser.id,
+            handler: this.currentUser.user_login
           })
           .then(function() {
             instance.makeToast(

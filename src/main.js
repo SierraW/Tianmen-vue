@@ -33,9 +33,6 @@ import "@mdi/font/css/materialdesignicons.css";
 // API service init
 ApiService.init();
 
-// Remove this to disable mock API
-// MockService.init();
-
 router.beforeEach((to, from, next) => {
   // Ensure we checked auth before each page load.
   Promise.all([store.dispatch(VERIFY_AUTH)]).then(next);

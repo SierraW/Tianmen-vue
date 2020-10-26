@@ -46,6 +46,10 @@ export const locale = {
     DES: "短说明（选填）"
   },
   CUSTOMER: {
+    HANDLER_NAME_EMPTY: "无数据",
+    HANDLER_OCEAN: "公海",
+    HANDLER_ID_PRE: "用户识别码: {id}",
+    HANDLER: "负责人",
     DEL: "删除用户",
     CAT: "分类",
     NEW: "添加新用户",
@@ -81,7 +85,7 @@ export const locale = {
       TRA: "客户来源",
       TRA_PLA: "如：YouTube视频广告",
       CAT: "客户分类",
-      CAT_PLA: "如：小程序",
+      CAT_PLA: "如：小程序、App开发、网页开发",
       COM: "客户公司名",
       NAME: "客户姓名",
       EMAIL: "电子邮件",
@@ -120,6 +124,8 @@ export const locale = {
     }
   },
   MENU: {
+    VER: "版本",
+    ADMIN: "所有客户",
     NEW: "新",
     DATA: "客户信息",
     ACTIONS: "行动",

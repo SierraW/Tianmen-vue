@@ -4,6 +4,7 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: "/",
@@ -20,6 +21,16 @@ export default new Router({
           name: "cus_ocean",
           component: () =>
             import("@/view/pages/customers_data/CustomersOcean.vue")
+        },
+        {
+          path: "/admin",
+          name: "admin_dashboard",
+          component: () => import("@/view/pages/admin/AdminDashboard.vue")
+        },
+        {
+          path: "/version",
+          name: "ver-info",
+          component: () => import("@/view/pages/about/Version.vue")
         },
         {
           path: "/customer/:customer_id",

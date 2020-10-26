@@ -42,6 +42,10 @@ export const locale = {
     DES: "Short Descriptions (Optional)"
   },
   CUSTOMER: {
+    HANDLER_NAME_EMPTY: "No Data",
+    HANDLER_OCEAN: "Ocean",
+    HANDLER_ID: "ID: {id}",
+    HANDLER: "Handler",
     DEL: "Delete Costomer",
     TRA: "Where to know us?",
     TRA_PLA: "Example: YouTube Ads",
@@ -112,6 +116,8 @@ export const locale = {
     }
   },
   MENU: {
+    VER: "Version",
+    ADMIN: "Customers",
     NEW: "Nouveau",
     DATA: "Customer Data",
     ACTIONS: "Actions",

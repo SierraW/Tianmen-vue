@@ -90,7 +90,8 @@ export default {
         em_customers(this.currentUser.fs_key)
           .doc(id)
           .update({
-            uid: ""
+            uid: "",
+            handler: "Ocean"
           })
           .then(function() {
             instance.makeToast(
@@ -115,8 +116,6 @@ export default {
           from: this.currentUser.user_login,
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
-      } else {
-        this.makeToast("hello", "123", "danger");
       }
     }
   }

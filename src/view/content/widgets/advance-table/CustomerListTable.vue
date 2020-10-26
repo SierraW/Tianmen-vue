@@ -10,24 +10,16 @@
           {{ $t("CUSTOMER.MANAGEMENT", { msg: "Management Panel" }) }}
         </span>
       </h3>
-      <div class="card-toolbar" v-if="isOcean">
-        <router-link
-          v-bind:to="{
-            name: 'cus_data',
-            params: {
-              customer_id: 'new_customer',
-              new_customer: true,
-              fs_key: this.currentUser.fs_key
+      <div class="card-toolbar">
+        <ToolBarCustomerListTable
+          :fs_key="currentUser.fs_key"
+          :isOcean="isOcean"
+          @input="
+            search => {
+              searchString = search;
             }
-          }"
-          class="btn btn-success font-weight-bolder font-size-sm"
-        >
-          <span class="svg-icon svg-icon-md svg-icon-white">
-            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
-            <inline-svg src="media/svg/icons/Communication/Add-user.svg" />
-            <!--end::Svg Icon--> </span
-          >{{ $t("CUSTOMER.NEW", { msg: "添加新用户" }) }}</router-link
-        >
+          "
+        ></ToolBarCustomerListTable>
       </div>
     </div>
     <!--end::Header-->
@@ -50,14 +42,17 @@
                   <span></span>
                 </label>
               </th>
-              <th class="pr-0" style="min-width: 250px">
+              <th class="pr-0" style="min-width: 200px">
                 {{ $t("CUSTOMER.COM", { msg: "COMPANY" }) }}
               </th>
-              <th class="pr-0" style="min-width: 150px">
+              <th class="pr-0" style="min-width: 100px">
                 {{ $t("CUSTOMER.CAT") }}
               </th>
-              <th style="min-width: 150px">
+              <th style="min-width: 150px" v-if="!isAdmin">
                 {{ $t("CUSTOMER.CON", { msg: "CONTACT" }) }}
+              </th>
+              <th style="min-width: 150px" v-if="isAdmin">
+                {{ $t("CUSTOMER.HANDLER") }}
               </th>
               <th style="min-width: 150px">
                 {{ $t("CUSTOMER.PROG", { msg: "PROGRESS" }) }}
@@ -68,7 +63,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(item, i) in list">
+            <template v-for="(item, i) in filteredCusList">
               <tr v-bind:key="i">
                 <td class="pl-0">
                   <label class="checkbox checkbox-lg checkbox-single">
@@ -93,13 +88,22 @@
                     >{{ item.category }}</span
                   >
                 </td>
-                <td>
+                <td v-if="!isAdmin">
                   <span
                     class="text-dark-75 font-weight-bolder d-block font-size-lg"
                     >{{ item.name }}</span
                   >
                   <span class="text-muted font-weight-bold">{{
                     item.phone
+                  }}</span>
+                </td>
+                <td v-if="isAdmin">
+                  <span
+                    class="text-dark-75 font-weight-bolder d-block font-size-lg"
+                    >{{ getHandlerString(item.handler) }}</span
+                  >
+                  <span class="text-muted font-weight-bold">{{
+                    getUidString(item.uid)
                   }}</span>
                 </td>
                 <td>
@@ -156,14 +160,20 @@ import { em_customers } from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
 import ActionsGroupOcean from "@/view/pages/customers_data/components/ActionsGroupOcean";
 import ActionsGroupDash from "@/view/pages/customers_data/components/ActionsGroupDash";
+import ToolBarCustomerListTable from "@/view/pages/customers_data/components/ToolBarCustomerListTable";
 
 export default {
   name: "CustomerListTable",
   components: {
     ActionsGroupOcean,
-    ActionsGroupDash
+    ActionsGroupDash,
+    ToolBarCustomerListTable
   },
   props: {
+    isAdmin: {
+      type: Boolean,
+      requried: true
+    },
     isOcean: {
       type: Boolean,
       required: true
@@ -172,39 +182,66 @@ export default {
   data() {
     return {
       list: [],
-      checked: false
+      checked: false,
+      searchString: ""
     };
   },
   created() {
-    var condi = "";
-    if (!this.isOcean) {
-      condi = this.currentUser.id;
+    var snapshot = em_customers(this.currentUser.fs_key);
+    if (!this.isAdmin && this.isOcean) {
+      snapshot = snapshot.where("uid", "==", "");
+    } else if (!this.isAdmin && !this.isOcean) {
+      snapshot = snapshot.where("uid", "==", this.currentUser.id);
     }
-    em_customers(this.currentUser.fs_key)
-      .where("uid", "==", condi)
-      .onSnapshot(querySnapshot => {
-        var emCusRecords = [];
-        querySnapshot.forEach(function(doc) {
-          const cusRecord = {
-            id: doc.id,
-            head: "media/svg/avatars/001-boy.svg",
-            company: doc.data().company,
-            email: doc.data().email,
-            name: doc.data().name,
-            phone: doc.data().phone,
-            progress: doc.data().progress,
-            state: doc.data().state,
-            time: doc.data().time,
-            category: doc.data().category,
-            inviter_uid: doc.data().inviter_uid
-          };
-          emCusRecords.push(cusRecord);
-        });
-        this.list = emCusRecords;
+
+    snapshot.onSnapshot(querySnapshot => {
+      var emCusRecords = [];
+      querySnapshot.forEach(function(doc) {
+        const cusRecord = {
+          id: doc.id,
+          head: "media/svg/avatars/001-boy.svg",
+          company: doc.data().company,
+          email: doc.data().email,
+          name: doc.data().name,
+          phone: doc.data().phone,
+          progress: doc.data().progress,
+          state: doc.data().state,
+          time: doc.data().time,
+          category: doc.data().category,
+          uid: doc.data().uid,
+          handler: doc.data().handler,
+          inviter_uid: doc.data().inviter_uid
+        };
+        emCusRecords.push(cusRecord);
       });
+      this.list = emCusRecords;
+    });
   },
-  computed: mapGetters(["currentUser"]),
+  computed: {
+    ...mapGetters(["currentUser"]),
+    filteredCusList() {
+      if (this.searchString == "") {
+        return this.list;
+      } else {
+        return this.list.filter(cusData => {
+          return JSON.stringify(cusData).includes(this.searchString);
+        });
+      }
+    }
+  },
   methods: {
+    getHandlerString(handler) {
+      if (!handler || handler == "") {
+        return this.$t("CUSTOMER.HANDLER_NAME_EMPTY");
+      }
+      return handler;
+    },
+    getUidString(uid) {
+      if (!uid || uid == "") {
+        return this.$t("CUSTOMER.HANDLER_OCEAN");
+      }
+      return this.$t("CUSTOMER.HANDLER_ID", { id: uid });
+    },
     getProgressString(progress) {
       switch (progress) {
         case "0%":

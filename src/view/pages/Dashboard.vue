@@ -3,7 +3,10 @@
     <!--begin::Dashboard-->
     <div class="row">
       <div class="col-xxl-12">
-        <CustomerListTable :isOcean="false"></CustomerListTable>
+        <CustomerListTable
+          :isOcean="false"
+          :isAdmin="false"
+        ></CustomerListTable>
       </div>
     </div>
   </div>
