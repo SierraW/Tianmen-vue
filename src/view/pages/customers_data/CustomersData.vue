@@ -415,6 +415,7 @@ export default {
         }
         cusData.inviter_uid = this.currentUser.id;
         cusData.uid = "";
+        cusData.handler = "Ocean";
         cusData.time = firebase.firestore.Timestamp.fromDate(new Date());
         em_customers(this.currentUser.fs_key)
           .add(cusData)

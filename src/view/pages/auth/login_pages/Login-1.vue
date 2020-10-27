@@ -587,6 +587,11 @@ export default {
         const display_name = this.$refs.rdisplay.value;
         const actcod = this.$refs.ractcod.value;
 
+        if (/^[0-9]*$/.test(login)) {
+          this.toast("Format error", "Login name must contain at least one letter.", "danger");
+          return;
+        }
+
         // clear existing errors
         this.$store.dispatch(LOGOUT);
 
