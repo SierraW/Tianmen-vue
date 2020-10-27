@@ -52,7 +52,7 @@ export const locale = {
     HANDLER: "负责人",
     DEL: "删除用户",
     CAT: "分类",
-    NEW: "添加新用户",
+    NEW: "添加新客户",
     NEW_CUS_ID: "XinYongHu",
     CUS_ID: "客户识别码: {id}",
     OCEAN: "公海",

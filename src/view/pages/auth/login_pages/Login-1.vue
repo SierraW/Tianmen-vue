@@ -171,7 +171,7 @@
                 <input
                   class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6"
                   type="text"
-                  placeholder="Display Name"
+                  placeholder="Firstname Lastname"
                   name="display"
                   ref="rdisplay"
                   autocomplete="off"
