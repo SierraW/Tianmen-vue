@@ -65,7 +65,7 @@ export const locale = {
     DES: "短说明（选填）",
     CODE: {
       TAB: "历史",
-      TABLE_NAME: "激活码状态",
+      TABLE_NAME: "激活码状态"
     }
   },
   CUSTOMER: {

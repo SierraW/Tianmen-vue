@@ -105,9 +105,9 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-button type="submit" variant="primary" class="mr-3"
-                >{{$t('ACT.ADD_COM.SUBMIT')}}</b-button
-              >
+              <b-button type="submit" variant="primary" class="mr-3">{{
+                $t("ACT.ADD_COM.SUBMIT")
+              }}</b-button>
             </b-form>
           </b-tab>
           <b-tab :title="$t('ACT.CODE.TAB')">
@@ -166,12 +166,12 @@ export default {
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
       { title: this.$t("MENU.DASHBOARD"), route: "dashboard" },
-      { title: this.$t("ACT.MOD_NAME") },
+      { title: this.$t("ACT.MOD_NAME") }
     ]);
   },
   created() {
     ApiService.post("getCodeState.php", {
-      session: this.currentUser.user_session,
+      session: this.currentUser.user_session
     })
       .then(({ data }) => {
         this.codes = data.data;
@@ -180,18 +180,18 @@ export default {
         this.toast("Get code status Failed", message, "danger");
       });
     em.get()
-      .then((query) => {
+      .then(query => {
         var results = [];
-        query.forEach((doc) => {
+        query.forEach(doc => {
           results.push({
             value: doc.data().id,
-            text: doc.data().name,
+            text: doc.data().name
           });
         });
         this.companies = results;
       })
-      .catch(() => {
-        console.log("err");
+      .catch(message => {
+        this.toast("Get company status Failed", message, "danger");
       });
   },
   data() {
@@ -201,14 +201,14 @@ export default {
           text: "Code",
           align: "left",
           sortable: false,
-          value: "activation_code",
+          value: "activation_code"
         },
         { text: "Title", value: "title_name" },
         { text: "Role", value: "role_name" },
         { text: "Company", value: "com_name" },
         { text: "User_login", value: "user_login" },
         { text: "User_display", value: "display_name" },
-        { text: "Requester", value: "requester" },
+        { text: "Requester", value: "requester" }
       ],
       search: "",
       show: true,
@@ -217,7 +217,7 @@ export default {
         title_id: "5",
         role_id: "4",
         com_id: "1",
-        description: "",
+        description: ""
       },
       formCompany: {
         name: ""
@@ -227,23 +227,23 @@ export default {
       titles: [
         {
           value: 5,
-          text: this.$t("ACT.TITLE.DEV"),
+          text: this.$t("ACT.TITLE.DEV")
         },
         {
           value: 6,
-          text: this.$t("ACT.TITLE.PROM"),
+          text: this.$t("ACT.TITLE.PROM")
         },
         {
           value: 7,
-          text: this.$t("ACT.TITLE.UID"),
+          text: this.$t("ACT.TITLE.UID")
         },
         {
           value: 8,
-          text: this.$t("ACT.TITLE.ACM"),
-        },
+          text: this.$t("ACT.TITLE.ACM")
+        }
       ],
       items: [],
-      description: "",
+      description: ""
     };
   },
   methods: {
@@ -254,7 +254,7 @@ export default {
         toaster: "b-toaster-top-center",
         solid: true,
         variant: variant,
-        appendToast: append,
+        appendToast: append
       });
     },
     onCreateCompany(evt) {
@@ -268,11 +268,14 @@ export default {
         title_id: this.form.title_id,
         role_id: this.form.role_id,
         com_id: this.form.num_id ? this.form.num_id : 1,
-        des: this.form.description ? this.form.description : "",
+        des: this.form.description ? this.form.description : ""
       };
       ApiService.post("generateActCode.php", formData)
         .then(({ data }) => {
           this.items = data.data;
+          if (this.items.length == 0) {
+            throw new Error(data.message);
+          }
           this.description = this.form.description;
         })
         .catch(({ message }) => {
@@ -292,13 +295,13 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
+    }
   },
   computed: {
     ...mapGetters(["currentUser"]),
     hasItem() {
       return this.items.length > 0;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -4,9 +4,12 @@
       <div class="col-xxl-12">
         <div class="card card-custom gutter-b">
           <div class="card-header">
-            <h2 class="card-title font-weight-bolder">Version 1.2.0.3b</h2>
+            <h2 class="card-title font-weight-bolder">
+              Version 1.2.0.4b (BETA)
+            </h2>
           </div>
           <div class="card-body">
+            <p>Hotfix 2020-10-28 11:20</p>
             <p>Finestudio Client Resource Management System</p>
           </div>
         </div>

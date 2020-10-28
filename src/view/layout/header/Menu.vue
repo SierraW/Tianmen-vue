@@ -45,6 +45,7 @@
     <router-link
       to="/admin"
       v-slot="{ href, navigate, isActive, isExactActive }"
+      v-if="isAdmin"
     >
       <li
         aria-haspopup="true"
@@ -63,7 +64,11 @@
       </li>
     </router-link>
 
-    <router-link to="/tag" v-slot="{ href, navigate, isActive, isExactActive }">
+    <router-link
+      to="/tag"
+      v-slot="{ href, navigate, isActive, isExactActive }"
+      v-if="isAdmin"
+    >
       <li
         aria-haspopup="true"
         data-menu-toggle="hover"
@@ -93,7 +98,7 @@
           isActive && 'menu-item-active',
           isExactActive && 'menu-item-active'
         ]"
-        v-if="isAdmin"
+        v-if="isSuperAdmin"
       >
         <a :href="href" class="menu-link" @click="navigate">
           <span class="menu-text">
@@ -113,6 +118,10 @@ export default {
     ...mapGetters(["currentUser"]),
 
     isAdmin() {
+      return this.currentUser.role_id < 4;
+    },
+
+    isSuperAdmin() {
       return this.currentUser.role_id < 3;
     }
   },

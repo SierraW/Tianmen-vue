@@ -66,7 +66,7 @@ export const locale = {
     DES: "Short Descriptions (Optional)",
     CODE: {
       TAB: "History",
-      TABLE_NAME: "Code Status",
+      TABLE_NAME: "Code Status"
     }
   },
   CUSTOMER: {
