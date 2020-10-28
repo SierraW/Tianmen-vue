@@ -15,7 +15,7 @@
           :fs_key="currentUser.fs_key"
           :isOcean="isOcean"
           @input="
-            (search) => {
+            search => {
               searchString = search;
             }
           "
@@ -174,24 +174,24 @@ export default {
   components: {
     ActionsGroupOcean,
     ActionsGroupDash,
-    ToolBarCustomerListTable,
+    ToolBarCustomerListTable
   },
   props: {
     isAdmin: {
       type: Boolean,
-      requried: true,
+      requried: true
     },
     isOcean: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       list: [],
       checked: false,
       searchString: "",
-      isLoading: true,
+      isLoading: true
     };
   },
   created() {
@@ -209,9 +209,9 @@ export default {
         snapshot = snapshot.where("uid", "==", this.currentUser.id);
       }
 
-      snapshot.onSnapshot((querySnapshot) => {
+      snapshot.onSnapshot(querySnapshot => {
         var emCusRecords = [];
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
           const cusRecord = {
             id: doc.id,
             head: "media/svg/avatars/001-boy.svg",
@@ -225,7 +225,7 @@ export default {
             category: doc.data().category,
             uid: doc.data().uid,
             handler: doc.data().handler,
-            inviter_uid: doc.data().inviter_uid,
+            inviter_uid: doc.data().inviter_uid
           };
           emCusRecords.push(cusRecord);
         });
@@ -240,11 +240,11 @@ export default {
       if (this.searchString == "") {
         return this.list;
       } else {
-        return this.list.filter((cusData) => {
+        return this.list.filter(cusData => {
           return JSON.stringify(cusData).includes(this.searchString);
         });
       }
-    },
+    }
   },
   methods: {
     getHandlerString(handler) {
@@ -281,7 +281,7 @@ export default {
     },
     setCheck(checked) {
       this.checked = checked;
-    },
-  },
+    }
+  }
 };
 </script>
