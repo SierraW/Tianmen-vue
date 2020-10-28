@@ -1,15 +1,18 @@
 <template>
   <div>
     <div class="row">
-      <b-form-input class="col-xl-10" v-model="companyName"></b-form-input>
-      <div class="col-xl-2">
+      <div class="col-6">
+        <b-form-input v-model="companyName"></b-form-input>
+      </div>
+
+      <div class="col">
         <b-button @click="addCompany" variant="success">{{
           $t("CATEGORY.ADD")
         }}</b-button>
       </div>
     </div>
-    <div class="row mt-10">
-      <div class="col-xl-12">
+    <div class="row mt-3">
+      <div class="col">
         <b-button v-b-toggle.collapse-cdm variant="primary">{{
           $t("SOURCE.COLL")
         }}</b-button>
@@ -53,24 +56,24 @@ export default {
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
-        { key: "time", sortable: true }
-      ]
+        { key: "time", sortable: true },
+      ],
     };
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
   },
   created() {
     this.isBusy = true;
     var instance = this;
-    em.onSnapshot(function(querySnapshot) {
+    em.onSnapshot(function (querySnapshot) {
       var resultItems = [];
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(function (doc) {
         resultItems.push({
           id: doc.data().id,
           name: doc.data().name,
           modifyBy: doc.data().login,
-          time: datePrettyPrint(doc.data().time.toDate())
+          time: datePrettyPrint(doc.data().time.toDate()),
         });
       });
       if (resultItems.length > 0) {
@@ -80,8 +83,8 @@ export default {
           {
             name: "",
             modifyBy: "Empty...",
-            time: ""
-          }
+            time: "",
+          },
         ];
       }
       instance.isBusy = false;
@@ -119,9 +122,9 @@ export default {
         .add({
           name: this.companyName,
           login: this.currentUser.user_login,
-          time: timestamp()
+          time: timestamp(),
         })
-        .then(docRef => {
+        .then((docRef) => {
           docId = docRef.id;
         })
         .catch(() => {
@@ -136,7 +139,7 @@ export default {
       await ApiService.post("addCompany.php", {
         session: this.currentUser.user_session,
         fs_key: docId,
-        name: this.companyName
+        name: this.companyName,
       })
         .then(({ data }) => {
           dbId = data.inserted_id;
@@ -153,7 +156,7 @@ export default {
       await em
         .doc(docId)
         .update({
-          id: dbId
+          id: dbId,
         })
         .then(() => {
           this.makeToast(
@@ -170,7 +173,7 @@ export default {
           );
         });
       this.isBusy = false;
-    }
-  }
+    },
+  },
 };
 </script>

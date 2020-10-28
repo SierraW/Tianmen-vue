@@ -42,7 +42,9 @@ export const locale = {
       "Are you sure you want to delete this customer? This action cannot be undo."
   },
   ACT: {
+    TAB: "Code",
     ADD_COM: {
+      TAB: "Add Company",
       NAME: "Company Name",
       SUBMIT: "Add"
     },

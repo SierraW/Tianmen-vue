@@ -41,7 +41,9 @@ export const locale = {
     DEL: "您确定要删除这位客户吗？此操作不可撤回。"
   },
   ACT: {
+    TAB: "激活码",
     ADD_COM: {
+      TAB: "新增公司",
       NAME: "公司名称",
       SUBMIT: "添加"
     },

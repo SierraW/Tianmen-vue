@@ -5,15 +5,17 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <b-form-input class="col-xl-10" v-model="categroyName"></b-form-input>
-        <div class="col-xl-2">
+        <div class="col-10">
+          <b-form-input v-model="categroyName"></b-form-input>
+        </div>
+        <div class="col">
           <b-button @click="addCategory" variant="success">{{
             $t("CATEGORY.ADD")
           }}</b-button>
         </div>
       </div>
-      <div class="row mt-10">
-        <div class="col-xl-12">
+      <div class="row mt-3">
+        <div class="col">
           <b-button v-b-toggle.collapse-cdm variant="primary">{{
             $t("SOURCE.COLL")
           }}</b-button>
@@ -56,21 +58,20 @@ export default {
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
-        { key: "time", sortable: true }
-      ]
+        { key: "time", sortable: true },
+      ],
     };
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
   },
   created() {
     this.isBusy = true;
     var instance = this;
     function datePrettyPrint(dt) {
-      return `${dt
-        .getFullYear()
-        .toString()
-        .padStart(4, "0")}/${(dt.getMonth() + 1)
+      return `${dt.getFullYear().toString().padStart(4, "0")}/${(
+        dt.getMonth() + 1
+      )
         .toString()
         .padStart(2, "0")}/${dt
         .getDate()
@@ -81,18 +82,15 @@ export default {
         .padStart(2, "0")}:${dt
         .getMinutes()
         .toString()
-        .padStart(2, "0")}:${dt
-        .getSeconds()
-        .toString()
-        .padStart(2, "0")}`;
+        .padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")}`;
     }
-    em_categories(this.currentUser.fs_key).onSnapshot(function(querySnapshot) {
+    em_categories(this.currentUser.fs_key).onSnapshot(function (querySnapshot) {
       var resultItems = [];
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(function (doc) {
         resultItems.push({
           name: doc.data().name,
           modifyBy: doc.data().login,
-          time: datePrettyPrint(doc.data().time.toDate())
+          time: datePrettyPrint(doc.data().time.toDate()),
         });
       });
       if (resultItems.length > 0) {
@@ -102,8 +100,8 @@ export default {
           {
             name: "",
             modifyBy: "Empty...",
-            time: ""
-          }
+            time: "",
+          },
         ];
       }
       instance.isBusy = false;
@@ -138,7 +136,7 @@ export default {
         .add({
           name: this.categroyName,
           login: this.currentUser.user_login,
-          time: timestamp()
+          time: timestamp(),
         })
         .then(() => {
           this.makeToast(
@@ -154,7 +152,7 @@ export default {
             "danger"
           );
         });
-    }
-  }
+    },
+  },
 };
 </script>

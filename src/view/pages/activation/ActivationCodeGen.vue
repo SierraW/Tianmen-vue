@@ -8,7 +8,7 @@
       </div>
       <div class="card-body">
         <b-tabs content-class="mt-3">
-          <b-tab title="First" active>
+          <b-tab :title="$t('ACT.TAB')" active>
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
               <b-form-group
                 id="input-group-num"
@@ -91,7 +91,7 @@
               <b-button type="reset" variant="danger">Reset</b-button>
             </b-form>
           </b-tab>
-          <b-tab title="Second">
+          <b-tab :title="$t('ACT.ADD_COM.TAB')">
             <CompanyDataManager></CompanyDataManager>
           </b-tab>
           <b-tab :title="$t('ACT.CODE.TAB')">
