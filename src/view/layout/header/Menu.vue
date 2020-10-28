@@ -107,6 +107,28 @@
         </a>
       </li>
     </router-link>
+
+    <router-link
+      to="/histories"
+      v-slot="{ href, navigate, isActive, isExactActive }"
+    >
+      <li
+        aria-haspopup="true"
+        data-menu-toggle="hover"
+        class="menu-item"
+        :class="[
+          isActive && 'menu-item-active',
+          isExactActive && 'menu-item-active'
+        ]"
+        v-if="isSuperAdmin"
+      >
+        <a :href="href" class="menu-link" @click="navigate">
+          <span class="menu-text">
+            {{ $t("MENU.ALL_HIS") }}
+          </span>
+        </a>
+      </li>
+    </router-link>
   </ul>
 </template>
 

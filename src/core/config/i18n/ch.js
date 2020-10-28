@@ -8,6 +8,9 @@ export const locale = {
     SIGN_OUT: "登出账号",
     USER_PROFILE: "用户资料"
   },
+  ALL_HIS: {
+    TABLE: "历史列表"
+  },
   CATEGORY: {
     EMPTY_TITLE: "空白信息",
     EMPTY_BODY: "不能上传空白信息",
@@ -17,6 +20,7 @@ export const locale = {
     EXIST_SOURCE_BODY: "类别信息已存在，无需重复添加"
   },
   SOURCE: {
+    EMPTY: "空白",
     EMPTY_TITLE: "空白信息",
     EMPTY_BODY: "不能上传空白信息",
     COLL: "展开",
@@ -64,7 +68,7 @@ export const locale = {
     },
     DES: "短说明（选填）",
     CODE: {
-      TAB: "历史",
+      TAB: "激活码历史",
       TABLE_NAME: "激活码状态"
     }
   },
@@ -149,6 +153,7 @@ export const locale = {
     }
   },
   MENU: {
+    ALL_HIS: "所有记录",
     TAG: "标签管理",
     VER: "版本",
     ADMIN: "所有客户",

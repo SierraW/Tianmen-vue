@@ -92,23 +92,7 @@
             </b-form>
           </b-tab>
           <b-tab title="Second">
-            <b-form @submit="onCreateCompany">
-              <b-form-group
-                id="input-cpy-name"
-                :label="$t('ACT.ADD_COM.NAME')"
-                label-for="input-cpy-name"
-              >
-                <b-form-input
-                  id="input-cpy-name"
-                  type="text"
-                  v-model="formCompany.name"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-button type="submit" variant="primary" class="mr-3">{{
-                $t("ACT.ADD_COM.SUBMIT")
-              }}</b-button>
-            </b-form>
+            <CompanyDataManager></CompanyDataManager>
           </b-tab>
           <b-tab :title="$t('ACT.CODE.TAB')">
             <v-app id="my_vue_app">
@@ -160,9 +144,14 @@ import { mapGetters } from "vuex";
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import ApiService from "@/core/services/api.service";
 import { em } from "@/core/services/firebaseInit";
+import { getToastConfig } from "@/core/services/toastStyleService";
+import CompanyDataManager from "@/view/pages/tag_data/CompanyDataManager";
 
 export default {
   name: "activation",
+  components: {
+    CompanyDataManager
+  },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
       { title: this.$t("MENU.DASHBOARD"), route: "dashboard" },
@@ -219,9 +208,6 @@ export default {
         com_id: "1",
         description: ""
       },
-      formCompany: {
-        name: ""
-      },
       companies: [],
       codes: [],
       titles: [
@@ -247,18 +233,8 @@ export default {
     };
   },
   methods: {
-    toast(title, body, variant, append = false) {
-      this.counter++;
-      this.$bvToast.toast(body, {
-        title: title,
-        toaster: "b-toaster-top-center",
-        solid: true,
-        variant: variant,
-        appendToast: append
-      });
-    },
-    onCreateCompany(evt) {
-      evt.preventDefault();
+    toast(title, body, variant) {
+      this.$bvToast.toast(body, getToastConfig(title, variant));
     },
     onSubmit(evt) {
       evt.preventDefault();

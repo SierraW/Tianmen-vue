@@ -8,6 +8,9 @@ export const locale = {
     SIGN_OUT: "Sign Out",
     USER_PROFILE: "User Profile"
   },
+  ALL_HIS: {
+    TABLE: "Histories"
+  },
   CATEGORY: {
     EMPTY_TITLE: "Warning",
     EMPTY_BODY: "Cannot upload an empty category",
@@ -17,6 +20,7 @@ export const locale = {
     EXIST_SOURCE_BODY: "Category Name Existed"
   },
   SOURCE: {
+    EMPTY: "Empty",
     EMPTY_TITLE: "Warning",
     EMPTY_BODY: "Cannot upload an empty source",
     COLL: "More...",
@@ -65,8 +69,8 @@ export const locale = {
     },
     DES: "Short Descriptions (Optional)",
     CODE: {
-      TAB: "History",
-      TABLE_NAME: "Code Status"
+      TAB: "Code Usage",
+      TABLE_NAME: "All Codes Status"
     }
   },
   CUSTOMER: {
@@ -150,6 +154,7 @@ export const locale = {
     }
   },
   MENU: {
+    ALL_HIS: "Histories",
     TAG: "Tags",
     VER: "Version",
     ADMIN: "Customers",

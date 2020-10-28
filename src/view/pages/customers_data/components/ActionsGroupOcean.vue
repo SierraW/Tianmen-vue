@@ -22,6 +22,7 @@ import {
   firebase
 } from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "ActionsGroupOcean",
@@ -36,15 +37,8 @@ export default {
     return {};
   },
   methods: {
-    makeToast(title, message, variant, delay = 5000) {
-      this.toastCount++;
-      this.$bvToast.toast(message, {
-        title: title,
-        autoHideDelay: delay,
-        variant: variant,
-        toaster: "b-toaster-top-center",
-        appendToast: true
-      });
+    makeToast(title, message, variant) {
+      this.$bvToast.toast(message, getToastConfig(title, variant));
     },
     subscribeCus(id) {
       if (confirm(this.$t("STATE.SUBS"))) {
@@ -71,7 +65,14 @@ export default {
           });
         em_histories(this.currentUser.fs_key).add({
           customerId: id,
-          message: "",
+          message: JSON.stringify({
+            snapshot: true,
+            name: this.item.name,
+            company: this.item.company,
+            email: this.item.email,
+            phone: this.item.phone,
+            wechat: this.item.wechat
+          }),
           type: "subscribe",
           root: "system",
           isRoot: false,

@@ -33,6 +33,11 @@ export default new Router({
           component: () => import("@/view/pages/about/Version.vue")
         },
         {
+          path: "/histories",
+          name: "db-allhis",
+          component: () => import("@/view/pages/debug/AllHistory.vue")
+        },
+        {
           path: "/customer/:customer_id",
           name: "cus_data",
           component: () =>

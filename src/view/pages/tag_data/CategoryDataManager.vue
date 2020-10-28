@@ -43,6 +43,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { em_categories, timestamp } from "@/core/services/firebaseInit";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "category_manager",
@@ -110,13 +111,7 @@ export default {
   },
   methods: {
     makeToast(title, message, variant = "warning") {
-      this.$bvToast.toast(message, {
-        title: title,
-        autoHideDelay: 5000,
-        variant: variant,
-        toaster: "b-toaster-top-center",
-        appendToast: true
-      });
+      this.$bvToast.toast(message, getToastConfig(title, variant));
     },
     async addCategory() {
       if (/^\s*$/.test(this.categroyName)) {

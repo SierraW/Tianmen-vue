@@ -72,9 +72,10 @@
 import {
   em_customers,
   em_histories,
-  firebase
+  timestamp
 } from "@/core/services/firebaseInit";
 import { mapGetters } from "vuex";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "ActionsGroupOcean",
@@ -93,15 +94,8 @@ export default {
     return {};
   },
   methods: {
-    makeToast(title, message, variant, delay = 5000) {
-      this.toastCount++;
-      this.$bvToast.toast(message, {
-        title: title,
-        autoHideDelay: delay,
-        variant: variant,
-        toaster: "b-toaster-top-center",
-        appendToast: true
-      });
+    makeToast(title, message, variant) {
+      this.$bvToast.toast(message, getToastConfig(title, variant));
     },
     deleteCus(id) {
       if (confirm(this.$t("STATE.DEL"))) {
@@ -123,6 +117,15 @@ export default {
               "danger"
             );
           });
+        em_histories(this.currentUser.fs_key).add({
+          customerId: id,
+          message: JSON.stringify(this.item),
+          type: "delete",
+          root: "system",
+          isRoot: false,
+          from: this.currentUser.user_login,
+          time: timestamp()
+        });
       }
     },
     unsubscribeCus(id) {
@@ -150,12 +153,19 @@ export default {
           });
         em_histories(this.currentUser.fs_key).add({
           customerId: id,
-          message: "",
+          message: JSON.stringify({
+            snapshot: true,
+            name: this.item.name,
+            company: this.item.company,
+            email: this.item.email,
+            phone: this.item.phone,
+            wechat: this.item.wechat
+          }),
           type: "unsubscribe",
           root: "system",
           isRoot: false,
           from: this.currentUser.user_login,
-          time: firebase.firestore.Timestamp.fromDate(new Date())
+          time: timestamp()
         });
       }
     }

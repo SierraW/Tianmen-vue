@@ -71,7 +71,7 @@ export default {
         var resultItems = [
           {
             value: "",
-            text: instance.$t("CATEGORY.EMPTY")
+            text: instance.$t("SOURCE.EMPTY")
           }
         ];
         querySnapshot.forEach(function(doc) {

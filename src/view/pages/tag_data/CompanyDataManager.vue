@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="row">
-      <b-form-input class="col-xl-10" v-model="categroyName"></b-form-input>
+      <b-form-input class="col-xl-10" v-model="companyName"></b-form-input>
       <div class="col-xl-2">
-        <b-button @click="addCategory" variant="success">{{
+        <b-button @click="addCompany" variant="success">{{
           $t("CATEGORY.ADD")
         }}</b-button>
       </div>
@@ -16,7 +16,7 @@
         <b-collapse id="collapse-cdm" class="mt-2">
           <!-- <b-card> -->
           <b-table
-            :items="categroyItems"
+            :items="companyItems"
             :busy.sync="isBusy"
             :fields="fields"
             class="mt-3"
@@ -37,16 +37,19 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { em_categories, timestamp } from "@/core/services/firebaseInit";
+import { em, timestamp } from "@/core/services/firebaseInit";
+import { getToastConfig } from "@/core/services/toastStyleService";
+import { datePrettyPrint } from "@/core/services/datePrintingService";
+import ApiService from "@/core/services/api.service";
 
 export default {
   name: "category_manager",
   data() {
     return {
-      categroyName: "",
+      companyName: "",
       isBusy: false,
       filter: "40",
-      categroyItems: [],
+      companyItems: [],
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
@@ -60,39 +63,20 @@ export default {
   created() {
     this.isBusy = true;
     var instance = this;
-    function datePrettyPrint(dt) {
-      return `${dt
-        .getFullYear()
-        .toString()
-        .padStart(4, "0")}/${(dt.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}/${dt
-        .getDate()
-        .toString()
-        .padStart(2, "0")} ${dt
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${dt
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}:${dt
-        .getSeconds()
-        .toString()
-        .padStart(2, "0")}`;
-    }
-    em_categories(this.currentUser.fs_key).onSnapshot(function(querySnapshot) {
+    em.onSnapshot(function(querySnapshot) {
       var resultItems = [];
       querySnapshot.forEach(function(doc) {
         resultItems.push({
+          id: doc.data().id,
           name: doc.data().name,
           modifyBy: doc.data().login,
           time: datePrettyPrint(doc.data().time.toDate())
         });
       });
       if (resultItems.length > 0) {
-        instance.categroyItems = resultItems;
+        instance.companyItems = resultItems;
       } else {
-        instance.categroyItems = [
+        instance.companyItems = [
           {
             name: "",
             modifyBy: "Empty...",
@@ -105,16 +89,11 @@ export default {
   },
   methods: {
     makeToast(title, message, variant = "warning") {
-      this.$bvToast.toast(message, {
-        title: title,
-        autoHideDelay: 5000,
-        variant: variant,
-        toaster: "b-toaster-top-center",
-        appendToast: true
-      });
+      this.$bvToast.toast(message, getToastConfig(title, variant));
     },
-    async addCategory() {
-      if (/^\s*$/.test(this.categroyName)) {
+    async addCompany() {
+      this.isBusy = true;
+      if (/^\s*$/.test(this.companyName)) {
         this.makeToast(
           this.$t("CATEGORY.EMPTY_TITLE"),
           this.$t("CATEGORY.EMPTY_BODY")
@@ -122,9 +101,7 @@ export default {
         return;
       }
 
-      var result = await em_categories(this.currentUser.fs_key)
-        .where("name", "==", this.categroyName)
-        .get();
+      var result = await em.where("name", "==", this.companyName).get();
 
       if (!result.empty) {
         this.makeToast(
@@ -134,11 +111,49 @@ export default {
         return;
       }
 
-      em_categories(this.currentUser.fs_key)
+      var success = true;
+      var docId = "";
+      var dbId = -1;
+
+      await em
         .add({
-          name: this.categroyName,
+          name: this.companyName,
           login: this.currentUser.user_login,
           time: timestamp()
+        })
+        .then(docRef => {
+          docId = docRef.id;
+        })
+        .catch(() => {
+          success = false;
+        });
+
+      if (!success) {
+        this.makeToast(this.$t("STATE.TITLE"), this.$t("STATE.FAIL"), "danger");
+        return;
+      }
+
+      await ApiService.post("addCompany.php", {
+        session: this.currentUser.user_session,
+        fs_key: docId,
+        name: this.companyName
+      })
+        .then(({ data }) => {
+          dbId = data.inserted_id;
+        })
+        .catch(() => {
+          success = false;
+        });
+
+      if (!success) {
+        this.makeToast(this.$t("STATE.TITLE"), this.$t("STATE.FAIL"), "danger");
+        return;
+      }
+
+      await em
+        .doc(docId)
+        .update({
+          id: dbId
         })
         .then(() => {
           this.makeToast(
@@ -154,6 +169,7 @@ export default {
             "danger"
           );
         });
+      this.isBusy = false;
     }
   }
 };
