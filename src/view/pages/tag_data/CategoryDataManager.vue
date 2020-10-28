@@ -58,20 +58,21 @@ export default {
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
-        { key: "time", sortable: true },
-      ],
+        { key: "time", sortable: true }
+      ]
     };
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser"])
   },
   created() {
     this.isBusy = true;
     var instance = this;
     function datePrettyPrint(dt) {
-      return `${dt.getFullYear().toString().padStart(4, "0")}/${(
-        dt.getMonth() + 1
-      )
+      return `${dt
+        .getFullYear()
+        .toString()
+        .padStart(4, "0")}/${(dt.getMonth() + 1)
         .toString()
         .padStart(2, "0")}/${dt
         .getDate()
@@ -82,15 +83,18 @@ export default {
         .padStart(2, "0")}:${dt
         .getMinutes()
         .toString()
-        .padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")}`;
+        .padStart(2, "0")}:${dt
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")}`;
     }
-    em_categories(this.currentUser.fs_key).onSnapshot(function (querySnapshot) {
+    em_categories(this.currentUser.fs_key).onSnapshot(function(querySnapshot) {
       var resultItems = [];
-      querySnapshot.forEach(function (doc) {
+      querySnapshot.forEach(function(doc) {
         resultItems.push({
           name: doc.data().name,
           modifyBy: doc.data().login,
-          time: datePrettyPrint(doc.data().time.toDate()),
+          time: datePrettyPrint(doc.data().time.toDate())
         });
       });
       if (resultItems.length > 0) {
@@ -100,8 +104,8 @@ export default {
           {
             name: "",
             modifyBy: "Empty...",
-            time: "",
-          },
+            time: ""
+          }
         ];
       }
       instance.isBusy = false;
@@ -136,7 +140,7 @@ export default {
         .add({
           name: this.categroyName,
           login: this.currentUser.user_login,
-          time: timestamp(),
+          time: timestamp()
         })
         .then(() => {
           this.makeToast(
@@ -152,7 +156,7 @@ export default {
             "danger"
           );
         });
-    },
-  },
+    }
+  }
 };
 </script>

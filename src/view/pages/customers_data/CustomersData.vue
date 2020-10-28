@@ -18,7 +18,7 @@
           :value="form.source"
           :fs_key="currentUser.fs_key"
           @input="
-            newSource => {
+            (newSource) => {
               form.source = newSource;
             }
           "
@@ -221,6 +221,7 @@ import {
   firebase
 } from "@/core/services/firebaseInit";
 import CDFormSource from "./components/CDFormSource";
+import { pageLoading } from "@/core/services/delayLoading";
 
 export default {
   name: "cus_data",
@@ -371,9 +372,13 @@ export default {
         append: true
       });
     },
-    async onSubmit(evt) {
+    onSubmit(evt) {
       evt.preventDefault();
-      if (!this.currentUser.fs_key) {
+
+      pageLoading(
+        this.$store,
+        async() => {
+          if (!this.currentUser.fs_key) {
         this.showAlertFailed();
         return;
       }
@@ -479,6 +484,9 @@ export default {
           });
         }
       }
+        }
+      )
+      
     },
     different(a) {
       var diff = [];

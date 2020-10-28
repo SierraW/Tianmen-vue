@@ -15,7 +15,7 @@
           :fs_key="currentUser.fs_key"
           :isOcean="isOcean"
           @input="
-            search => {
+            (search) => {
               searchString = search;
             }
           "
@@ -26,7 +26,7 @@
     <!--begin::Body-->
     <div class="card-body py-0">
       <!--begin::Spinner-->
-      <div class="text-center" v-if="isLoading">
+      <div class="text-center mb-10" v-if="isLoading">
         <b-spinner variant="primary" label="Text Centered"></b-spinner>
       </div>
       <!--end::Spinner-->
@@ -167,63 +167,71 @@ import { mapGetters } from "vuex";
 import ActionsGroupOcean from "@/view/pages/customers_data/components/ActionsGroupOcean";
 import ActionsGroupDash from "@/view/pages/customers_data/components/ActionsGroupDash";
 import ToolBarCustomerListTable from "@/view/pages/customers_data/components/ToolBarCustomerListTable";
+import { delay } from "@/core/services/delayLoading";
 
 export default {
   name: "CustomerListTable",
   components: {
     ActionsGroupOcean,
     ActionsGroupDash,
-    ToolBarCustomerListTable
+    ToolBarCustomerListTable,
   },
   props: {
     isAdmin: {
       type: Boolean,
-      requried: true
+      requried: true,
     },
     isOcean: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       list: [],
       checked: false,
       searchString: "",
-      isLoading: true
+      isLoading: true,
     };
   },
   created() {
-    this.isLoading = true;
-    var snapshot = em_customers(this.currentUser.fs_key);
-    if (!this.isAdmin && this.isOcean) {
-      snapshot = snapshot.where("uid", "==", "");
-    } else if (!this.isAdmin && !this.isOcean) {
-      snapshot = snapshot.where("uid", "==", this.currentUser.id);
+    if (!this.currentUser.fs_key) {
+      alert(this.$t("STATE.UNEXPECTED_REFRESH"));
+      this.$router.push({ name: "dashboard" });
     }
+    this.isLoading = true;
 
-    snapshot.onSnapshot(querySnapshot => {
-      var emCusRecords = [];
-      querySnapshot.forEach(function(doc) {
-        const cusRecord = {
-          id: doc.id,
-          head: "media/svg/avatars/001-boy.svg",
-          company: doc.data().company,
-          email: doc.data().email,
-          name: doc.data().name,
-          phone: doc.data().phone,
-          progress: doc.data().progress,
-          state: doc.data().state,
-          time: doc.data().time,
-          category: doc.data().category,
-          uid: doc.data().uid,
-          handler: doc.data().handler,
-          inviter_uid: doc.data().inviter_uid
-        };
-        emCusRecords.push(cusRecord);
+    delay().then(() => {
+      var snapshot = em_customers(this.currentUser.fs_key);
+      if (!this.isAdmin && this.isOcean) {
+        snapshot = snapshot.where("uid", "==", "");
+      } else if (!this.isAdmin && !this.isOcean) {
+        snapshot = snapshot.where("uid", "==", this.currentUser.id);
+      }
+
+      snapshot.onSnapshot((querySnapshot) => {
+        var emCusRecords = [];
+        querySnapshot.forEach(function (doc) {
+          const cusRecord = {
+            id: doc.id,
+            head: "media/svg/avatars/001-boy.svg",
+            company: doc.data().company,
+            email: doc.data().email,
+            name: doc.data().name,
+            phone: doc.data().phone,
+            progress: doc.data().progress,
+            state: doc.data().state,
+            time: doc.data().time,
+            category: doc.data().category,
+            uid: doc.data().uid,
+            handler: doc.data().handler,
+            inviter_uid: doc.data().inviter_uid,
+          };
+          emCusRecords.push(cusRecord);
+        });
+        this.list = emCusRecords;
+        this.isLoading = false;
       });
-      this.list = emCusRecords;
-      this.isLoading = false;
     });
   },
   computed: {
@@ -232,11 +240,11 @@ export default {
       if (this.searchString == "") {
         return this.list;
       } else {
-        return this.list.filter(cusData => {
+        return this.list.filter((cusData) => {
           return JSON.stringify(cusData).includes(this.searchString);
         });
       }
-    }
+    },
   },
   methods: {
     getHandlerString(handler) {
@@ -273,7 +281,7 @@ export default {
     },
     setCheck(checked) {
       this.checked = checked;
-    }
-  }
+    },
+  },
 };
 </script>
