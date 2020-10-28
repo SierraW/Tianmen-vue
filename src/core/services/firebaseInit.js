@@ -23,8 +23,12 @@ function em_sources(fs_key) {
   return em.doc(fs_key).collection("em_cus_sources");
 }
 
+function em_categories(fs_key) {
+  return em.doc(fs_key).collection("em_cus_categories");
+}
+
 function timestamp() {
-  return firebase.firestore.Timestamp.fromDate(new Date());
+  return firebase.firestore.Timestamp.now();
 }
 
 export {
@@ -36,5 +40,6 @@ export {
   em_customers,
   em_histories,
   em_sources,
+  em_categories,
   timestamp
 };

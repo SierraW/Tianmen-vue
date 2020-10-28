@@ -8,7 +8,18 @@ export const locale = {
     SIGN_OUT: "登出账号",
     USER_PROFILE: "用户资料"
   },
+  CATEGORY: {
+    EMPTY_TITLE: "空白信息",
+    EMPTY_BODY: "不能上传空白信息",
+    PAGE: "客户分类管理",
+    ADD: "增加",
+    EXIST_SOURCE_TITLE: "类别已存在",
+    EXIST_SOURCE_BODY: "类别信息已存在，无需重复添加"
+  },
   SOURCE: {
+    EMPTY_TITLE: "空白信息",
+    EMPTY_BODY: "不能上传空白信息",
+    COLL: "展开",
     PAGE: "客户来源管理",
     ADD: "增加",
     EXIST_SOURCE_TITLE: "来源已存在",
@@ -26,6 +37,10 @@ export const locale = {
     DEL: "您确定要删除这位客户吗？此操作不可撤回。"
   },
   ACT: {
+    ADD_COM: {
+      NAME: "公司名称",
+      SUBMIT: "添加"
+    },
     MOD_NAME: "注册码生成器",
     NUM: "需要生成的激活码数量",
     ROLE: {
@@ -35,20 +50,28 @@ export const locale = {
       USR: "用户"
     },
     TITLE: {
-      NAME: "用户群组",
+      NAME: "荣誉称号",
       FS: "Fine Studio",
-      CS: "Customers"
+      CS: "Customers",
+      DEV: "开发者",
+      PROM: "项目经理",
+      UID: "UI设计师",
+      ACM: "客户经理"
     },
     COM: {
-      NAME: "所属单位",
+      NAME: "所属公司",
       FS: "Fine Studio"
     },
-    DES: "短说明（选填）"
+    DES: "短说明（选填）",
+    CODE: {
+      TAB: "历史",
+      TABLE_NAME: "激活码状态",
+    }
   },
   CUSTOMER: {
     HANDLER_NAME_EMPTY: "无数据",
     HANDLER_OCEAN: "公海",
-    HANDLER_ID_PRE: "用户识别码: {id}",
+    HANDLER_ID: "用户识别码: {id}",
     HANDLER: "负责人",
     DEL: "删除用户",
     CAT: "分类",
@@ -71,13 +94,13 @@ export const locale = {
     MESSAGE: "留言",
     ADD_MSG: "加入留言",
     ENTER_MSG: "输入新留言",
-    ADVANCED_OPT: "高级选项",
+    ADVANCED_OPT: "添加项目",
     SUBMIT: "提交",
     RESET: "重置",
     HISTORY_ADV: {
-      ROOT: "父类别",
+      ROOT: "项目名称",
       IS_ROOT: "这是一个父类别",
-      TYPE: "类别",
+      TYPE: "项目名称",
       MORE_OPT: "更多选项"
     },
     DATA: {
@@ -120,10 +143,13 @@ export const locale = {
       EMPTY_MESSAGE_BODY: "不能留下空白信息的记录",
       PHONE_INVALID_TITLE: "电话号码格式错误",
       PHONE_INVALID_BODY:
-        "电话号码需要以区域码为前缀，参考样式：+16476543210。您输入的号码为{number}。"
+        "电话号码需要以区域码为前缀，参考样式：+16476543210。您输入的号码为{number}。",
+      EMPTY_TYPE_TITLE: "空白项目名称",
+      EMPTY_TYPE_BODY: "项目名称不可留空。"
     }
   },
   MENU: {
+    TAG: "标签管理",
     VER: "版本",
     ADMIN: "所有客户",
     NEW: "新",

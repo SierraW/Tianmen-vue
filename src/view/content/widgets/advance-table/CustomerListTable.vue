@@ -25,8 +25,13 @@
     <!--end::Header-->
     <!--begin::Body-->
     <div class="card-body py-0">
+      <!--begin::Spinner-->
+      <div class="text-center" v-if="isLoading">
+        <b-spinner variant="primary" label="Text Centered"></b-spinner>
+      </div>
+      <!--end::Spinner-->
       <!--begin::Table-->
-      <div class="table-responsive">
+      <div class="table-responsive" v-if="!isLoading">
         <table
           class="table table-head-custom table-vertical-center"
           id="kt_advance_table_widget_1"
@@ -141,6 +146,7 @@
                   <ActionsGroupDash
                     v-if="!isOcean"
                     :item="item"
+                    :isAdmin="isAdmin"
                   ></ActionsGroupDash>
                 </td>
               </tr>
@@ -183,10 +189,12 @@ export default {
     return {
       list: [],
       checked: false,
-      searchString: ""
+      searchString: "",
+      isLoading: true
     };
   },
   created() {
+    this.isLoading = true;
     var snapshot = em_customers(this.currentUser.fs_key);
     if (!this.isAdmin && this.isOcean) {
       snapshot = snapshot.where("uid", "==", "");
@@ -215,6 +223,7 @@ export default {
         emCusRecords.push(cusRecord);
       });
       this.list = emCusRecords;
+      this.isLoading = false;
     });
   },
   computed: {

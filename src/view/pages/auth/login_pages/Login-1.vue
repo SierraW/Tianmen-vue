@@ -588,7 +588,11 @@ export default {
         const actcod = this.$refs.ractcod.value;
 
         if (/^[0-9]*$/.test(login)) {
-          this.toast("Format error", "Login name must contain at least one letter.", "danger");
+          this.toast(
+            "Format error",
+            "Login name must contain at least one letter.",
+            "danger"
+          );
           return;
         }
 

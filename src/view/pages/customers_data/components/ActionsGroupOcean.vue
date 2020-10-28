@@ -2,19 +2,6 @@
   <div>
     <button
       v-b-tooltip.hover
-      :title="$t('CUSTOMER.DEL')"
-      @click="deleteCus(item.id)"
-      class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-      v-if="isInviter(item.inviter_uid)"
-    >
-      <span class="svg-icon svg-icon-md svg-icon-danger">
-        <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->
-        <inline-svg src="media/svg/icons/General/Trash.svg" />
-        <!--end::Svg Icon-->
-      </span>
-    </button>
-    <button
-      v-b-tooltip.hover
       :title="$t('CUSTOMER.PUSH', { msg: '拉入' })"
       @click="subscribeCus(item.id)"
       class="btn btn-icon btn-light btn-hover-primary btn-sm"
@@ -59,12 +46,6 @@ export default {
         appendToast: true
       });
     },
-    isInviter(id) {
-      if (this.currentUser.id == id) {
-        return true;
-      }
-      return false;
-    },
     subscribeCus(id) {
       if (confirm(this.$t("STATE.SUBS"))) {
         var instance = this;
@@ -72,7 +53,7 @@ export default {
           .doc(id)
           .update({
             uid: this.currentUser.id,
-            handler: this.currentUser.user_login
+            handler: this.currentUser.display_name
           })
           .then(function() {
             instance.makeToast(
@@ -97,28 +78,6 @@ export default {
           from: this.currentUser.user_login,
           time: firebase.firestore.Timestamp.fromDate(new Date())
         });
-      }
-    },
-    deleteCus(id) {
-      if (confirm(this.$t("STATE.DEL"))) {
-        var instance = this;
-        em_customers(this.currentUser.fs_key)
-          .doc(id)
-          .delete()
-          .then(function() {
-            instance.makeToast(
-              instance.$t("STATE.TITLE"),
-              instance.$t("STATE.SUCCESS"),
-              "success"
-            );
-          })
-          .catch(function() {
-            instance.makeToast(
-              instance.$t("STATE.TITLE"),
-              instance.$t("STATE.FAIL"),
-              "danger"
-            );
-          });
       }
     }
   }

@@ -9,7 +9,8 @@
           customer_id: item.id,
           customer_name: item.name,
           customer_company: item.company,
-          fs_key: currentUser.fs_key
+          fs_key: currentUser.fs_key,
+          is_admin: isAdmin
         }
       }"
       class="btn btn-icon btn-light btn-hover-primary btn-sm"
@@ -27,7 +28,8 @@
         name: 'cus_data',
         params: {
           customer_id: item.id,
-          new_customer: false
+          new_customer: false,
+          is_admin: isAdmin
         }
       }"
       class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
@@ -39,6 +41,19 @@
       </span>
     </router-link>
     <button
+      v-if="isAdmin"
+      v-b-tooltip.hover
+      :title="$t('CUSTOMER.DEL')"
+      v-on:click="deleteCus(item.id)"
+      class="btn btn-icon btn-light btn-hover-danger btn-sm mr-3"
+    >
+      <span class="svg-icon svg-icon-md svg-icon-danger">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->
+        <inline-svg src="media/svg/icons/General/Trash.svg" />
+        <!--end::Svg Icon-->
+      </span>
+    </button>
+    <button
       v-b-tooltip.hover
       :title="$t('CUSTOMER.POP', { msg: 'Unsubscribe' })"
       v-on:click="unsubscribeCus(item.id)"
@@ -46,7 +61,7 @@
     >
       <span class="svg-icon svg-icon-md svg-icon-primary">
         <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->
-        <inline-svg src="media/svg/icons/General/Trash.svg" />
+        <inline-svg src="media/svg/icons/Code/Error-circle.svg" />
         <!--end::Svg Icon-->
       </span>
     </button>
@@ -67,6 +82,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true
     }
   },
   computed: mapGetters(["currentUser"]),
@@ -83,6 +102,28 @@ export default {
         toaster: "b-toaster-top-center",
         appendToast: true
       });
+    },
+    deleteCus(id) {
+      if (confirm(this.$t("STATE.DEL"))) {
+        var instance = this;
+        em_customers(this.currentUser.fs_key)
+          .doc(id)
+          .delete()
+          .then(function() {
+            instance.makeToast(
+              instance.$t("STATE.TITLE"),
+              instance.$t("STATE.SUCCESS"),
+              "success"
+            );
+          })
+          .catch(function() {
+            instance.makeToast(
+              instance.$t("STATE.TITLE"),
+              instance.$t("STATE.FAIL"),
+              "danger"
+            );
+          });
+      }
     },
     unsubscribeCus(id) {
       if (confirm(this.$t("STATE.UNSUBS"))) {

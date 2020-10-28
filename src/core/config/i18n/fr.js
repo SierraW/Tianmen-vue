@@ -8,6 +8,23 @@ export const locale = {
     SIGN_OUT: "Déconnexion",
     USER_PROFILE: "Profil utilisateur"
   },
+  CATEGORY: {
+    EMPTY_TITLE: "Warning",
+    EMPTY_BODY: "Cannot upload an empty category",
+    PAGE: "Categories",
+    ADD: "Add",
+    EXIST_SOURCE_TITLE: "Warning",
+    EXIST_SOURCE_BODY: "Category Name Existed"
+  },
+  SOURCE: {
+    EMPTY_TITLE: "Warning",
+    EMPTY_BODY: "Cannot upload an empty source",
+    COLL: "More...",
+    PAGE: "Sources",
+    ADD: "Add",
+    EXIST_SOURCE_TITLE: "Warning",
+    EXIST_SOURCE_BODY: "Source Existed"
+  },
   STATE: {
     TITLE: "State",
     SUCCESS: "Téléchargement réussi!",
@@ -22,6 +39,10 @@ export const locale = {
       "Are you sure you want to delete this customer? This action cannot be undo."
   },
   ACT: {
+    ADD_COM: {
+      NAME: "Company Name",
+      SUBMIT: "Add"
+    },
     MOD_NAME: "Activation Code Generator",
     NUM: "Number of codes needed",
     ROLE: {
@@ -31,15 +52,23 @@ export const locale = {
       USR: "User"
     },
     TITLE: {
-      NAME: "User Group",
+      NAME: "User Title",
       FS: "Fine Studio",
-      CS: "Customers"
+      CS: "Customers",
+      DEV: "Developer",
+      PROM: "Project Manager",
+      UID: "UI Designer",
+      ACM: "Account Manager"
     },
     COM: {
       NAME: "Company",
       FS: "Fine Studio"
     },
-    DES: "Short Descriptions (Optional)"
+    DES: "Short Descriptions (Optional)",
+    CODE: {
+      TAB: "History",
+      TABLE_NAME: "Code Status",
+    }
   },
   CUSTOMER: {
     HANDLER_NAME_EMPTY: "No Data",
@@ -112,10 +141,13 @@ export const locale = {
       EMPTY_MESSAGE_BODY: "Must not pass empty message body.",
       PHONE_INVALID_TITLE: "Phone Number invalid",
       PHONE_INVALID_BODY:
-        "Phone number needs area code as prefix, your input is {number}. Valid phone number example: +16476543210"
+        "Phone number needs area code as prefix, your input is {number}. Valid phone number example: +16476543210",
+      EMPTY_TYPE_TITLE: "Empty project name",
+      EMPTY_TYPE_BODY: "Project name cannot be empty."
     }
   },
   MENU: {
+    TAG: "Tags",
     VER: "Version",
     ADMIN: "Customers",
     NEW: "Nouveau",

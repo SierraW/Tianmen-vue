@@ -1,26 +1,26 @@
 <template>
   <div class="card card-custom gutter-b">
     <div class="card-header">
-      <h1 class="card-title">{{ $t("SOURCE.PAGE") }}</h1>
+      <h1 class="card-title">{{ $t("CATEGORY.PAGE") }}</h1>
     </div>
     <div class="card-body">
       <div class="row">
-        <b-form-input class="col-xl-10" v-model="sourceName"></b-form-input>
+        <b-form-input class="col-xl-10" v-model="categroyName"></b-form-input>
         <div class="col-xl-2">
-          <b-button @click="addSource" variant="success">{{
-            $t("SOURCE.ADD")
+          <b-button @click="addCategory" variant="success">{{
+            $t("CATEGORY.ADD")
           }}</b-button>
         </div>
       </div>
       <div class="row mt-10">
         <div class="col-xl-12">
-          <b-button v-b-toggle.collapse-sdm variant="primary">{{
+          <b-button v-b-toggle.collapse-cdm variant="primary">{{
             $t("SOURCE.COLL")
           }}</b-button>
-          <b-collapse id="collapse-sdm" class="mt-2">
+          <b-collapse id="collapse-cdm" class="mt-2">
             <!-- <b-card> -->
             <b-table
-              :items="sourceItems"
+              :items="categroyItems"
               :busy.sync="isBusy"
               :fields="fields"
               class="mt-3"
@@ -42,16 +42,16 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { em_sources, timestamp } from "@/core/services/firebaseInit";
+import { em_categories, timestamp } from "@/core/services/firebaseInit";
 
 export default {
-  name: "source_manager",
+  name: "category_manager",
   data() {
     return {
-      sourceName: "",
+      categroyName: "",
       isBusy: false,
       filter: "40",
-      sourceItems: [],
+      categroyItems: [],
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
@@ -85,7 +85,7 @@ export default {
         .toString()
         .padStart(2, "0")}`;
     }
-    em_sources(this.currentUser.fs_key).onSnapshot(function(querySnapshot) {
+    em_categories(this.currentUser.fs_key).onSnapshot(function(querySnapshot) {
       var resultItems = [];
       querySnapshot.forEach(function(doc) {
         resultItems.push({
@@ -95,9 +95,9 @@ export default {
         });
       });
       if (resultItems.length > 0) {
-        instance.sourceItems = resultItems;
+        instance.categroyItems = resultItems;
       } else {
-        instance.sourceItems = [
+        instance.categroyItems = [
           {
             name: "",
             modifyBy: "Empty...",
@@ -118,30 +118,30 @@ export default {
         appendToast: true
       });
     },
-    async addSource() {
-      if (/^\s*$/.test(this.sourceName)) {
+    async addCategory() {
+      if (/^\s*$/.test(this.categroyName)) {
         this.makeToast(
-          this.$t("SOURCE.EMPTY_TITLE"),
-          this.$t("SOURCE.EMPTY_BODY")
+          this.$t("CATEGORY.EMPTY_TITLE"),
+          this.$t("CATEGORY.EMPTY_BODY")
         );
         return;
       }
 
-      var result = await em_sources(this.currentUser.fs_key)
-        .where("name", "==", this.sourceName)
+      var result = await em_categories(this.currentUser.fs_key)
+        .where("name", "==", this.categroyName)
         .get();
 
       if (!result.empty) {
         this.makeToast(
-          this.$t("SOURCE.EXIST_SOURCE_TITLE"),
-          this.$t("SOURCE.EXIST_SOURCE_BODY")
+          this.$t("CATEGORY.EXIST_SOURCE_TITLE"),
+          this.$t("CATEGORY.EXIST_SOURCE_BODY")
         );
         return;
       }
 
-      em_sources(this.currentUser.fs_key)
+      em_categories(this.currentUser.fs_key)
         .add({
-          name: this.sourceName,
+          name: this.categroyName,
           login: this.currentUser.user_login,
           time: timestamp()
         })

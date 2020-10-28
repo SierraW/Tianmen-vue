@@ -5,12 +5,11 @@
       :label="$t('CUSTOMER.DATA.TRA')"
       label-for="input-tra"
     >
-      <b-form-input
+      <b-form-select
         id="input-tra"
         v-model="sourceAndCategory.source"
-        required
-        :placeholder="$t('CUSTOMER.DATA.TRA_PLA')"
-      ></b-form-input>
+        :options="sources"
+      ></b-form-select>
     </b-form-group>
 
     <b-form-group
@@ -18,22 +17,88 @@
       :label="$t('CUSTOMER.DATA.CAT')"
       label-for="input-cat"
     >
-      <b-form-input
+      <b-form-select
         id="input-cat"
         v-model="sourceAndCategory.category"
-        required
-        :placeholder="$t('CUSTOMER.DATA.CAT_PLA')"
-      ></b-form-input>
+        :options="categories"
+      ></b-form-select>
     </b-form-group>
   </div>
 </template>
 
 <script>
+import { em_sources, em_categories } from "@/core/services/firebaseInit";
+
 export default {
   name: "CDFormSource",
+  data() {
+    return {
+      sources: [],
+      categories: []
+    };
+  },
+  created() {
+    var instance = this;
+    em_sources(this.fs_key)
+      .get()
+      .then(function(querySnapshot) {
+        var resultItems = [
+          {
+            value: "",
+            text: instance.$t("SOURCE.EMPTY")
+          }
+        ];
+        querySnapshot.forEach(function(doc) {
+          resultItems.push({
+            value: doc.data().name,
+            text: doc.data().name
+          });
+        });
+        if (resultItems.length > 0) {
+          instance.sources = resultItems;
+        } else {
+          instance.sources = [
+            {
+              value: "",
+              text: "Empty..."
+            }
+          ];
+        }
+      });
+    em_categories(this.fs_key)
+      .get()
+      .then(function(querySnapshot) {
+        var resultItems = [
+          {
+            value: "",
+            text: instance.$t("CATEGORY.EMPTY")
+          }
+        ];
+        querySnapshot.forEach(function(doc) {
+          resultItems.push({
+            value: doc.data().name,
+            text: doc.data().name
+          });
+        });
+        if (resultItems.length > 0) {
+          instance.categories = resultItems;
+        } else {
+          instance.categories = [
+            {
+              value: "",
+              text: "Empty..."
+            }
+          ];
+        }
+      });
+  },
   props: {
     value: {
       type: Object,
+      required: true
+    },
+    fs_key: {
+      type: String,
       required: true
     }
   },

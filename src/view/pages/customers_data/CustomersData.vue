@@ -16,6 +16,7 @@
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <CDFormSource
           :value="form.source"
+          :fs_key="currentUser.fs_key"
           @input="
             newSource => {
               form.source = newSource;
@@ -252,7 +253,8 @@ export default {
         wechat: ""
       },
       newCus: false,
-      show: true
+      show: true,
+      isAdmin: false
     };
   },
   mounted() {
@@ -260,6 +262,11 @@ export default {
       this.$store.dispatch(SET_BREADCRUMB, [
         { title: this.$t("MENU.DASHBOARD"), route: "../dashboard" },
         { title: this.$t("CUSTOMER.OCEAN"), route: "../ocean" },
+        { title: this.$t("MENU.DATA") }
+      ]);
+    } else if (this.isAdmin) {
+      this.$store.dispatch(SET_BREADCRUMB, [
+        { title: this.$t("MENU.ADMIN"), route: "../admin" },
         { title: this.$t("MENU.DATA") }
       ]);
     } else {
@@ -270,6 +277,7 @@ export default {
     }
   },
   created() {
+    this.isAdmin = this.$route.params.is_admin;
     if (this.$route.params.new_customer) {
       this.newCus = true;
     } else if (this.$route.params.customer_id == "new_customer") {
@@ -421,6 +429,7 @@ export default {
           .add(cusData)
           .then(function() {
             instance.showAlertSuccess();
+            instance.$router.push({ name: "cus_ocean" });
           })
           .catch(function() {
             instance.showAlertFailed();
@@ -437,6 +446,7 @@ export default {
       } else {
         if (cusData.state == "danger") {
           cusData.uid = "";
+          cusData.handler = "Ocean";
           em_histories(this.currentUser.fs_key).add({
             customerId: this.form.id,
             message: "",

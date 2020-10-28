@@ -14,6 +14,18 @@
           <b-tabs content-class="mt-3">
             <b-tab :title="$t('CUSTOMER.MESSAGE', { msg: 'msg' })" active>
               <b-form-group
+                id="input-group-father"
+                :label="$t('CUSTOMER.HISTORY_ADV.ROOT')"
+                label-for="input-father"
+                description='Always select "Default" when you are confusing.'
+              >
+                <b-form-select
+                  v-model="form.root"
+                  :options="options"
+                ></b-form-select>
+              </b-form-group>
+
+              <b-form-group
                 id="input-group-1"
                 :label="$t('CUSTOMER.ADD_MSG', { msg: 'msg' })"
                 label-for="input-1"
@@ -31,18 +43,6 @@
             </b-tab>
             <b-tab :title="$t('CUSTOMER.ADVANCED_OPT', { msg: 'Advanced' })">
               <b-form-group
-                id="input-group-father"
-                :label="$t('CUSTOMER.HISTORY_ADV.ROOT')"
-                label-for="input-father"
-                description='Always select "Default" when you are confusing.'
-              >
-                <b-form-select
-                  v-model="form.root"
-                  :options="options"
-                ></b-form-select>
-              </b-form-group>
-
-              <b-form-group
                 id="input-group-type"
                 :label="$t('CUSTOMER.HISTORY_ADV.TYPE')"
                 label-for="input-type"
@@ -52,26 +52,8 @@
                   id="input-type"
                   v-model="form.type"
                   type="text"
-                  required
                   placeholder="Message"
                 ></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                id="input-group-opt-father"
-                :label="$t('CUSTOMER.HISTORY_ADV.MORE_OPT')"
-                label-for="input-opt-father"
-                description="Check only if you certain what you are doing."
-              >
-                <b-form-checkbox
-                  id="input-opt-father"
-                  v-model="form.isRoot"
-                  name="input-opt-father"
-                  value="true"
-                  unchecked-value="false"
-                >
-                  {{ $t("CUSTOMER.HISTORY_ADV.IS_ROOT") }}
-                </b-form-checkbox>
               </b-form-group>
             </b-tab>
           </b-tabs>
@@ -131,14 +113,14 @@ import { em_histories, firebase } from "@/core/services/firebaseInit";
 export default {
   name: "CustomerSupportHistory",
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
   },
   data() {
     return {
       selected: ["2"],
       filterOptions: [
         { text: "System", value: "1" },
-        { text: "用户定义", value: "2" }
+        { text: "用户定义", value: "2" },
       ],
       cusId: "",
       cusName: "",
@@ -147,7 +129,7 @@ export default {
         message: "",
         isRoot: false,
         root: "user-defined",
-        type: "Message"
+        type: "",
       },
       options: [],
       show: true,
@@ -157,15 +139,16 @@ export default {
           text: "操作者",
           align: "left",
           sortable: false,
-          value: "from"
+          value: "from",
         },
         { text: "父类型", value: "root", align: " d-none" },
         { text: "类型", value: "type" },
         { text: "留言", value: "message" },
-        { text: "时间戳", value: "time" }
+        { text: "时间戳", value: "time" },
       ],
       logs: [],
-      filteredLogs: []
+      filteredLogs: [],
+      isAdmin: false,
     };
   },
   components: {},
@@ -173,16 +156,17 @@ export default {
     this.cusId = this.$route.params.customer_id;
     this.cusName = this.$route.params.customer_name;
     this.cusCom = this.$route.params.customer_company;
+    this.isAdmin = this.$route.params.is_admin;
     var instance = this;
     em_histories(this.currentUser.fs_key)
       .where("customerId", "==", this.cusId)
-      .onSnapshot(function(querySnapshot) {
+      .onSnapshot(function (querySnapshot) {
         var logs = [];
         var roots = [
           {
             value: "user-defined",
-            text: "Default"
-          }
+            text: "Default",
+          },
         ];
         function datePrettyPrint(dt) {
           return `${dt
@@ -191,21 +175,9 @@ export default {
             .padStart(
               4,
               "0"
-            )}/${(dt.getMonth() + 1).toString().padStart(2, "0")}/${dt
-            .getDate()
-            .toString()
-            .padStart(2, "0")} ${dt
-            .getHours()
-            .toString()
-            .padStart(2, "0")}:${dt
-            .getMinutes()
-            .toString()
-            .padStart(2, "0")}:${dt
-            .getSeconds()
-            .toString()
-            .padStart(2, "0")}`;
+            )}/${(dt.getMonth() + 1).toString().padStart(2, "0")}/${dt.getDate().toString().padStart(2, "0")} ${dt.getHours().toString().padStart(2, "0")}:${dt.getMinutes().toString().padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")}`;
         }
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
           logs.push({
             id: doc.id,
             from: doc.data().from,
@@ -213,7 +185,7 @@ export default {
             root: doc.data().root,
             type: doc.data().type,
             isRoot: doc.data().isRoot,
-            time: datePrettyPrint(doc.data().time.toDate())
+            time: datePrettyPrint(doc.data().time.toDate()),
           });
         });
 
@@ -229,7 +201,7 @@ export default {
             message: item.message,
             type: item.type,
             isRoot: item.isRoot,
-            child: []
+            child: [],
           };
           if (option.root == "user-defined") {
             f_root.push(option);
@@ -265,7 +237,7 @@ export default {
             if (opt.isRoot) {
               output.push({
                 value: opt.type,
-                text: `${prefix} ${opt.type}: ${opt.message}`
+                text: `${prefix} ${opt.type}: ${opt.message}`,
               });
             } else {
               return output;
@@ -307,7 +279,7 @@ export default {
         }
       }
 
-      this.filteredLogs = this.logs.filter(log => {
+      this.filteredLogs = this.logs.filter((log) => {
         return (
           (displaySysDef && log.root == "system") ||
           (displayUserDef && log.root != "system")
@@ -321,7 +293,7 @@ export default {
         variant: "warning",
         toaster: "b-toaster-top-center",
         autoHideDelay: 5000,
-        appendToast: true
+        appendToast: true,
       });
     },
     showAlertFailed() {
@@ -330,7 +302,7 @@ export default {
         variant: "danger",
         solid: true,
         toaster: "b-toaster-top-center",
-        append: true
+        append: true,
       });
     },
     showAlertSuccess() {
@@ -339,7 +311,7 @@ export default {
         variant: "success",
         solid: true,
         toaster: "b-toaster-top-center",
-        append: true
+        append: true,
       });
     },
     onSubmit(evt) {
@@ -348,6 +320,12 @@ export default {
         this.showAlertFailed();
         return;
       }
+      if (/^\s*$/.test(this.form.type)) {
+        this.form.isRoot = false;
+        this.form.type = "Message";
+      } else {
+        this.form.isRoot = true;
+      }
       if (/^\s*$/.test(this.form.message) && !this.form.isRoot) {
         this.makeToast(
           this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_TITLE"),
@@ -355,6 +333,7 @@ export default {
         );
         return;
       }
+
       if (
         this.form.type.toLowerCase() == "system" ||
         this.form.root.toLowerCase() == "system" ||
@@ -376,13 +355,13 @@ export default {
           root: this.form.root,
           type: this.form.type,
           isRoot: this.form.isRoot,
-          time: firebase.firestore.Timestamp.fromDate(new Date())
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
         })
-        .then(function() {
+        .then(function () {
           instance.showAlertSuccess();
           instance.onReset();
         })
-        .catch(function() {
+        .catch(function () {
           instance.showAlertFailed();
         });
     },
@@ -400,17 +379,24 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    }
+    },
   },
   mounted() {
-    this.$store.dispatch(SET_BREADCRUMB, [
-      {
-        title: this.$t("MENU.DASHBOARD", { msg: "仪表板" }),
-        route: "../dashboard"
-      },
-      { title: this.$t("CUSTOMER.SUPPORT_HISTORY", { msg: "History" }) }
-    ]);
-  }
+    if (this.isAdmin) {
+      this.$store.dispatch(SET_BREADCRUMB, [
+        { title: this.$t("MENU.ADMIN"), route: "../admin" },
+        { title: this.$t("MENU.DATA") },
+      ]);
+    } else {
+      this.$store.dispatch(SET_BREADCRUMB, [
+        {
+          title: this.$t("MENU.DASHBOARD", { msg: "仪表板" }),
+          route: "../dashboard",
+        },
+        { title: this.$t("CUSTOMER.SUPPORT_HISTORY", { msg: "History" }) },
+      ]);
+    }
+  },
 };
 </script>
 
