@@ -50,7 +50,7 @@ import CentreLoader from "@/view/content/widgets/CentreLoader";
 export default {
   name: "category_manager",
   components: {
-    CentreLoader
+    CentreLoader,
   },
   data() {
     return {
@@ -62,24 +62,24 @@ export default {
       fields: [
         { key: "name", sortable: true },
         { key: "modifyBy", sortable: true },
-        { key: "time", sortable: true }
-      ]
+        { key: "time", sortable: true },
+      ],
     };
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
   },
   created() {
     this.isBusy = true;
     var instance = this;
-    em.onSnapshot(function(querySnapshot) {
+    em.onSnapshot(function (querySnapshot) {
       var resultItems = [];
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(function (doc) {
         resultItems.push({
           id: doc.data().id,
           name: doc.data().name,
           modifyBy: doc.data().login,
-          time: datePrettyPrint(doc.data().time.toDate())
+          time: datePrettyPrint(doc.data().time.toDate()),
         });
       });
       if (resultItems.length > 0) {
@@ -89,8 +89,8 @@ export default {
           {
             name: "",
             modifyBy: "Empty...",
-            time: ""
-          }
+            time: "",
+          },
         ];
       }
       instance.isBusy = false;
@@ -108,6 +108,8 @@ export default {
           this.$t("CATEGORY.EMPTY_TITLE"),
           this.$t("CATEGORY.EMPTY_BODY")
         );
+        this.isBusy = false;
+        this.isLoading = false;
         return;
       }
 
@@ -118,6 +120,8 @@ export default {
           this.$t("CATEGORY.EXIST_SOURCE_TITLE"),
           this.$t("CATEGORY.EXIST_SOURCE_BODY")
         );
+        this.isBusy = false;
+        this.isLoading = false;
         return;
       }
 
@@ -129,9 +133,9 @@ export default {
         .add({
           name: this.companyName,
           login: this.currentUser.user_login,
-          time: timestamp()
+          time: timestamp(),
         })
-        .then(docRef => {
+        .then((docRef) => {
           docId = docRef.id;
         })
         .catch(() => {
@@ -140,13 +144,15 @@ export default {
 
       if (!success) {
         this.makeToast(this.$t("STATE.TITLE"), this.$t("STATE.FAIL"), "danger");
+        this.isBusy = false;
+        this.isLoading = false;
         return;
       }
 
       await ApiService.post("addCompany.php", {
         session: this.currentUser.user_session,
         fs_key: docId,
-        name: this.companyName
+        name: this.companyName,
       })
         .then(({ data }) => {
           dbId = data.inserted_id;
@@ -157,13 +163,15 @@ export default {
 
       if (!success) {
         this.makeToast(this.$t("STATE.TITLE"), this.$t("STATE.FAIL"), "danger");
+        this.isBusy = false;
+        this.isLoading = false;
         return;
       }
 
       await em
         .doc(docId)
         .update({
-          id: dbId
+          id: dbId,
         })
         .then(() => {
           this.makeToast(
@@ -181,7 +189,7 @@ export default {
         });
       this.isBusy = false;
       this.isLoading = false;
-    }
-  }
+    },
+  },
 };
 </script>

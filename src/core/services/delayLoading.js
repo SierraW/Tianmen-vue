@@ -19,4 +19,14 @@ function pageLoading(store, callback, ms = 1000) {
   });
 }
 
-export { delay, pageLoading };
+function delayCancelable( beforeLoad, loading, afterLoad, condition, ms = 1000) {
+  beforeLoad();
+  delay(ms).then(() => {
+    if (!condition()) {
+      loading();
+    }
+    afterLoad();
+  })
+}
+
+export { delay, pageLoading, delayCancelable };

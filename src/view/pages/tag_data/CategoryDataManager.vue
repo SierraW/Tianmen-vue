@@ -134,6 +134,7 @@ export default {
             this.$t("CATEGORY.EMPTY_TITLE"),
             this.$t("CATEGORY.EMPTY_BODY")
           );
+          this.isLoading = false;
           return;
         }
 
@@ -146,10 +147,11 @@ export default {
             this.$t("CATEGORY.EXIST_SOURCE_TITLE"),
             this.$t("CATEGORY.EXIST_SOURCE_BODY")
           );
+          this.isLoading = false;
           return;
         }
 
-        em_categories(this.currentUser.fs_key)
+        await em_categories(this.currentUser.fs_key)
           .add({
             name: this.categroyName,
             login: this.currentUser.user_login,

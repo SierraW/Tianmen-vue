@@ -134,6 +134,7 @@ export default {
             this.$t("SOURCE.EMPTY_TITLE"),
             this.$t("SOURCE.EMPTY_BODY")
           );
+          this.isLoading = false;
           return;
         }
 
@@ -146,10 +147,11 @@ export default {
             this.$t("SOURCE.EXIST_SOURCE_TITLE"),
             this.$t("SOURCE.EXIST_SOURCE_BODY")
           );
+          this.isLoading = false;
           return;
         }
 
-        em_sources(this.currentUser.fs_key)
+        await em_sources(this.currentUser.fs_key)
           .add({
             name: this.sourceName,
             login: this.currentUser.user_login,
