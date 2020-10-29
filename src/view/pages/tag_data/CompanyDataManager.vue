@@ -1,12 +1,13 @@
 <template>
   <div>
+    <CentreLoader v-if="isLoading"></CentreLoader>
     <div class="row">
       <div class="col-6">
         <b-form-input v-model="companyName"></b-form-input>
       </div>
 
       <div class="col">
-        <b-button @click="addCompany" variant="success">{{
+        <b-button :disabled="isLoading" @click="addCompany" variant="success">{{
           $t("CATEGORY.ADD")
         }}</b-button>
       </div>
@@ -44,11 +45,16 @@ import { em, timestamp } from "@/core/services/firebaseInit";
 import { getToastConfig } from "@/core/services/toastStyleService";
 import { datePrettyPrint } from "@/core/services/datePrintingService";
 import ApiService from "@/core/services/api.service";
+import CentreLoader from "@/view/content/widgets/CentreLoader";
 
 export default {
   name: "category_manager",
+  components: {
+    CentreLoader
+  },
   data() {
     return {
+      isLoading: false,
       companyName: "",
       isBusy: false,
       filter: "40",
@@ -95,6 +101,7 @@ export default {
       this.$bvToast.toast(message, getToastConfig(title, variant));
     },
     async addCompany() {
+      this.isLoading = true;
       this.isBusy = true;
       if (/^\s*$/.test(this.companyName)) {
         this.makeToast(
@@ -173,6 +180,7 @@ export default {
           );
         });
       this.isBusy = false;
+      this.isLoading = false;
     }
   }
 };

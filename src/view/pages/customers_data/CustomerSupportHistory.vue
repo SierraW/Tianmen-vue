@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CentreLoader v-if="isLoading"></CentreLoader>
     <div class="card card-custom gutter-b col-xxl-12">
       <div class="card-header py-6">
         <h3 class="card-title">{{ cusCom }}<br />{{ cusName }}</h3>
@@ -46,21 +47,23 @@
                 id="input-group-type"
                 :label="$t('CUSTOMER.HISTORY_ADV.TYPE')"
                 label-for="input-type"
-                description="Default: Message"
               >
                 <b-form-input
                   id="input-type"
                   v-model="form.type"
                   type="text"
-                  placeholder="Message"
                 ></b-form-input>
               </b-form-group>
             </b-tab>
           </b-tabs>
 
-          <b-button type="submit" variant="primary" class="mr-3">{{
-            $t("CUSTOMER.SUBMIT", { msg: "Submit" })
-          }}</b-button>
+          <b-button
+            :disabled="isLoading"
+            type="submit"
+            variant="primary"
+            class="mr-3"
+            >{{ $t("CUSTOMER.SUBMIT", { msg: "Submit" }) }}</b-button
+          >
           <b-button type="reset" variant="danger">
             {{ $t("CUSTOMER.RESET", { msg: "Reset" }) }}
           </b-button>
@@ -109,6 +112,8 @@
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import { mapGetters } from "vuex";
 import { em_histories, firebase } from "@/core/services/firebaseInit";
+import CentreLoader from "@/view/content/widgets/CentreLoader";
+import { delay } from "@/core/services/delayLoading";
 
 export default {
   name: "CustomerSupportHistory",
@@ -117,6 +122,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       selected: ["2"],
       filterOptions: [
         { text: "System", value: "1" },
@@ -151,7 +157,9 @@ export default {
       isAdmin: false
     };
   },
-  components: {},
+  components: {
+    CentreLoader
+  },
   created() {
     this.cusId = this.$route.params.customer_id;
     this.cusName = this.$route.params.customer_name;
@@ -328,54 +336,63 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      if (!this.cusId) {
-        this.showAlertFailed();
-        return;
-      }
-      if (/^\s*$/.test(this.form.type)) {
-        this.form.isRoot = false;
-        this.form.type = "Message";
-      } else {
-        this.form.isRoot = true;
-      }
-      if (/^\s*$/.test(this.form.message) && !this.form.isRoot) {
-        this.makeToast(
-          this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_TITLE"),
-          this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_BODY")
-        );
-        return;
-      }
 
-      if (
-        this.form.type.toLowerCase() == "system" ||
-        this.form.root.toLowerCase() == "system" ||
-        this.form.type.toLowerCase() == "user-defined"
-      ) {
-        this.makeToast(
-          this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_TITLE"),
-          this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_BODY")
-        );
-        return;
-      }
-      var instance = this;
+      this.isLoading = true;
 
-      em_histories(this.currentUser.fs_key)
-        .add({
-          customerId: this.cusId,
-          from: this.currentUser.user_login,
-          message: this.form.message,
-          root: this.form.root,
-          type: this.form.type,
-          isRoot: this.form.isRoot,
-          time: firebase.firestore.Timestamp.fromDate(new Date())
-        })
-        .then(function() {
-          instance.showAlertSuccess();
-          instance.onReset();
-        })
-        .catch(function() {
-          instance.showAlertFailed();
-        });
+      delay().then(() => {
+        if (!this.cusId) {
+          this.showAlertFailed();
+          this.isLoading = false;
+          return;
+        }
+        if (/^\s*$/.test(this.form.type)) {
+          this.form.isRoot = false;
+        } else {
+          this.form.isRoot = true;
+        }
+        if (/^\s*$/.test(this.form.message) && !this.form.isRoot) {
+          this.makeToast(
+            this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_TITLE"),
+            this.$t("CUSTOMER.WARNINGS.EMPTY_MESSAGE_BODY")
+          );
+          this.isLoading = false;
+          return;
+        }
+
+        if (
+          this.form.type.toLowerCase() == "system" ||
+          this.form.root.toLowerCase() == "system" ||
+          this.form.type.toLowerCase() == "user-defined" ||
+          this.form.type.toLowerCase() == "Message"
+        ) {
+          this.makeToast(
+            this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_TITLE"),
+            this.$t("CUSTOMER.WARNINGS.RESEVERED_KEYWORD_BODY")
+          );
+          this.isLoading = false;
+          return;
+        }
+        var instance = this;
+
+        em_histories(this.currentUser.fs_key)
+          .add({
+            customerId: this.cusId,
+            from: this.currentUser.user_login,
+            message: this.form.message,
+            root: this.form.root,
+            type: this.form.isRoot ? this.form.type : "Message",
+            isRoot: this.form.isRoot,
+            time: firebase.firestore.Timestamp.fromDate(new Date())
+          })
+          .then(function() {
+            instance.showAlertSuccess();
+            instance.onReset();
+          })
+          .catch(function() {
+            instance.showAlertFailed();
+          });
+        this.isLoading = false;
+      });
     },
     onReset(evt) {
       if (evt) {

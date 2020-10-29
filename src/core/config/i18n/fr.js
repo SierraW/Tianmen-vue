@@ -142,7 +142,7 @@ export const locale = {
     WARNINGS: {
       RESEVERED_KEYWORD_TITLE: "Reserved keyword",
       RESEVERED_KEYWORD_BODY:
-        "One of system reserve keyword are being used. Reverved keyword are: system, user-defined",
+        "One of system reserve keyword are being used. Reverved keyword are: system, user-defined, message",
       EMPTY_MESSAGE_TITLE: "Empty Message Body",
       EMPTY_MESSAGE_BODY: "Must not pass empty message body.",
       PHONE_INVALID_TITLE: "Phone Number invalid",

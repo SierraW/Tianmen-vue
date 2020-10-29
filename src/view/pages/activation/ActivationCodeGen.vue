@@ -110,12 +110,23 @@
                     ></v-text-field>
                   </v-card-title>
                   <v-data-table
+                    :page.sync="page"
+                    items-per-page="10"
+                    hide-default-footer
+                    @page-count="pageCount = $event"
                     :headers="headers"
                     :items="codes"
                     :sort-by="['display_name']"
                     :sort-desc="true"
                     :search="search"
                   ></v-data-table>
+                  <div class="text-center pt-2">
+                    <v-pagination
+                      v-model="page"
+                      :length="pageCount"
+                    ></v-pagination>
+                    <br />
+                  </div>
                 </v-card>
               </v-main>
             </v-app>
@@ -185,6 +196,8 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      pageCount: 0,
       headers: [
         {
           text: "Code",

@@ -1,5 +1,6 @@
 <template>
   <div class="card card-custom gutter-b">
+    <CentreLoader v-if="isLoading"></CentreLoader>
     <div class="card-header">
       <h1 class="card-title">{{ $t("SOURCE.PAGE") }}</h1>
     </div>
@@ -9,9 +10,12 @@
           <b-form-input v-model="sourceName"></b-form-input>
         </div>
         <div class="col">
-          <b-button @click="addSource" variant="success">{{
-            $t("SOURCE.ADD")
-          }}</b-button>
+          <b-button
+            :disabled="isLoading"
+            @click="addSource"
+            variant="success"
+            >{{ $t("SOURCE.ADD") }}</b-button
+          >
         </div>
       </div>
       <div class="row mt-3">
@@ -46,11 +50,17 @@
 import { mapGetters } from "vuex";
 import { em_sources, timestamp } from "@/core/services/firebaseInit";
 import { getToastConfig } from "@/core/services/toastStyleService";
+import CentreLoader from "@/view/content/widgets/CentreLoader";
+import { delay } from "@/core/services/delayLoading";
 
 export default {
   name: "source_manager",
+  components: {
+    CentreLoader
+  },
   data() {
     return {
+      isLoading: false,
       sourceName: "",
       isBusy: false,
       filter: "40",
@@ -115,47 +125,53 @@ export default {
     makeToast(title, message, variant = "warning") {
       this.$bvToast.toast(message, getToastConfig(title, variant));
     },
-    async addSource() {
-      if (/^\s*$/.test(this.sourceName)) {
-        this.makeToast(
-          this.$t("SOURCE.EMPTY_TITLE"),
-          this.$t("SOURCE.EMPTY_BODY")
-        );
-        return;
-      }
+    addSource() {
+      this.isLoading = true;
 
-      var result = await em_sources(this.currentUser.fs_key)
-        .where("name", "==", this.sourceName)
-        .get();
-
-      if (!result.empty) {
-        this.makeToast(
-          this.$t("SOURCE.EXIST_SOURCE_TITLE"),
-          this.$t("SOURCE.EXIST_SOURCE_BODY")
-        );
-        return;
-      }
-
-      em_sources(this.currentUser.fs_key)
-        .add({
-          name: this.sourceName,
-          login: this.currentUser.user_login,
-          time: timestamp()
-        })
-        .then(() => {
+      delay().then(async () => {
+        if (/^\s*$/.test(this.sourceName)) {
           this.makeToast(
-            this.$t("STATE.TITLE"),
-            this.$t("STATE.SUCCESS"),
-            "success"
+            this.$t("SOURCE.EMPTY_TITLE"),
+            this.$t("SOURCE.EMPTY_BODY")
           );
-        })
-        .catch(() => {
+          return;
+        }
+
+        var result = await em_sources(this.currentUser.fs_key)
+          .where("name", "==", this.sourceName)
+          .get();
+
+        if (!result.empty) {
           this.makeToast(
-            this.$t("STATE.TITLE"),
-            this.$t("STATE.FAIL"),
-            "danger"
+            this.$t("SOURCE.EXIST_SOURCE_TITLE"),
+            this.$t("SOURCE.EXIST_SOURCE_BODY")
           );
-        });
+          return;
+        }
+
+        em_sources(this.currentUser.fs_key)
+          .add({
+            name: this.sourceName,
+            login: this.currentUser.user_login,
+            time: timestamp()
+          })
+          .then(() => {
+            this.makeToast(
+              this.$t("STATE.TITLE"),
+              this.$t("STATE.SUCCESS"),
+              "success"
+            );
+          })
+          .catch(() => {
+            this.makeToast(
+              this.$t("STATE.TITLE"),
+              this.$t("STATE.FAIL"),
+              "danger"
+            );
+          });
+
+        this.isLoading = false;
+      });
     }
   }
 };

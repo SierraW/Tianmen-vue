@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex flex-column flex-root">
+    <CentreLoader v-if="isLoading"></CentreLoader>
     <div
       class="login login-1 d-flex flex-column flex-lg-row flex-column-fluid bg-white"
       :class="{
@@ -111,6 +112,7 @@
               </div>
               <div class="pb-lg-0 pb-5">
                 <button
+                  :disabled="isLoading"
                   ref="kt_login_signin_submit"
                   class="btn btn-primary font-weight-bolder font-size-h6 px-15 py-4 my-3 mr-3"
                 >
@@ -321,27 +323,29 @@
 
 <script>
 import formValidation from "@/assets/plugins/formvalidation/dist/es6/core/Core";
-
 // FormValidation plugins
 import Trigger from "@/assets/plugins/formvalidation/dist/es6/plugins/Trigger";
 import Bootstrap from "@/assets/plugins/formvalidation/dist/es6/plugins/Bootstrap";
 import SubmitButton from "@/assets/plugins/formvalidation/dist/es6/plugins/SubmitButton";
-
 import KTUtil from "@/assets/js/components/util";
 import { mapGetters, mapState } from "vuex";
 import { LOGIN, LOGOUT, REGISTER } from "@/core/services/store/auth.module";
-// import Swal from "sweetalert2";
+import CentreLoader from "@/view/content/widgets/CentreLoader";
+import { delay } from "@/core/services/delayLoading";
 
 export default {
   name: "login-1",
+  components: {
+    CentreLoader
+  },
   data() {
     return {
       state: "signin",
-      // Remove this dummy login info
       form: {
         email: "",
         password: ""
-      }
+      },
+      isLoading: false
     };
   },
   computed: {
@@ -498,6 +502,10 @@ export default {
         const email = this.$refs.email.value;
         const password = this.$refs.password.value;
 
+        this.isLoading = true;
+        this.form.email = email;
+        this.form.password = password;
+
         // clear existing errors
         this.$store.dispatch(LOGOUT);
 
@@ -505,10 +513,8 @@ export default {
         const submitButton = this.$refs["kt_login_signup_submit"];
         submitButton.classList.add("spinner", "spinner-light", "spinner-right");
 
-        // dummy delay
-        setTimeout(() => {
-          // send register request
-          this.$store
+        delay().then(async () => {
+          await this.$store
             .dispatch(LOGIN, { email, password })
             // go to which page after successfully login
             .then(() => this.$router.push({ name: "dashboard" }))
@@ -516,12 +522,14 @@ export default {
               this.toast("Login Failed", response, "danger");
             });
 
+          this.isLoading = false;
+
           submitButton.classList.remove(
             "spinner",
             "spinner-light",
             "spinner-right"
           );
-        }, 2000);
+        });
       });
       // this.fv.validate();
 

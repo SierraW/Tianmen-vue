@@ -144,7 +144,7 @@ export const locale = {
     WARNINGS: {
       RESEVERED_KEYWORD_TITLE: "系统预留名称",
       RESEVERED_KEYWORD_BODY:
-        "其中一个或多个系统预留名称被占用。系统预定名称有：system、user-defined 不区分大小写。",
+        "其中一个或多个系统预留名称被占用。系统预定名称有：system、user-defined、message 不区分大小写。",
       EMPTY_MESSAGE_TITLE: "空白信息",
       EMPTY_MESSAGE_BODY: "不能留下空白信息的记录",
       PHONE_INVALID_TITLE: "电话号码格式错误",
