@@ -228,6 +228,7 @@
               </div>
               <div class="form-group d-flex flex-wrap pb-lg-0 pb-3">
                 <button
+                  :disabled="isLoading"
                   ref="kt_login_signup_submit"
                   class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-4"
                   style="width:150px;"
@@ -587,13 +588,15 @@ export default {
         });
       });
     },
-    async onSubmitRegister() {
+    onSubmitRegister() {
       this.emergSingleValidationProcess(this.fv1).then(() => {
         const login = this.$refs.rlogin.value;
         const email = this.$refs.remail.value;
         const password = this.$refs.rpassword.value;
         const display_name = this.$refs.rdisplay.value;
         const actcod = this.$refs.ractcod.value;
+
+        this.isLoading = true;
 
         if (/^[0-9]*$/.test(login)) {
           this.toast(
@@ -611,10 +614,8 @@ export default {
         const submitButton = this.$refs["kt_login_signup_submit"];
         submitButton.classList.add("spinner", "spinner-light", "spinner-right");
 
-        // dummy delay
-        setTimeout(() => {
-          // send register request
-          this.$store
+        delay().then(async () => {
+          await this.$store
             .dispatch(REGISTER, {
               username: login,
               email: email,
@@ -628,12 +629,14 @@ export default {
             })
             .catch(response => this.toast("Signup Failed", response, "danger"));
 
+          this.isLoading = false;
+
           submitButton.classList.remove(
             "spinner",
             "spinner-light",
             "spinner-right"
           );
-        }, 2000);
+        });
       });
 
       // this.fv1.validate();

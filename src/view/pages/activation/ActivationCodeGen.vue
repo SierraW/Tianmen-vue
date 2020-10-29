@@ -1,11 +1,13 @@
 <template>
   <div>
-    <CentreLoader v-if="isLoading" :isCancelable="true" 
-    @input="
-    cancel => {
-      isCanceled = cancel
-    }
-    "
+    <CentreLoader
+      v-if="isLoading"
+      :isCancelable="true"
+      @input="
+        cancel => {
+          isCanceled = cancel;
+        }
+      "
     ></CentreLoader>
     <div class="card card-custom gutter-b col-xxl-12">
       <div class="card-header">
@@ -170,17 +172,17 @@ export default {
   name: "activation",
   components: {
     CompanyDataManager,
-    CentreLoader,
+    CentreLoader
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
       { title: this.$t("MENU.DASHBOARD"), route: "dashboard" },
-      { title: this.$t("ACT.MOD_NAME") },
+      { title: this.$t("ACT.MOD_NAME") }
     ]);
   },
   created() {
     ApiService.post("getCodeState.php", {
-      session: this.currentUser.user_session,
+      session: this.currentUser.user_session
     })
       .then(({ data }) => {
         this.codes = data.data;
@@ -189,17 +191,17 @@ export default {
         this.toast("Get code status Failed", message, "danger");
       });
     em.get()
-      .then((query) => {
+      .then(query => {
         var results = [];
-        query.forEach((doc) => {
+        query.forEach(doc => {
           results.push({
             value: doc.data().id,
-            text: doc.data().name,
+            text: doc.data().name
           });
         });
         this.companies = results;
       })
-      .catch((message) => {
+      .catch(message => {
         this.toast("Get company status Failed", message, "danger");
       });
   },
@@ -214,14 +216,14 @@ export default {
           text: "Code",
           align: "left",
           sortable: false,
-          value: "activation_code",
+          value: "activation_code"
         },
         { text: "Title", value: "title_name" },
         { text: "Role", value: "role_name" },
         { text: "Company", value: "com_name" },
         { text: "User_login", value: "user_login" },
         { text: "User_display", value: "display_name" },
-        { text: "Requester", value: "requester" },
+        { text: "Requester", value: "requester" }
       ],
       search: "",
       show: true,
@@ -230,30 +232,30 @@ export default {
         title_id: "5",
         role_id: "4",
         com_id: "1",
-        description: "",
+        description: ""
       },
       companies: [],
       codes: [],
       titles: [
         {
           value: 5,
-          text: this.$t("ACT.TITLE.DEV"),
+          text: this.$t("ACT.TITLE.DEV")
         },
         {
           value: 6,
-          text: this.$t("ACT.TITLE.PROM"),
+          text: this.$t("ACT.TITLE.PROM")
         },
         {
           value: 7,
-          text: this.$t("ACT.TITLE.UID"),
+          text: this.$t("ACT.TITLE.UID")
         },
         {
           value: 8,
-          text: this.$t("ACT.TITLE.ACM"),
-        },
+          text: this.$t("ACT.TITLE.ACM")
+        }
       ],
       items: [],
-      description: "",
+      description: ""
     };
   },
   methods: {
@@ -273,8 +275,8 @@ export default {
             num: this.form.num,
             title_id: this.form.title_id,
             role_id: this.form.role_id,
-            com_id: this.form.num_id ? this.form.num_id : 1,
-            des: this.form.description ? this.form.description : "",
+            com_id: this.form.com_id,
+            des: this.form.description ? this.form.description : ""
           };
           ApiService.post("generateActCode.php", formData)
             .then(({ data }) => {
@@ -309,13 +311,13 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    },
+    }
   },
   computed: {
     ...mapGetters(["currentUser"]),
     hasItem() {
       return this.items.length > 0;
-    },
-  },
+    }
+  }
 };
 </script>
