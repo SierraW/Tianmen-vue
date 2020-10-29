@@ -293,8 +293,7 @@ export default {
         },
         () => {
           return this.isCanceled;
-        },
-        3000
+        }
       );
     },
     onReset(evt) {

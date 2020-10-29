@@ -19,7 +19,7 @@ function pageLoading(store, callback, ms = 1000) {
   });
 }
 
-function delayCancelable( beforeLoad, loading, afterLoad, condition, ms = 1000) {
+function delayCancelable( beforeLoad, loading, afterLoad, condition, ms = 3500) {
   beforeLoad();
   delay(ms).then(() => {
     if (!condition()) {

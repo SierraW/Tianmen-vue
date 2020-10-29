@@ -30,6 +30,9 @@ export const locale = {
     EXIST_SOURCE_BODY: "Source Existed"
   },
   STATE: {
+    LOAD: "正在加载...",
+    CANCEL: "取消",
+    CANCELED: "正在取消...",
     TITLE: "State",
     SUCCESS: "Téléchargement réussi!",
     FAIL:

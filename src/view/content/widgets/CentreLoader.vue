@@ -12,7 +12,7 @@
       <div class="text-center my-10">
         <p class="mb-3">{{ message }}</p>
         <b-spinner variant="primary" label="Text Centered"></b-spinner>
-        <p class="mt-6"><b-button @click="toggleCancel" variant="danger" v-if="isCancelable">Cancel</b-button></p>
+        <p class="mt-8"><b-button @click="toggleCancel" variant="danger" v-if="isCancelable">{{ $t('STATE.CANCEL') }}</b-button></p>
         
       </div>
     </b-modal>
@@ -32,13 +32,13 @@ export default {
     return {
       show: true,
       cancel: false,
-      message: "加载中..."
+      message: this.$t('STATE.LOAD')
     };
   },
   methods: {
     toggleCancel() {
       this.isCanceled = true;
-      this.message = "正在取消..."
+      this.message = this.$t('STATE.CANCELED')
     }
   },
   computed: {

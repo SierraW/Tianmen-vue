@@ -30,6 +30,9 @@ export const locale = {
     EXIST_SOURCE_BODY: "来源信息已存在，无需重复添加"
   },
   STATE: {
+    LOAD: "正在加载...",
+    CANCEL: "取消",
+    CANCELED: "正在取消...",
     TITLE: "状态",
     SUCCESS: "数据更新成功",
     FAIL: "数据更新失败，请重试。",
