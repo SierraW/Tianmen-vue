@@ -208,13 +208,14 @@
 <script>
 import { mapGetters } from "vuex";
 import { UPDATE_PERSONAL_INFO } from "@/core/services/store/profile.module";
+import axios from "axios";
 
 export default {
   name: "PersonalInformation",
   data() {
     return {
       default_photo: "media/users/blank.png",
-      current_photo: null
+      current_photo: null,
     };
   },
   mounted() {
@@ -244,7 +245,7 @@ export default {
           phone,
           email,
           company_site,
-          photo
+          photo,
         });
 
         submitButton.classList.remove(
@@ -266,10 +267,22 @@ export default {
     onFileChange(e) {
       const file = e.target.files[0];
 
+      let formData = new FormData();
+      formData.append("file", file);
+
+      axios
+        .post("http://tianmengroup.com/server/upload.php", formData)
+        .then(({ data }) => {
+          console.log("success", data);
+        })
+        .catch(({ response }) => {
+          console.log("failed", response);
+        });
+
       if (typeof FileReader === "function") {
         const reader = new FileReader();
 
-        reader.onload = event => {
+        reader.onload = (event) => {
           this.current_photo = event.target.result;
         };
 
@@ -277,7 +290,7 @@ export default {
       } else {
         alert("Sorry, FileReader API not supported");
       }
-    }
+    },
   },
   computed: {
     ...mapGetters(["currentUserPersonalInfo"]),
@@ -285,7 +298,7 @@ export default {
       return this.current_photo == null
         ? this.default_photo
         : this.current_photo;
-    }
-  }
+    },
+  },
 };
 </script>

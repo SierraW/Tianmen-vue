@@ -18,7 +18,11 @@
         <span
           class="symbol-label text-white font-size-h5 font-weight-bold bg-white-o-30"
         >
-          {{ currentUser.user_login.charAt(0).toUpperCase() }}
+          {{
+            currentUser.user_login
+              ? currentUser.user_login.charAt(0).toUpperCase()
+              : "X"
+          }}
         </span>
       </span>
     </div>
@@ -49,7 +53,7 @@
       <!--begin::Content-->
       <perfect-scrollbar
         class="offcanvas-content pr-5 mr-n5 scroll"
-        style="max-height: 90vh; position: relative;"
+        style="max-height: 90vh; position: relative"
       >
         <!--begin::Header-->
         <div class="d-flex align-items-center mt-5">
@@ -57,12 +61,12 @@
             <img class="symbol-label" :src="picture" alt="" />
           </div>
           <div class="d-flex flex-column">
-            <a
-              href="#"
+            <router-link
+              to="/profile"
               class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"
             >
               {{ currentUser.display_name }}
-            </a>
+            </router-link>
             <div class="text-muted mt-1">{{ currentUser.role_name }}</div>
             <div class="navi mt-2">
               <a href="#" class="navi-item">
@@ -111,13 +115,17 @@ export default {
     },
     closeOffcanvas() {
       new KTOffcanvas(KTLayoutQuickUser.getElement()).hide();
-    }
+    },
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser", "userHeadBaseUri"]),
     picture() {
-      return process.env.BASE_URL + "media/users/300_21.jpg";
-    }
-  }
+      if (this.currentUser.head) {
+        return this.userHeadBaseUri + this.currentUser.head;
+      } else {
+        return "media/users/blank.png";
+      }
+    },
+  },
 };
 </script>

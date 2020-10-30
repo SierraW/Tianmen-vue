@@ -17,12 +17,16 @@ export const SET_ERROR = "setError";
 const state = {
   errors: null,
   user: {},
+  userHeadBaseUri: "http://tianmengroup.com/server/heads/",
   isAuthenticated: !!JwtService.getToken()
 };
 
 const getters = {
   currentUser(state) {
     return state.user;
+  },
+  userHeadBaseUri(state) {
+    return state.userHeadBaseUri;
   },
   isAuthenticated(state) {
     return state.isAuthenticated;
