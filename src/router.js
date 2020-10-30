@@ -17,6 +17,11 @@ export default new Router({
           component: () => import("@/view/pages/Dashboard.vue")
         },
         {
+          path: "/profile",
+          name: "user_profile",
+          component: () => import("@/view/pages/user_data/Profile.vue")
+        },
+        {
           path: "/ocean",
           name: "cus_ocean",
           component: () =>

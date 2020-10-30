@@ -402,7 +402,7 @@ export default {
       this.form.message = "";
       this.form.isRoot = false;
       this.form.root = "user-defined";
-      this.form.type = "Message";
+      this.form.type = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {

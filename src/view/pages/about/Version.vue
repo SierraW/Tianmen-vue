@@ -2,14 +2,13 @@
   <div>
     <div class="row">
       <div class="col-xxl-12">
-        <div class="card card-custom gutter-b">
+        <div class="card card-custom">
           <div class="card-header">
             <h2 class="card-title font-weight-bolder">
               Version 1.2.0.6
             </h2>
           </div>
           <div class="card-body">
-            <p>Hotfix 2020-10-28 16:00</p>
             <p>Finestudio Client Resource Management System</p>
           </div>
         </div>
