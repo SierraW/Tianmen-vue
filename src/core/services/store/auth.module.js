@@ -25,8 +25,12 @@ const getters = {
   currentUser(state) {
     return state.user;
   },
-  userHeadBaseUri(state) {
-    return state.userHeadBaseUri;
+  userHeadUri(state) {
+    if (state.user.head) {
+      return state.userHeadBaseUri + state.user.head;
+    } else {
+      return "media/users/blank.png";
+    }
   },
   isAuthenticated(state) {
     return state.isAuthenticated;

@@ -111,9 +111,10 @@
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import { mapGetters } from "vuex";
-import { em_histories, firebase } from "@/core/services/firebaseInit";
+import { em_histories, timestamp } from "@/core/services/firebaseInit";
 import CentreLoader from "@/view/content/widgets/CentreLoader";
 import { delay } from "@/core/services/delayLoading";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "CustomerSupportHistory",
@@ -308,31 +309,19 @@ export default {
     },
     makeToast(title, message) {
       this.toastCount++;
-      this.$bvToast.toast(message, {
-        title: title,
-        variant: "warning",
-        toaster: "b-toaster-top-center",
-        autoHideDelay: 5000,
-        appendToast: true
-      });
+      this.$bvToast.toast(message, getToastConfig(title, "warning"));
     },
     showAlertFailed() {
-      this.$bvToast.toast(this.$t("STATE.FAIL"), {
-        title: this.$t("STATE.TITLE"),
-        variant: "danger",
-        solid: true,
-        toaster: "b-toaster-top-center",
-        append: true
-      });
+      this.$bvToast.toast(
+        this.$t("STATE.FAIL"),
+        getToastConfig(this.$t("STATE.TITLE"), "danger")
+      );
     },
     showAlertSuccess() {
-      this.$bvToast.toast(this.$t("STATE.SUCCESS"), {
-        title: this.$t("STATE.TITLE"),
-        variant: "success",
-        solid: true,
-        toaster: "b-toaster-top-center",
-        append: true
-      });
+      this.$bvToast.toast(
+        this.$t("STATE.SUCCESS"),
+        getToastConfig(this.$t("STATE.TITLE"), "success")
+      );
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -382,7 +371,7 @@ export default {
             root: this.form.root,
             type: this.form.isRoot ? this.form.type : "Message",
             isRoot: this.form.isRoot,
-            time: firebase.firestore.Timestamp.fromDate(new Date())
+            time: timestamp()
           })
           .then(function() {
             instance.showAlertSuccess();

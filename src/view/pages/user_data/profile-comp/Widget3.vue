@@ -4,10 +4,10 @@
     <div class="card-header border-0 pt-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark"
-          >New Arrivals</span
+          >Leader Borad</span
         >
         <span class="text-muted mt-3 font-weight-bold font-size-sm"
-          >More than 400+ new members</span
+          >Data provided by TEStatisticEngine</span
         >
       </h3>
       <div class="card-toolbar">
@@ -16,30 +16,30 @@
             <a
               class="nav-link py-2 px-4"
               data-toggle="tab"
-              :class="{ active: this.show === 'month' }"
+              :class="{ active: this.show === 'today' }"
               href="#kt_tab_pane_2_1"
-              @click="show = 'month'"
-              >Month</a
+              @click="show = 'today'"
+              >Today</a
             >
           </li>
           <li class="nav-item">
             <a
               class="nav-link py-2 px-4"
               data-toggle="tab"
-              :class="{ active: this.show === 'week' }"
+              :class="{ active: this.show === 'month' }"
               href="#kt_tab_pane_2_2"
-              @click="show = 'week'"
-              >Week</a
+              @click="show = 'month'"
+              >This month</a
             >
           </li>
           <li class="nav-item">
             <a
               class="nav-link py-2 px-4"
               data-toggle="tab"
-              :class="{ active: this.show === 'day' }"
+              :class="{ active: this.show === 'alltime' }"
               href="#kt_tab_pane_2_3"
-              @click="show = 'day'"
-              >Day</a
+              @click="show = 'alltime'"
+              >All Time</a
             >
           </li>
         </ul>
@@ -66,11 +66,9 @@
                 <td class="pl-0 py-5">
                   <div class="symbol symbol-50 symbol-light mr-2">
                     <span class="symbol-label">
-                      <img
-                        :src="`${item.img}`"
-                        class="h-50 align-self-center"
-                        alt=""
-                      />
+                      <h1 class="h-50 align-self-center">
+                        {{ i + 1 }}
+                      </h1>
                     </span>
                   </div>
                 </td>
@@ -78,32 +76,32 @@
                   <a
                     href="#"
                     class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >{{ item.title }}</a
+                    >{{ item.display_name }}</a
                   >
                   <span class="text-muted font-weight-bold d-block">{{
-                    item.desc
+                    item.user_login
                   }}</span>
                 </td>
                 <td class="text-right">
-                  <span class="text-muted font-weight-bold">{{
-                    item.desc2
-                  }}</span>
+                  <b-form-input v-if="isSelf(item.user_login)" v-model="computedMsgAs" class="text-muted font-weight-bold" size="sm" placeholder="Acceptance speech"></b-form-input>
+                  <span v-if="!isSelf(item.user_login)" class="text-muted font-weight-bold"></span>
                 </td>
                 <td class="text-right">
-                  <span class="text-muted font-weight-bold">{{
-                    item.users
+                  <span >{{
+                    item.subtitle
                   }}</span>
                 </td>
                 <td class="text-right pr-0">
-                  <a href="#" class="btn btn-icon btn-light btn-sm">
-                    <span class="svg-icon svg-icon-md svg-icon-success">
-                      <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
-                      <inline-svg
-                        src="media/svg/icons/Navigation/Arrow-right.svg"
-                      ></inline-svg>
-                      <!--end::Svg Icon-->
-                    </span>
-                  </a>
+                  <!--begin::Symbol-->
+                  <div class="symbol symbol-40 symbol-2by3 flex-shrink-0 mr-4">
+                    <div class="symbol-label d-flex flex-column">
+                      <h4 class="mb-0">{{ item.value }}</h4>
+                      <p class="text-muted font-weight-bold font-size-sm my-1">
+                        times
+                      </p>
+                    </div>
+                  </div>
+                  <!--end::Symbol-->
                 </td>
               </tr>
             </template>
@@ -118,133 +116,54 @@
 
 <script>
 import { mapGetters } from "vuex";
+import TEStatisticEngine from "@/core/services/TEStatisticEngine";
+import { em_ass } from "@/core/services/firebaseInit";
 
 export default {
   name: "widget-12",
   data() {
     return {
-      show: "day",
-      month: [
-        {
-          title: "Bestseller Theme",
-          desc: "Amazing Templates",
-          desc2: "ReactJS, Ruby",
-          users: "354 Users",
-          img: "media/svg/misc/014-kickstarter.svg"
-        },
-        {
-          title: "Top Authors",
-          desc: "Successful Fellas",
-          desc2: "ReactJs, HTML",
-          users: "4600 Users",
-          img: "media/svg/misc/006-plurk.svg"
-        },
-        {
-          title: "New Users",
-          desc: "Awesome Users",
-          desc2: "Laravel, Metronic",
-          users: "890 Users",
-          img: "media/svg/misc/003-puzzle.svg"
-        },
-        {
-          title: "Popular Authors",
-          desc: "Most Successful",
-          desc2: "Python, MySQL",
-          users: "7200 Users",
-          img: "media/svg/misc/015-telegram.svg"
-        },
-        {
-          title: "Active Customers",
-          desc: "Best Customers",
-          desc2: "AngularJS, C#",
-          users: "6370 Users",
-          img: "media/svg/misc/005-bebo.svg"
-        }
-      ],
-      week: [
-        {
-          title: "Popular Authors",
-          desc: "Most Successful",
-          desc2: "Python, MySQL",
-          users: "7200 Users",
-          img: "media/svg/misc/015-telegram.svg"
-        },
-        {
-          title: "Top Authors",
-          desc: "Successful Fellas",
-          desc2: "ReactJs, HTML",
-          users: "4600 Users",
-          img: "media/svg/misc/006-plurk.svg"
-        },
-        {
-          title: "New Users",
-          desc: "Awesome Users",
-          desc2: "Laravel, Metronic",
-          users: "890 Users",
-          img: "media/svg/misc/003-puzzle.svg"
-        },
-        {
-          title: "Active Customers",
-          desc: "Best Customers",
-          desc2: "AngularJS, C#",
-          users: "6370 Users",
-          img: "media/svg/misc/005-bebo.svg"
-        },
-        {
-          title: "Bestseller Theme",
-          desc: "Amazing Templates",
-          desc2: "ReactJS, Ruby",
-          users: "354 Users",
-          img: "media/svg/misc/014-kickstarter.svg"
-        }
-      ],
-      day: [
-        {
-          title: "Popular Authors",
-          desc: "Most Successful",
-          desc2: "Python, MySQL",
-          users: "7200 Users",
-          img: "media/svg/misc/015-telegram.svg"
-        },
-        {
-          title: "Top Authors",
-          desc: "Successful Fellas",
-          desc2: "ReactJs, HTML",
-          users: "4600 Users",
-          img: "media/svg/misc/006-plurk.svg"
-        },
-        {
-          title: "New Users",
-          desc: "Awesome Users",
-          desc2: "Laravel, Metronic",
-          users: "890 Users",
-          img: "media/svg/misc/003-puzzle.svg"
-        },
-        {
-          title: "Bestseller Theme",
-          desc: "Amazing Templates",
-          desc2: "ReactJS, Ruby",
-          users: "354 Users",
-          img: "media/svg/misc/014-kickstarter.svg"
-        },
-        {
-          title: "Active Customers",
-          desc: "Best Customers",
-          desc2: "AngularJS, C#",
-          users: "6370 Users",
-          img: "media/svg/misc/005-bebo.svg"
-        }
-      ]
+      show: "today",
+      today: [],
+      month: [],
+      alltime: [],
+      msg_ass: {},
     };
   },
+  async created() {
+    const statisticEngine = new TEStatisticEngine(
+      this.currentUser.fs_key,
+      this.currentUser.user_login
+    );
+    this.today = await statisticEngine.getTopchartToday();
+
+    em_ass(this.currentUser.fs_key, "dmtc").onSnapshot((doc) => {
+      this.msg_ass = doc.data();
+    })
+  },
   computed: {
-    ...mapGetters(["layoutConfig"]),
+    ...mapGetters(["currentUser", "layoutConfig"]),
     dataToShow() {
+      if (this.show === "alltime") return this.alltime;
+      if (this.show === "today") return this.today;
       if (this.show === "month") return this.month;
-      if (this.show === "week") return this.week;
-      if (this.show === "day") return this.day;
-      return this.day;
+      return this.alltime;
+    },
+    computedMsgAs: {
+      get: () => {
+        return "";
+      },
+      set: (newVal) => {
+        em_ass(this.currentUser.fs_key, "dmtc").set({
+        [this.currentUser.user_login]: newVal
+      }, {merge: true});
+      }
     }
+  },
+  methods: {
+    isSelf(login) {
+      return this.currentUser.user_login === login;
+    },
   }
 };
 </script>

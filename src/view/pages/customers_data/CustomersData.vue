@@ -18,7 +18,7 @@
           :value="form.source"
           :fs_key="currentUser.fs_key"
           @input="
-            newSource => {
+            (newSource) => {
               form.source = newSource;
             }
           "
@@ -218,15 +218,16 @@ import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import {
   em_histories,
   em_customers,
-  firebase
+  firebase,
 } from "@/core/services/firebaseInit";
 import CDFormSource from "./components/CDFormSource";
 import { pageLoading } from "@/core/services/delayLoading";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "cus_data",
   components: {
-    CDFormSource
+    CDFormSource,
   },
   data() {
     return {
@@ -245,17 +246,17 @@ export default {
         oEmail: false,
         source: {
           source: "",
-          category: ""
+          category: "",
         },
         progress: "0%",
         state: "primary",
         selectedGender: "",
         description: "",
-        wechat: ""
+        wechat: "",
       },
       newCus: false,
       show: true,
-      isAdmin: false
+      isAdmin: false,
     };
   },
   mounted() {
@@ -263,17 +264,17 @@ export default {
       this.$store.dispatch(SET_BREADCRUMB, [
         { title: this.$t("MENU.DASHBOARD"), route: "../dashboard" },
         { title: this.$t("CUSTOMER.OCEAN"), route: "../ocean" },
-        { title: this.$t("MENU.DATA") }
+        { title: this.$t("MENU.DATA") },
       ]);
     } else if (this.isAdmin) {
       this.$store.dispatch(SET_BREADCRUMB, [
         { title: this.$t("MENU.ADMIN"), route: "../admin" },
-        { title: this.$t("MENU.DATA") }
+        { title: this.$t("MENU.DATA") },
       ]);
     } else {
       this.$store.dispatch(SET_BREADCRUMB, [
         { title: this.$t("MENU.DASHBOARD"), route: "../dashboard" },
-        { title: this.$t("MENU.DATA") }
+        { title: this.$t("MENU.DATA") },
       ]);
     }
   },
@@ -289,7 +290,7 @@ export default {
       em_customers(this.currentUser.fs_key)
         .doc(this.$route.params.customer_id)
         .get()
-        .then(function(doc) {
+        .then(function (doc) {
           instance.form.id = doc.id;
           instance.form.head = doc.data().head;
           instance.form.name = doc.data().name;
@@ -304,28 +305,13 @@ export default {
           instance.form.source.category = doc.data().category;
           instance.form.wechat = doc.data().wechat;
 
-          // instance.old = {
-          //   id: doc.id,
-          //   head: doc.data().head,
-          //   name: doc.data().name,
-          //   company: doc.data().company,
-          //   phone: doc.data().phone,
-          //   email: doc.data().email,
-          //   progress: doc.data().progress,
-          //   state: doc.data().state,
-          //   selectedGender: doc.data().gender,
-          //   description: doc.data().description,
-          //   source: doc.data().source,
-          //   category: doc.data().category,
-          //   wechat: doc.data().wechat
-          // };
-
-          instance.old = instance.form;
+          instance.old = {};
+          Object.assign(instance.old, instance.form);
         });
     }
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
   },
   methods: {
     optionsChk(item, e) {
@@ -346,31 +332,19 @@ export default {
     },
     makeToast(title, message) {
       this.toastCount++;
-      this.$bvToast.toast(message, {
-        title: title,
-        autoHideDelay: 5000,
-        variant: "warning",
-        toaster: "b-toaster-top-center",
-        appendToast: true
-      });
+      this.$bvToast.toast(message, getToastConfig(title, "warning"));
     },
     showAlertFailed() {
-      this.$bvToast.toast(this.$t("STATE.FAIL"), {
-        title: this.$t("STATE.TITLE"),
-        variant: "danger",
-        solid: true,
-        toaster: "b-toaster-top-center",
-        append: true
-      });
+      this.$bvToast.toast(
+        this.$t("STATE.FAIL"),
+        getToastConfig(this.$t("STATE.TITLE"), "danger")
+      );
     },
     showAlertSuccess() {
-      this.$bvToast.toast(this.$t("STATE.SUCCESS"), {
-        title: this.$t("STATE.TITLE"),
-        variant: "success",
-        solid: true,
-        toaster: "b-toaster-top-center",
-        append: true
-      });
+      this.$bvToast.toast(
+        this.$t("STATE.SUCCESS"),
+        getToastConfig(this.$t("STATE.TITLE"), "success")
+      );
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -389,7 +363,7 @@ export default {
           this.makeToast(
             this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_TITLE"),
             this.$t("CUSTOMER.WARNINGS.PHONE_INVALID_BODY", {
-              number: this.form.phone
+              number: this.form.phone,
             })
           );
           return;
@@ -407,7 +381,7 @@ export default {
           description: this.form.description ? this.form.description : "",
           source: this.form.source.source,
           category: this.form.source.category,
-          wechat: this.form.wechat
+          wechat: this.form.wechat,
         };
         if (this.newCus) {
           const result = await em_customers(this.currentUser.fs_key)
@@ -417,7 +391,7 @@ export default {
             if (
               !confirm(
                 this.$t("CUSTOMER.DATA.PHONE_ALREADY_EXIST", {
-                  number: this.form.phone
+                  number: this.form.phone,
                 })
               )
             ) {
@@ -430,11 +404,11 @@ export default {
           cusData.time = firebase.firestore.Timestamp.fromDate(new Date());
           em_customers(this.currentUser.fs_key)
             .add(cusData)
-            .then(function() {
+            .then(function () {
               instance.showAlertSuccess();
               instance.$router.push({ name: "cus_ocean" });
             })
-            .catch(function() {
+            .catch(function () {
               instance.showAlertFailed();
             });
           em_histories(this.currentUser.fs_key).add({
@@ -444,7 +418,7 @@ export default {
             root: "system",
             isRoot: false,
             from: this.currentUser.user_login,
-            time: firebase.firestore.Timestamp.fromDate(new Date())
+            time: firebase.firestore.Timestamp.fromDate(new Date()),
           });
         } else {
           if (cusData.state == "danger") {
@@ -457,16 +431,16 @@ export default {
               root: "system",
               isRoot: false,
               from: this.currentUser.user_login,
-              time: firebase.firestore.Timestamp.fromDate(new Date())
+              time: firebase.firestore.Timestamp.fromDate(new Date()),
             });
           }
           em_customers(this.currentUser.fs_key)
             .doc(this.form.id)
             .update(cusData)
-            .then(function() {
+            .then(function () {
               instance.showAlertSuccess();
             })
-            .catch(function() {
+            .catch(function () {
               instance.showAlertFailed();
             });
           const diff = this.different(cusData);
@@ -478,7 +452,7 @@ export default {
               root: "system",
               isRoot: false,
               from: this.currentUser.user_login,
-              time: firebase.firestore.Timestamp.fromDate(new Date())
+              time: firebase.firestore.Timestamp.fromDate(new Date()),
             });
           }
         }
@@ -487,11 +461,19 @@ export default {
     different(a) {
       var diff = [];
       for (const [key, value] of Object.entries(a)) {
-        if (this.old[key] && this.old[key] !== value) {
+        if (key == "source") {
+          if (this.source.source !== a.source.source) {
+            diff.push(`source: ${a.source.source}`);
+          }
+          if (this.source.category !== a.source.category) {
+            diff.push(`category: ${a.source.category}`);
+          }
+        } else if (this.old[key] && this.old[key] !== value) {
           diff.push(`${key}: ${value}`);
         }
       }
-      this.old = a;
+      this.old = {};
+      Object.assign(this.old, a);
       return diff;
     },
     onReset(evt) {
@@ -519,7 +501,7 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -27,8 +27,13 @@ function em_categories(fs_key) {
   return em.doc(fs_key).collection("em_cus_categories");
 }
 
-function timestamp() {
-  return firebase.firestore.Timestamp.now();
+function timestamp(date=new Date()) {
+  return firebase.firestore.Timestamp.fromDate(date);
+}
+
+// daily message top chart
+function em_ass(fs_key, mode) {
+  return em.doc(fs_key).collection("em_ass").doc(mode);
 }
 
 export {
@@ -41,5 +46,6 @@ export {
   em_histories,
   em_sources,
   em_categories,
+  em_ass,
   timestamp
 };

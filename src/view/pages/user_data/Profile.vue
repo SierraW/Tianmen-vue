@@ -13,7 +13,7 @@
               <div
                 class="symbol-label"
                 :style="{
-                  backgroundImage: `url(http://tianmengroup.com/server/uploads/887b3e767a.png)`
+                  backgroundImage: `url(${userHeadUri})`
                 }"
               ></div>
               <i class="symbol-badge bg-success"></i>
@@ -214,7 +214,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser", "userHeadUri"]),
   }
 };
 </script>

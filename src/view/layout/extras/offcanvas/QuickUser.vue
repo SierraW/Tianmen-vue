@@ -58,7 +58,7 @@
         <!--begin::Header-->
         <div class="d-flex align-items-center mt-5">
           <div class="symbol symbol-100 mr-5">
-            <img class="symbol-label" :src="picture" alt="" />
+            <img class="symbol-label" :src="userHeadUri" alt="" />
           </div>
           <div class="d-flex flex-column">
             <router-link
@@ -118,14 +118,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["currentUser", "userHeadBaseUri"]),
-    picture() {
-      if (this.currentUser.head) {
-        return this.userHeadBaseUri + this.currentUser.head;
-      } else {
-        return "media/users/blank.png";
-      }
-    },
+    ...mapGetters(["currentUser", "userHeadUri"]),
   },
 };
 </script>

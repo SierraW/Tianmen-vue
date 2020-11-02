@@ -1,13 +1,8 @@
 <template>
-  <div class="card card-custom gutter-b card-stretch">
+  <div>
     <!--begin::Header-->
     <div class="card-header border-0">
-      <h3 class="card-title font-weight-bolder text-dark">Market Leaders</h3>
-      <div class="card-toolbar">
-        <div class="dropdown dropdown-inline">
-          <Dropdown2></Dropdown2>
-        </div>
-      </div>
+      <h3 class="card-title font-weight-bolder text-dark">Activity overview</h3>
     </div>
     <!--end::Header-->
     <!--begin::Body-->
@@ -21,16 +16,15 @@
         >
           <!--begin::Symbol-->
           <div class="symbol symbol-60 symbol-2by3 flex-shrink-0 mr-4">
-            <div
-              class="symbol-label"
-              :style="`background-image:url(${item.text0})`"
-            ></div>
+            <div class="symbol-label d-flex flex-column">
+              <h1 class="mb-0">{{ item.text4 }}</h1>
+              <p class="text-muted font-weight-bold font-size-sm my-1">times</p>
+            </div>
           </div>
           <!--end::Symbol-->
           <!--begin::Title-->
           <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">
             <a
-              href="#"
               class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg"
               >{{ item.text1 }}</a
             >
@@ -48,11 +42,11 @@
           <!--begin::Info-->
           <div class="d-flex align-items-center py-lg-0 py-2">
             <div class="d-flex flex-column text-right">
-              <span class="text-dark-75 font-weight-bolder font-size-h4">{{
-                item.text4
+              <span v-bind:class="comparedTextColor(item)" class="font-weight-bolder font-size-h2">{{
+                item.previousCom.value
               }}</span>
               <span class="text-muted font-size-sm font-weight-bolder"
-                >votes</span
+                >Compared to last priod</span
               >
             </div>
           </div>
@@ -66,8 +60,8 @@
 </template>
 
 <script>
-import Dropdown2 from "@/view/content/dropdown/Dropdown2.vue";
 import { mapGetters } from "vuex";
+import TEStatisticEngine from "@/core/services/TEStatisticEngine";
 
 export default {
   name: "widget-2",
@@ -75,45 +69,60 @@ export default {
     return {
       list: [
         {
-          text0: "media/stock-600x400/img-17.jpg",
-          text1: "Cup & Green",
-          text2: "Local, clean & environmental",
-          text3: "CoreAd",
-          text4: "24,900"
+          text1: "Message set",
+          text2: "(Today)",
+          text3: "TEStatisticEngine",
+          text4: "0",
+          previousCom: {
+            value: 0,
+            class: ""
+          }
         },
         {
-          text0: "media/stock-600x400/img-10.jpg",
-          text1: "Yellow Background",
-          text2: "Strong abstract concept",
-          text3: "KeenThemes",
-          text4: "70,380"
+          text1: "New customer created",
+          text2: "(This month)",
+          text3: "TEStatisticEngine",
+          text4: "0",
+          previousCom: {
+            value: 0,
+            class: ""
+          }
         },
         {
-          text0: "media/stock-600x400/img-17.jpg",
-          text1: "Nike & Blue",
-          text2: "Footwear overalls",
-          text3: "Invision Inc.",
-          text4: "7,200"
+          text1: "Progress changed",
+          text2: "(This month)",
+          text3: "TEStatisticEngine",
+          text4: "0",
+          previousCom: {
+            value: 0,
+            class: ""
+          }
         },
         {
-          text0: "media/stock-600x400/img-9.jpg",
-          text1: "Desserts platter",
-          text2: "Food trends & reviews",
-          text3: "Figma Studio",
-          text4: "36,450"
+          text1: "Project created",
+          text2: "(This month)",
+          text3: "TEStatisticEngine",
+          text4: "0",
+          previousCom: {
+            value: 0,
+            class: ""
+          }
         },
-        {
-          text0: "media/stock-600x400/img-12.jpg",
-          text1: "Cup & Green",
-          text2: "Local, clean & environmental",
-          text3: "CoreAd",
-          text4: "23,900"
-        }
-      ]
+      ],
     };
   },
-  components: {
-    Dropdown2
+  async created() {
+    const statisticEngine = new TEStatisticEngine(
+      this.currentUser.fs_key,
+      this.currentUser.user_login
+    );
+    this.list[0].text4 = await statisticEngine.getDailyMessagesReport();
+    this.list[1].text4 = await statisticEngine.getMonthlyNewCustomerReport();
+    this.list[2].text4 = await statisticEngine.getMonthlyProgressReport();
+    this.list[3].text4 = await statisticEngine.getMonthProjectReport();
+    this.list[0].previousCom = await statisticEngine.getComparisonDMR();
+    this.list[1].previousCom = await statisticEngine.getComparisonMNCR();
+    this.list[2].previousCom = await statisticEngine.getComparisonMPR();
   },
   methods: {
     lastElement(i) {
@@ -122,10 +131,16 @@ export default {
       } else {
         return true;
       }
+    },
+    comparedTextColor(item) {
+      return {
+        'text-danger': item.previousCom.class == 'text-danger',
+        'text-success': item.previousCom.class == 'text-success'
+      }
     }
   },
   computed: {
-    ...mapGetters(["layoutConfig"])
-  }
+    ...mapGetters(["currentUser", "layoutConfig"]),
+  },
 };
 </script>
