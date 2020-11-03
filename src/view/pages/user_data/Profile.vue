@@ -165,6 +165,9 @@ import KTProfileOverview from "@/view/pages/user_data/profile-comp/ProfileOvervi
 import KTPersonalInformation from "@/view/pages/user_data/profile-comp/PersonalInformation";
 import KTAccountInformation from "@/view/pages/user_data/profile-comp/AccountInformation";
 import KTChangePassword from "@/view/pages/user_data/profile-comp/ChangePassword";
+import { pageLoading } from "@/core/services/delayLoading";
+import KTLayoutQuickUser from "@/assets/js/layout/extended/quick-user.js";
+import KTOffcanvas from "@/assets/js/components/offcanvas.js";
 
 export default {
   name: "user_profile",
@@ -178,6 +181,10 @@ export default {
     return {
       tabIndex: 0
     };
+  },
+  created() {
+    new KTOffcanvas(KTLayoutQuickUser.getElement()).hide();
+    pageLoading(this.$store, () => {}, 5000);
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: "Profile" }]);
