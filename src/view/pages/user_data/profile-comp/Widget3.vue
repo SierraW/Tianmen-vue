@@ -4,7 +4,7 @@
     <div class="card-header border-0 pt-5">
       <h3 class="card-title align-items-start flex-column">
         <span class="card-label font-weight-bolder text-dark"
-          >Leader Borad</span
+          >Leader Board</span
         >
         <span class="text-muted mt-3 font-weight-bold font-size-sm"
           >Data provided by TEStatisticEngine</span
@@ -29,7 +29,7 @@
               :class="{ active: this.show === 'month' }"
               href="#kt_tab_pane_2_2"
               @click="show = 'month'"
-              >This month</a
+              >Previous month</a
             >
           </li>
           <li class="nav-item">
@@ -65,7 +65,10 @@
               <tr v-bind:key="i">
                 <td class="pl-0 py-5">
                   <div class="symbol symbol-50 symbol-light mr-2">
-                    <span class="symbol-label">
+                    <span
+                      class="symbol-label"
+                      v-bind:class="rankBadgeColorClass(i, item.user_login)"
+                    >
                       <h1 class="h-50 align-self-center">
                         {{ i + 1 }}
                       </h1>
@@ -74,7 +77,6 @@
                 </td>
                 <td class="pl-0">
                   <a
-                    href="#"
                     class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg"
                     >{{ item.display_name }}</a
                   >
@@ -83,13 +85,22 @@
                   }}</span>
                 </td>
                 <td class="text-right">
-                  <b-form-input v-if="isSelf(item.user_login)" v-model="computedMsgAs" class="text-muted font-weight-bold" size="sm" placeholder="Acceptance speech"></b-form-input>
-                  <span v-if="!isSelf(item.user_login)" class="text-muted font-weight-bold"></span>
+                  <b-form-input
+                    v-if="showInput(item.user_login)"
+                    @change="setSpeech($event, i)"
+                    class="text-muted font-weight-bold"
+                    size="sm"
+                    placeholder="Acceptance speech"
+                    :value="item.acceptanceSpeech"
+                  ></b-form-input>
+                  <span
+                    v-if="!showInput(item.user_login)"
+                    class="text-muted font-weight-bold"
+                    >{{ item.acceptanceSpeech }}</span
+                  >
                 </td>
                 <td class="text-right">
-                  <span >{{
-                    item.subtitle
-                  }}</span>
+                  <span>{{ item.subtitle }}</span>
                 </td>
                 <td class="text-right pr-0">
                   <!--begin::Symbol-->
@@ -117,7 +128,6 @@
 <script>
 import { mapGetters } from "vuex";
 import TEStatisticEngine from "@/core/services/TEStatisticEngine";
-import { em_ass } from "@/core/services/firebaseInit";
 
 export default {
   name: "widget-12",
@@ -126,20 +136,17 @@ export default {
       show: "today",
       today: [],
       month: [],
-      alltime: [],
-      msg_ass: {},
+      alltime: []
     };
   },
   async created() {
-    const statisticEngine = new TEStatisticEngine(
+    var statisticEngine = new TEStatisticEngine(
       this.currentUser.fs_key,
       this.currentUser.user_login
     );
-    this.today = await statisticEngine.getTopchartToday();
-
-    em_ass(this.currentUser.fs_key, "dmtc").onSnapshot((doc) => {
-      this.msg_ass = doc.data();
-    })
+    this.today = await statisticEngine.getMessageTopChartFrom("d");
+    this.alltime = await statisticEngine.getMessageTopChartFrom("a");
+    statisticEngine.getPMReport().then(data => (this.month = data));
   },
   computed: {
     ...mapGetters(["currentUser", "layoutConfig"]),
@@ -148,22 +155,47 @@ export default {
       if (this.show === "today") return this.today;
       if (this.show === "month") return this.month;
       return this.alltime;
-    },
-    computedMsgAs: {
-      get: () => {
-        return "";
-      },
-      set: (newVal) => {
-        em_ass(this.currentUser.fs_key, "dmtc").set({
-        [this.currentUser.user_login]: newVal
-      }, {merge: true});
-      }
     }
   },
   methods: {
-    isSelf(login) {
-      return this.currentUser.user_login === login;
+    setSpeech(speech, index) {
+      var statisticEngine = new TEStatisticEngine(
+        this.currentUser.fs_key,
+        this.currentUser.user_login
+      );
+      statisticEngine.setSpeechOnPMR(index, speech);
     },
+    showInput(login) {
+      return this.currentUser.user_login === login && this.show === "month";
+    },
+    rankBadgeColorClass(index, login) {
+      if (login === "-") {
+        return;
+      }
+      return {
+        champion: index === 0,
+        secondPlace: index === 1,
+        thirdPlace: index === 2
+      };
+    }
   }
 };
 </script>
+
+<style scoped>
+.champion {
+  background-color: #f9ff60 !important;
+  background-image: linear-gradient(315deg, #bf953f 0%, #fbf5b7 74%) !important;
+  color: silver !important;
+}
+.secondPlace {
+  background-color: #b8c6db !important;
+  background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%) !important;
+  color: gold !important;
+}
+.thirdPlace {
+  background-color: #fec84e !important;
+  background-image: linear-gradient(315deg, #fec84e 0%, #ffdea8 74%) !important;
+  color: snow !important;
+}
+</style>

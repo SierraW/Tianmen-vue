@@ -13,7 +13,7 @@
       <!--begin::Aside-->
       <div
         class="login-aside d-flex flex-column flex-row-auto"
-        style="background-color: #F2C98A;"
+        style="background-color: #f2c98a"
       >
         <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
           <a href="#" class="text-center mb-10">
@@ -25,7 +25,7 @@
           </a>
           <h3
             class="font-weight-bolder text-center font-size-h4 font-size-h1-lg"
-            style="color: #986923;"
+            style="color: #986923"
           >
             Discover Amazing Future <br />with Finestuido
           </h3>
@@ -231,7 +231,7 @@
                   :disabled="isLoading"
                   ref="kt_login_signup_submit"
                   class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-4"
-                  style="width:150px;"
+                  style="width: 150px"
                 >
                   Submit
                 </button>
@@ -331,8 +331,10 @@ import SubmitButton from "@/assets/plugins/formvalidation/dist/es6/plugins/Submi
 import KTUtil from "@/assets/js/components/util";
 import { mapGetters, mapState } from "vuex";
 import { LOGIN, LOGOUT, REGISTER } from "@/core/services/store/auth.module";
+import { NOTIFICATION_INIT } from "@/core/services/store/notification.module";
 import CentreLoader from "@/view/content/widgets/CentreLoader";
 import { delay } from "@/core/services/delayLoading";
+import { getToastConfig } from "@/core/services/toastStyleService";
 
 export default {
   name: "login-1",
@@ -479,15 +481,9 @@ export default {
     });
   },
   methods: {
-    toast(title, body, variant, append = false) {
+    toast(title, body, variant) {
       this.counter++;
-      this.$bvToast.toast(body, {
-        title: title,
-        toaster: "b-toaster-top-center",
-        solid: true,
-        variant: variant,
-        appendToast: append
-      });
+      this.$bvToast.toast(body, getToastConfig(title, variant));
     },
     showForm(form) {
       this.state = form;
@@ -518,9 +514,21 @@ export default {
           await this.$store
             .dispatch(LOGIN, { email, password })
             // go to which page after successfully login
-            .then(() => this.$router.push({ name: "dashboard" }))
+            .then(({ fs_key }) => {
+              // init notification centre
+              this.$store.dispatch(NOTIFICATION_INIT, fs_key);
+              this.$router.push({ name: "dashboard" });
+            })
             .catch(response => {
-              this.toast("Login Failed", response, "danger");
+              if (response) {
+                this.toast("Login Failed", response, "danger");
+              } else {
+                this.toast(
+                  "Network Error",
+                  "Please check your network and try again.",
+                  "danger"
+                );
+              }
             });
 
           this.isLoading = false;

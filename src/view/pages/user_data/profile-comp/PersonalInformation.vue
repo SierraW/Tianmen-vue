@@ -129,31 +129,53 @@
 <script>
 import { mapGetters } from "vuex";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { UPDATE_PERSONAL_INFO } from "@/core/services/store/auth.module";
 
 export default {
   name: "PersonalInformation",
   data() {
     return {
       current_photo: null,
+      current_head_name: ""
     };
   },
   methods: {
-    save() {
-
+    async save() {
       // set spinner to submit button
       const submitButton = this.$refs["kt_save_changes"];
+      var display_name = this.$refs.display.value;
+      var user_email = this.$refs.email.value;
+
       submitButton.classList.add("spinner", "spinner-light", "spinner-right");
 
-      // dummy delay
-      setTimeout(() => {
-        // send update request
+      await this.$store
+        .dispatch(UPDATE_PERSONAL_INFO, {
+          session: this.currentUser.user_session,
+          head: this.current_head_name === "" ? "null" : this.current_head_name,
+          display_name,
+          user_email
+        })
+        .then(() => {
+          Swal.fire({
+            title: "",
+            text: "Upload success",
+            icon: "success"
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            title: "Something went wrong!",
+            text: err,
+            icon: "error"
+          });
+        });
 
-        submitButton.classList.remove(
-          "spinner",
-          "spinner-light",
-          "spinner-right"
-        );
-      }, 2000);
+      submitButton.classList.remove(
+        "spinner",
+        "spinner-light",
+        "spinner-right"
+      );
     },
     cancel() {
       this.$refs.display.value = this.currentUser.display_name;
@@ -166,19 +188,26 @@ export default {
       let formData = new FormData();
       formData.append("file", file);
 
+      var instance = this;
+
       axios
-        .post("http://tianmengroup.com/server/upload.php", formData)
+        .post("http://tianmengroup.com/server/uploadHead.php", formData)
         .then(({ data }) => {
-          console.log("success", data);
+          instance.current_head_name = data;
         })
-        .catch(({ response }) => {
-          console.log("failed", response);
+        .catch(() => {
+          instance.current_head_name = "";
+          Swal.fire({
+            title: "Something went wrong!",
+            text: "The upload was failed, please try again!",
+            icon: "error"
+          });
         });
 
       if (typeof FileReader === "function") {
         const reader = new FileReader();
 
-        reader.onload = (event) => {
+        reader.onload = event => {
           this.current_photo = event.target.result;
         };
 
@@ -186,15 +215,13 @@ export default {
       } else {
         alert("Sorry, FileReader API not supported");
       }
-    },
+    }
   },
   computed: {
     ...mapGetters(["currentUser", "userHeadUri"]),
     photo() {
-      return this.current_photo == null
-        ? this.userHeadUri
-        : this.current_photo;
-    },
-  },
+      return this.current_photo == null ? this.userHeadUri : this.current_photo;
+    }
+  }
 };
 </script>

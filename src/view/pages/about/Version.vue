@@ -4,12 +4,20 @@
       <div class="col-xxl-12">
         <div class="card card-custom">
           <div class="card-header">
-            <h2 class="card-title font-weight-bolder">
-              Version 1.2.0.6
-            </h2>
+            <h2 class="card-title font-weight-bolder">Version 1.2.1</h2>
           </div>
           <div class="card-body">
             <p>Finestudio Client Resource Management System</p>
+            <br />
+            <p>
+              new user profile page<br />
+              new daily statistic table<br />
+              new leader board table<br />
+              new reset password page<br />
+              new account info change page<br />
+              support custom head pic<br />
+              ocean notification<br />
+            </p>
           </div>
         </div>
       </div>
@@ -24,6 +32,6 @@ export default {
   name: "ver-info",
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [{ title: this.$t("MENU.VER") }]);
-  }
+  },
 };
 </script>

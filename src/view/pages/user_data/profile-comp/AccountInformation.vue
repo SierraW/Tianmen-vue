@@ -49,9 +49,7 @@
                 readonly
               />
             </div>
-            <span class="form-text text-muted"
-              >This cannot be changed.</span
-            >
+            <span class="form-text text-muted">This cannot be changed.</span>
           </div>
         </div>
         <!--begin::Form Group-->
@@ -101,7 +99,9 @@
         </div>
         <!--begin::Form Group-->
         <div class="form-group row">
-          <label class="col-xl-3 col-lg-3 col-form-label">Activation code</label>
+          <label class="col-xl-3 col-lg-3 col-form-label"
+            >Activation code</label
+          >
           <div class="col-lg-9 col-xl-6">
             <div>
               <input
@@ -121,6 +121,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "AccountInformation",
@@ -131,14 +132,18 @@ export default {
   },
   methods: {
     save() {
-
       // set spinner to submit button
       const submitButton = this.$refs["kt_save_changes"];
       submitButton.classList.add("spinner", "spinner-light", "spinner-right");
 
       // dummy delay
       setTimeout(() => {
-        // send update request
+        Swal.fire({
+          title: "Warning",
+          text:
+            "This page is under development, nothing will change at the moment",
+          icon: "error"
+        });
 
         submitButton.classList.remove(
           "spinner",

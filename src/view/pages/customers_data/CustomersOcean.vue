@@ -11,11 +11,19 @@
 <script>
 import { SET_BREADCRUMB } from "@/core/services/store/breadcrumbs.module";
 import CustomerListTable from "@/view/content/widgets/advance-table/CustomerListTable.vue";
+import { VIEW_NEW_CUS } from "@/core/services/store/notification.module";
+import { mapGetters } from "vuex";
 
 export default {
   name: "cus_ocean",
   components: {
     CustomerListTable
+  },
+  computed: {
+    ...mapGetters(["getLastestCreatedCustomerId"])
+  },
+  created() {
+    this.$store.dispatch(VIEW_NEW_CUS, this.getLastestCreatedCustomerId);
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [

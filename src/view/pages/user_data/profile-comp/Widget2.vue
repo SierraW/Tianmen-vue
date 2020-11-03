@@ -42,9 +42,11 @@
           <!--begin::Info-->
           <div class="d-flex align-items-center py-lg-0 py-2">
             <div class="d-flex flex-column text-right">
-              <span v-bind:class="comparedTextColor(item)" class="font-weight-bolder font-size-h2">{{
-                item.previousCom.value
-              }}</span>
+              <span
+                v-bind:class="comparedTextColor(item)"
+                class="font-weight-bolder font-size-h2"
+                >{{ item.previousCom.value }}</span
+              >
               <span class="text-muted font-size-sm font-weight-bolder"
                 >Compared to last priod</span
               >
@@ -107,8 +109,8 @@ export default {
             value: 0,
             class: ""
           }
-        },
-      ],
+        }
+      ]
     };
   },
   async created() {
@@ -134,13 +136,13 @@ export default {
     },
     comparedTextColor(item) {
       return {
-        'text-danger': item.previousCom.class == 'text-danger',
-        'text-success': item.previousCom.class == 'text-success'
-      }
+        "text-danger": item.previousCom.class == "text-danger",
+        "text-success": item.previousCom.class == "text-success"
+      };
     }
   },
   computed: {
-    ...mapGetters(["currentUser", "layoutConfig"]),
-  },
+    ...mapGetters(["currentUser", "layoutConfig"])
+  }
 };
 </script>

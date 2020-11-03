@@ -38,6 +38,7 @@
           <span class="menu-text">
             {{ $t("CUSTOMER.OCEAN", { msg: "公海" }) }}
           </span>
+          <span v-if="hasNewCustomer" class="dot bg-danger" id="overlay"></span>
         </a>
       </li>
     </router-link>
@@ -134,10 +135,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "KTMenu",
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser", "hasNewCustomer"]),
 
     isAdmin() {
       return this.currentUser.role_id < 4;
@@ -154,3 +156,19 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#overlay {
+  bottom: 2em;
+  right: 0.7em;
+  position: absolute;
+  z-index: 100;
+}
+
+.dot {
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>

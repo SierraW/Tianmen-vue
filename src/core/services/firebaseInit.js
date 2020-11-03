@@ -27,13 +27,18 @@ function em_categories(fs_key) {
   return em.doc(fs_key).collection("em_cus_categories");
 }
 
-function timestamp(date=new Date()) {
+function timestamp(date = new Date()) {
   return firebase.firestore.Timestamp.fromDate(date);
 }
 
 // daily message top chart
 function em_ass(fs_key, mode) {
-  return em.doc(fs_key).collection("em_ass").doc(mode);
+  var date = new Date();
+  date.setMonth(date.getMonth() - 1);
+  date.setDate(1);
+  date.setHours(0, 0, 0, 0);
+  const dateString = [date.getFullYear(), date.getMonth()].join("-");
+  return em.doc(fs_key).collection(`em_ass/${mode}/${dateString}`);
 }
 
 export {

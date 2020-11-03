@@ -73,9 +73,8 @@
             </span>
           </div>
           <div class="alert-text font-weight-bold">
-            Configure user passwords to expire periodically. Users will need
-            warning that their passwords are going to expire, <br />or they
-            might inadvertently get locked out of the system!
+            Please remember your password carefully. <br />
+            Other password reset methods are not previded.
           </div>
           <div class="alert-close">
             <button
@@ -167,7 +166,6 @@ export default {
   },
   mounted() {
     const password_change_form = KTUtil.getById("kt_password_change_form");
-    var curr_password = this.currentUser.password;
 
     this.fv = formValidation(password_change_form, {
       fields: {
@@ -175,12 +173,6 @@ export default {
           validators: {
             notEmpty: {
               message: "Current password is required"
-            },
-            identical: {
-              compare: function() {
-                return curr_password;
-              },
-              message: "Wrong password"
             }
           }
         },
@@ -219,7 +211,8 @@ export default {
       this.fv.validate();
 
       this.fv.on("core.form.valid", () => {
-        var password = this.$refs.new_password.value;
+        var old_password = this.$refs.current_password.value;
+        var new_password = this.$refs.new_password.value;
         const submitButton = this.$refs["kt_save_changes"];
 
         // set spinner to submit button
@@ -229,9 +222,29 @@ export default {
         setTimeout(() => {
           // send update request
           this.$store
-            .dispatch(UPDATE_PASSWORD, { password })
+            .dispatch(UPDATE_PASSWORD, {
+              uid: this.currentUser.id,
+              old_password,
+              new_password
+            })
             // go to which page after successfully update
-            .then(() => this.$router.push({ name: "dashboard" }));
+            .then(() => {
+              Swal.fire({
+                title: "",
+                text: "Reset successful.",
+                icon: "success",
+                confirmButtonClass: "btn btn-secondary"
+              });
+              this.cancel();
+            })
+            .catch(err => {
+              Swal.fire({
+                title: "Something went wrong!",
+                text: err,
+                icon: "error",
+                confirmButtonClass: "btn btn-secondary"
+              });
+            });
 
           submitButton.classList.remove(
             "spinner",

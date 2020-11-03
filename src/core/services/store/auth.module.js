@@ -1,5 +1,6 @@
 import ApiService from "@/core/services/api.service";
 import JwtService from "@/core/services/jwt.service";
+import Swal from "sweetalert2";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -7,11 +8,12 @@ export const LOGIN = "login";
 export const LOGOUT = "logout";
 export const REGISTER = "register";
 export const UPDATE_PASSWORD = "updateUser";
+export const UPDATE_PERSONAL_INFO = "updatePersonalInfo";
 
 // mutation types
 export const PURGE_AUTH = "logOut";
 export const SET_AUTH = "setUser";
-export const SET_PASSWORD = "setPassword";
+export const SET_PERSONAL_INFO = "setPersonalInfo";
 export const SET_ERROR = "setError";
 
 const state = {
@@ -46,7 +48,7 @@ const actions = {
             reject(data.message);
           } else {
             context.commit(SET_AUTH, data.data);
-            resolve(data);
+            resolve(data.data);
           }
         })
         .catch(response => {
@@ -90,23 +92,61 @@ const actions = {
           }
         })
         .catch(() => {
+          Swal.fire({
+            title: "Login Expired",
+            text:
+              "Your login infomations are now expired, please refresh this page!",
+            icon: "error"
+          });
           context.commit(PURGE_AUTH);
         });
     } else {
       context.commit(PURGE_AUTH);
     }
   },
+  [UPDATE_PERSONAL_INFO](context, payload) {
+    return new Promise((resolve, reject) => {
+      ApiService.post("setPersonalInfo.php", payload)
+        .then(({ data }) => {
+          if (data.success == "success") {
+            context.commit(SET_PERSONAL_INFO, payload);
+            resolve(true);
+          } else {
+            reject("Email already in-use.");
+          }
+        })
+        .catch(response => {
+          reject(response);
+        });
+    });
+  },
   [UPDATE_PASSWORD](context, payload) {
-    const password = payload;
-
-    return ApiService.put("password", password).then(({ data }) => {
-      context.commit(SET_PASSWORD, data);
-      return data;
+    return new Promise((resolve, reject) => {
+      ApiService.post("setPassword.php", payload)
+        .then(({ data }) => {
+          if (data.success == "success") {
+            resolve(data.message);
+          } else {
+            reject(data.message);
+          }
+        })
+        .catch(response => {
+          context.commit(SET_ERROR, response);
+          reject(response);
+        });
     });
   }
 };
 
 const mutations = {
+  [SET_PERSONAL_INFO](state, info) {
+    if (info.head !== "null") {
+      state.user.head = info.head;
+    }
+
+    state.user.user_email = info.user_email;
+    state.user.display_name = info.display_name;
+  },
   [SET_ERROR](state, error) {
     state.errors = error;
   },
@@ -115,9 +155,6 @@ const mutations = {
     state.user = user;
     state.errors = {};
     JwtService.saveToken(state.user.user_session);
-  },
-  [SET_PASSWORD](state, password) {
-    state.user.password = password;
   },
   [PURGE_AUTH](state) {
     state.isAuthenticated = false;

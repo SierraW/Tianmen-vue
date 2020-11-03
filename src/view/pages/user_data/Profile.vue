@@ -16,7 +16,6 @@
                   backgroundImage: `url(${userHeadUri})`
                 }"
               ></div>
-              <i class="symbol-badge bg-success"></i>
             </div>
             <div>
               <a
@@ -36,16 +35,12 @@
               }}</a>
             </div>
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="font-weight-bold mr-2">Phone:</span>
-              <span class="text-muted">{{
-                currentUser.user_login
-              }}</span>
+              <span class="font-weight-bold mr-2">Login Name:</span>
+              <span class="text-muted">{{ currentUser.user_login }}</span>
             </div>
             <div class="d-flex align-items-center justify-content-between">
               <span class="font-weight-bold mr-2">Company Name:</span>
-              <span class="text-muted">{{
-                currentUser.company_name
-              }}</span>
+              <span class="text-muted">{{ currentUser.company_name }}</span>
             </div>
           </div>
           <!--end::Contact-->
@@ -129,7 +124,7 @@
                 <span class="navi-label">
                   <span
                     class="label label-light-danger label-rounded font-weight-bold"
-                    >5</span
+                    >1</span
                   >
                 </span>
               </a>
@@ -157,7 +152,6 @@
         <b-tab>
           <KTChangePassword></KTChangePassword>
         </b-tab>
-
       </b-tabs>
     </div>
     <!--end::Content-->
@@ -214,7 +208,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["currentUser", "userHeadUri"]),
+    ...mapGetters(["currentUser", "userHeadUri"])
   }
 };
 </script>

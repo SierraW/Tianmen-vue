@@ -115,10 +115,10 @@ export default {
     },
     closeOffcanvas() {
       new KTOffcanvas(KTLayoutQuickUser.getElement()).hide();
-    },
+    }
   },
   computed: {
-    ...mapGetters(["currentUser", "userHeadUri"]),
-  },
+    ...mapGetters(["currentUser", "userHeadUri"])
+  }
 };
 </script>
