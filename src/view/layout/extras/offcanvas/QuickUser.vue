@@ -62,7 +62,7 @@
           </div>
           <div class="d-flex flex-column">
             <router-link
-              to="/profile#"
+              to="/profile"
               class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"
             >
               {{ currentUser.display_name }}

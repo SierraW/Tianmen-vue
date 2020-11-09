@@ -159,6 +159,7 @@ export const locale = {
     }
   },
   MENU: {
+    PROF: "Profile",
     ALL_HIS: "Histories",
     TAG: "Tags",
     VER: "Version",

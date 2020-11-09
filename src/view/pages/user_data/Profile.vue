@@ -187,7 +187,7 @@ export default {
     pageLoading(this.$store, () => {}, 5000);
   },
   mounted() {
-    this.$store.dispatch(SET_BREADCRUMB, [{ title: "Profile" }]);
+    this.$store.dispatch(SET_BREADCRUMB, [{ title: this.$t("MENU.PROF") }]);
   },
   methods: {
     /**

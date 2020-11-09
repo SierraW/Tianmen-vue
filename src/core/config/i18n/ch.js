@@ -158,6 +158,7 @@ export const locale = {
     }
   },
   MENU: {
+    PROF: "个人中心",
     ALL_HIS: "所有记录",
     TAG: "标签管理",
     VER: "版本",

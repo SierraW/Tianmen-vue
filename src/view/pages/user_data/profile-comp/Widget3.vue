@@ -88,7 +88,7 @@
                   <b-form-input
                     v-if="showInput(item.user_login)"
                     @change="setSpeech($event, i)"
-                    class="text-muted font-weight-bold"
+                    class="text-muted font-weight-bold text-right"
                     size="sm"
                     placeholder="Acceptance speech"
                     :value="item.acceptanceSpeech"

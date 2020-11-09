@@ -307,6 +307,8 @@ export default {
 
           instance.old = {};
           Object.assign(instance.old, instance.form);
+          instance.old.category = instance.old.source.category;
+          instance.old.source = instance.old.source.source;
         });
     }
   },
@@ -462,11 +464,11 @@ export default {
       var diff = [];
       for (const [key, value] of Object.entries(a)) {
         if (key == "source") {
-          if (this.source.source !== a.source.source) {
-            diff.push(`source: ${a.source.source}`);
+          if (this.old.source !== a.source) {
+            diff.push(`source: ${a.source}`);
           }
-          if (this.source.category !== a.source.category) {
-            diff.push(`category: ${a.source.category}`);
+          if (this.old.category !== a.category) {
+            diff.push(`category: ${a.category}`);
           }
         } else if (this.old[key] && this.old[key] !== value) {
           diff.push(`${key}: ${value}`);
