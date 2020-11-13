@@ -48,7 +48,9 @@ export const locale = {
     ADD_COM: {
       TAB: "新增公司",
       NAME: "公司名称",
-      SUBMIT: "添加"
+      SUBMIT: "添加",
+      NOTI:
+        "为了减少使用的内存资源，本页面采用了懒加载机制。请在添加公司之后刷新本页面，以正常使用刚添加的公司。"
     },
     MOD_NAME: "注册码生成器",
     NUM: "需要生成的激活码数量",
@@ -75,6 +77,12 @@ export const locale = {
     CODE: {
       TAB: "激活码历史",
       TABLE_NAME: "激活码状态"
+    },
+    SUCCESS: {
+      TITLE: "本次生成的激活码",
+      DES: "短说明",
+      NOTI:
+        '为了减少使用的内存资源，本页面采用了懒加载机制。如需在"激活码历史"页面查看最近生成的激活码历史，请刷新本页面。'
     }
   },
   CUSTOMER: {

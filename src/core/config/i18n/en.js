@@ -49,7 +49,8 @@ export const locale = {
     ADD_COM: {
       TAB: "Add Company",
       NAME: "Company Name",
-      SUBMIT: "Add"
+      SUBMIT: "Add",
+      NOTI: "Please refresh page after you upload a company."
     },
     MOD_NAME: "Activation Code Generator",
     NUM: "Number of codes needed",
@@ -76,6 +77,12 @@ export const locale = {
     CODE: {
       TAB: "Code Usage",
       TABLE_NAME: "All Codes Status"
+    },
+    SUCCESS: {
+      TITLE: "Generated Code",
+      DES: "Short Descriptions",
+      NOTI:
+        'Please refresh page in order to find your recently generated code in the "Code Usage" tab.'
     }
   },
   CUSTOMER: {

@@ -4,6 +4,25 @@
       <div class="col-xxl-12 mb-6">
         <div class="card card-custom">
           <div class="card-header">
+            <h2 class="card-title font-weight-bolder">Version 1.2.3</h2>
+          </div>
+          <div class="card-body">
+            <p>Finestudio Client Resource Management System</p>
+            <br />
+            <p>
+              fix:<br />
+              after cancel, act gen will not complete.<br />
+              add:<br />
+              more translation on act gen.<br />
+              more description on act gen.<br />
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-12 mb-6">
+        <div class="card card-custom">
+          <div class="card-header">
             <h2 class="card-title font-weight-bolder">Version 1.2.2</h2>
           </div>
           <div class="card-body">

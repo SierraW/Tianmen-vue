@@ -145,14 +145,15 @@
     <div class="card card-custom gutter-b col-xxl-12" v-if="hasItem">
       <div class="card-header">
         <div class="card-title">
-          <h3>本次生成的激活码</h3>
+          <h3>{{ $t("ACT.SUCCESS.TITLE") }}</h3>
         </div>
       </div>
       <div class="card-body">
-        <h6>短说明: {{ description }}</h6>
+        <h6>{{ $t("ACT.SUCCESS.DES") }}: {{ description }}</h6>
         <p class="text-monospace mt-6" v-for="item in items" :key="item">
           {{ item }}
         </p>
+        <p class="text-mute font-size-sm mt-10">{{ $t("ACT.SUCCESS.NOTI") }}</p>
       </div>
     </div>
   </div>
@@ -294,6 +295,10 @@ export default {
           this.isLoading = false;
         },
         () => {
+          if (this.isCanceled) {
+            this.isCanceled = false;
+            return true;
+          }
           return this.isCanceled;
         }
       );

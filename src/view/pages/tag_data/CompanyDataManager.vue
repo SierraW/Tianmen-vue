@@ -12,6 +12,7 @@
         }}</b-button>
       </div>
     </div>
+    <p class="text-mute font-size-sm">{{ $t("ACT.ADD_COM.NOTI") }}</p>
     <div class="row mt-3">
       <div class="col">
         <b-button v-b-toggle.collapse-cdm variant="primary">{{
