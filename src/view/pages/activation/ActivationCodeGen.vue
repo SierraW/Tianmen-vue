@@ -253,6 +253,10 @@ export default {
         {
           value: 8,
           text: this.$t("ACT.TITLE.ACM")
+        },
+        {
+          value: 9,
+          text: this.$t("ACT.TITLE.USR")
         }
       ],
       items: [],

@@ -67,7 +67,8 @@ export const locale = {
       DEV: "开发者",
       PROM: "项目经理",
       UID: "UI设计师",
-      ACM: "客户经理"
+      ACM: "客户经理",
+      USR: "用户"
     },
     COM: {
       NAME: "所属公司",
